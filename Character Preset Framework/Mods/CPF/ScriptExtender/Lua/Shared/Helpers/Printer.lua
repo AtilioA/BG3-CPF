@@ -63,7 +63,7 @@ local CCA_RES_TYPES = {
 local function _extractStaticName(data)
     if not data then return nil end
     -- Try common name-like fields in order of usefulness
-    local candidates = { "Name", "DisplayName" }
+    local candidates = { "Name", "SlotName", "DisplayName" }
     for _, k in ipairs(candidates) do
         local v = UserData.Get(data, k)
         if type(v) == "string" and v ~= "" then
@@ -80,7 +80,6 @@ local function _tryStaticData(guid, typeName)
     if not guid or guid == "" then return nil end
     local ok, result = pcall(Ext.StaticData.Get, guid, typeName)
     if ok and result ~= nil then
-        _D(result)
         return result
     end
     return nil
@@ -91,10 +90,11 @@ end
 ---@return table
 local function _formatResolvedGuid(guid, typeName)
     if not guid or guid == "" then
-        return { Guid = guid or "", Resolved = nil, Type = typeName }
+        return {}
     end
     local data = _tryStaticData(guid, typeName)
     local name = _extractStaticName(data)
+    if not name then name = "Unknown" end
     return {
         Guid = guid,
         -- Type = typeName,
