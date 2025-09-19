@@ -32,20 +32,20 @@ function CPFWarn(debugLevel, ...)
     CPFPrinter:PrintWarning(debugLevel, ...)
 end
 
-function CPFDump(debugLevel, ...)
+function CPFDump(...)
     CPFPrinter:SetFontColor(190, 150, 225)
-    CPFPrinter:Dump(debugLevel, ...)
+    CPFPrinter:Dump(...)
 end
 
-function CPFDumpArray(debugLevel, ...)
-    CPFPrinter:DumpArray(debugLevel, ...)
+function CPFDumpArray(...)
+    CPFPrinter:DumpArray(...)
 end
 
 --- @param debugLevel integer
 --- @param cca CharacterCreationAppearanceComponent
 function CPFDumpCCA(debugLevel, cca)
     CPFPrinter:SetFontColor(190, 150, 225)
-    CPFDumpCCA(debugLevel, cca)
+    DumpCCA(debugLevel, cca)
 end
 
 -- Internal: Resource manager type names we care about for CCA resolution
@@ -65,7 +65,7 @@ local function _extractStaticName(data)
     -- Try common name-like fields in order of usefulness
     local candidates = { "Name", "DisplayName" }
     for _, k in ipairs(candidates) do
-        local v = data[k]
+        local v = UserData.Get(data, k)
         if type(v) == "string" and v ~= "" then
             return v
         end
@@ -80,6 +80,7 @@ local function _tryStaticData(guid, typeName)
     if not guid or guid == "" then return nil end
     local ok, result = pcall(Ext.StaticData.Get, guid, typeName)
     if ok and result ~= nil then
+        _D(result)
         return result
     end
     return nil
@@ -96,9 +97,9 @@ local function _formatResolvedGuid(guid, typeName)
     local name = _extractStaticName(data)
     return {
         Guid = guid,
-        Type = typeName,
+        -- Type = typeName,
         Name = name,
-        Data = nil, -- Avoid dumping entire static objects by default (can be huge)
+        -- Data = nil, -- Avoid dumping entire static objects by default (can be huge)
     }
 end
 
@@ -118,48 +119,46 @@ local function _summarizeMaterialSetting(setting)
 end
 
 ---@param debugLevel integer
----@param cca CharacterCreationAppearanceComponent|table|nil
+---@param safeCCA CharacterCreationAppearanceComponent|table|nil
 ---@param options table|nil @optional flags: { includeDeepStatic:boolean }
 ---@return nil
-function CPFDumpCCA(debugLevel, cca, options)
+function DumpCCA(debugLevel, cca, options)
     if not cca then
-        CPFWarn(0, "CPFDumpCCA called with nil CCA")
+        CPFWarn(0, "DumpCCA called with nil CCA")
         return
     end
 
     local includeDeepStatic = options and options.includeDeepStatic == true
 
+    local safeCCA = UserData.Safe(cca)
+
     ---@type table
     local summary = {
-        AccessorySet = UserData.TryGetFallback(cca, "AccessorySet", nil) and _formatResolvedGuid(cca.AccessorySet, CCA_RES_TYPES.AccessorySet),
-        EyeColor = UserData.TryGetFallback(cca, "EyeColor", nil) and _formatResolvedGuid(cca.EyeColor, CCA_RES_TYPES.EyeColor),
-        SecondEyeColor = UserData.TryGetFallback(cca, "SecondEyeColor", nil) and _formatResolvedGuid(cca.SecondEyeColor, CCA_RES_TYPES.EyeColor),
-        HairColor = UserData.TryGetFallback(cca, "HairColor", nil) and _formatResolvedGuid(cca.HairColor, CCA_RES_TYPES.HairColor),
-        SkinColor = UserData.TryGetFallback(cca, "SkinColor", nil) and _formatResolvedGuid(cca.SkinColor, CCA_RES_TYPES.SkinColor),
-        field_98 = tostring(cca.field_98 or ""),
+        AccessorySet = _formatResolvedGuid(safeCCA.AccessorySet, CCA_RES_TYPES.AccessorySet),
+        EyeColor = _formatResolvedGuid(safeCCA.EyeColor, CCA_RES_TYPES.EyeColor),
+        SecondEyeColor = _formatResolvedGuid(safeCCA.SecondEyeColor, CCA_RES_TYPES.EyeColor),
+        HairColor = _formatResolvedGuid(safeCCA.HairColor, CCA_RES_TYPES.HairColor),
+        SkinColor = _formatResolvedGuid(safeCCA.SkinColor, CCA_RES_TYPES.SkinColor),
+        field_98 = tostring(safeCCA.field_98 or ""),
         AdditionalChoices = {},
         Visuals = {},
         Elements = {},
-        Icon = cca.Icon and "<ScratchBuffer>" or nil,
+        Icon = safeCCA.Icon and "<ScratchBuffer>" or nil,
     }
 
-    -- AdditionalChoices
-    if type(cca.AdditionalChoices) == "table" then
-        for _, n in ipairs(cca.AdditionalChoices) do
-            table.insert(summary.AdditionalChoices, n)
-        end
-    end
+    -- AdditionalChoices (map indices to names)
+    summary.AdditionalChoices = CCAEnums.MapAdditionalChoices(safeCCA.AdditionalChoices)
 
     -- Visuals
-    if type(cca.Visuals) == "table" then
-        for _, v in ipairs(cca.Visuals) do
+    if safeCCA.Visuals then
+        for _, v in ipairs(safeCCA.Visuals) do
             table.insert(summary.Visuals, _formatResolvedGuid(v, CCA_RES_TYPES.AppearanceVisual))
         end
     end
 
     -- Elements (materials)
-    if type(cca.Elements) == "table" then
-        for _, el in ipairs(cca.Elements) do
+    if safeCCA.Elements then
+        for _, el in ipairs(safeCCA.Elements) do
             table.insert(summary.Elements, _summarizeMaterialSetting(el))
         end
     end
@@ -167,20 +166,20 @@ function CPFDumpCCA(debugLevel, cca, options)
     -- Optionally include the full static data blobs for power users
     if includeDeepStatic then
         local deep = {}
-        deep.AccessorySet = _tryStaticData(cca.AccessorySet, CCA_RES_TYPES.AccessorySet)
-        deep.EyeColor = _tryStaticData(cca.EyeColor, CCA_RES_TYPES.EyeColor)
-        deep.SecondEyeColor = _tryStaticData(cca.SecondEyeColor, CCA_RES_TYPES.EyeColor)
-        deep.HairColor = _tryStaticData(cca.HairColor, CCA_RES_TYPES.HairColor)
-        deep.SkinColor = _tryStaticData(cca.SkinColor, CCA_RES_TYPES.SkinColor)
+        deep.AccessorySet = _tryStaticData(safeCCA.AccessorySet, CCA_RES_TYPES.AccessorySet)
+        deep.EyeColor = _tryStaticData(safeCCA.EyeColor, CCA_RES_TYPES.EyeColor)
+        deep.SecondEyeColor = _tryStaticData(safeCCA.SecondEyeColor, CCA_RES_TYPES.EyeColor)
+        deep.HairColor = _tryStaticData(safeCCA.HairColor, CCA_RES_TYPES.HairColor)
+        deep.SkinColor = _tryStaticData(safeCCA.SkinColor, CCA_RES_TYPES.SkinColor)
         deep.Visuals = {}
-        if type(cca.Visuals) == "table" then
-            for i, v in ipairs(cca.Visuals) do
+        if safeCCA.Visuals then
+            for i, v in ipairs(safeCCA.Visuals) do
                 deep.Visuals[i] = _tryStaticData(v, CCA_RES_TYPES.AppearanceVisual)
             end
         end
         deep.Materials = {}
-        if type(cca.Elements) == "table" then
-            for i, el in ipairs(cca.Elements) do
+        if safeCCA.Elements then
+            for i, el in ipairs(safeCCA.Elements) do
                 deep.Materials[i] = _tryStaticData(el and el.Material or nil, CCA_RES_TYPES.AppearanceMaterial)
             end
         end
@@ -188,5 +187,5 @@ function CPFDumpCCA(debugLevel, cca, options)
     end
 
     CPFPrinter:SetFontColor(190, 150, 225) -- Light purple (same as CPFDump)
-    CPFPrinter:Dump(debugLevel, { CharacterCreationAppearance = summary })
+    CPFPrinter:Dump(summary)
 end
