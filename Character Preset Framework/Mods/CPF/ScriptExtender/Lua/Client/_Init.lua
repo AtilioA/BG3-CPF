@@ -1,7 +1,3 @@
-MCM.SetKeybindingCallback('keybinding_setting_id', function()
-    Ext.Net.PostMessageToServer("CPF_trigger_callback_on_server", Ext.Json.Stringify({ skipChecks = false }))
-end)
-
 local MODVERSION = Ext.Mod.GetMod(ModuleUUID).Info.ModVersion
 
 if MODVERSION == nil then
@@ -12,3 +8,9 @@ else
     local versionNumber = table.concat(MODVERSION, ".")
     CPFPrint(0, "Character Preset Framework (client) version " .. versionNumber .. " loaded")
 end
+
+Ext.Events.ResetCompleted:Subscribe(function()
+    CPFDebug(0, "Reset completed, dumping CCA")
+    _DS(_C().CharacterCreationAppearance)
+    CPFDumpCCA(0, _C().CharacterCreationAppearance)
+end)
