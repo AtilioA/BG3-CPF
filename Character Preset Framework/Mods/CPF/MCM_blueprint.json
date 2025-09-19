@@ -1,6 +1,9 @@
 {
     "SchemaVersion": 1,
-    "ModName": "Mod Name",
+    "ModName": "Character Preset Framework",
+    "Handles": {
+        "NameHandle": "he93c1127109d4ef6a81de03d2391c2e04d3c"
+    },
     "Tabs": [
         {
             "TabId": "General",

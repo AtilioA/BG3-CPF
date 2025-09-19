@@ -1,4 +1,4 @@
--- setmetatable(Mods.ModName, { __index = Mods.VolitionCabinet })
+-- setmetatable(Mods.CPF, { __index = Mods.VolitionCabinet })
 
 ---Ext.Require files at the path
 ---@param path string
@@ -10,7 +10,7 @@ function RequireFiles(path, files)
 end
 
 local function updateLoca()
-    for _, file in ipairs({ "MN_English.loca" }) do
+    for _, file in ipairs({ "CPF_English.loca" }) do
         local fileName = string.format("Localization/English/%s.xml", file)
         local contents = Ext.IO.LoadFile(fileName, "data")
 

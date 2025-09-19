@@ -1,4 +1,4 @@
--- setmetatable(Mods.ModName, { __index = Mods.VolitionCabinet })
+-- setmetatable(Mods.CPF, { __index = Mods.VolitionCabinet })
 
 ---Ext.Require files at the path
 ---@param path string
@@ -18,12 +18,12 @@ RequireFiles("Server/", {
 local MODVERSION = Ext.Mod.GetMod(ModuleUUID).Info.ModVersion
 
 if MODVERSION == nil then
-    MNPrint(0, "Mod Name loaded (version unknown)")
+    CPFPrint(0, "Character Preset Framework loaded (version unknown)")
 else
     table.remove(MODVERSION)
 
     local versionNumber = table.concat(MODVERSION, ".")
-    MNPrint(0, "Mod Name version " .. versionNumber .. " loaded")
+    CPFPrint(0, "Character Preset Framework version " .. versionNumber .. " loaded")
 end
 
 SubscribedEvents.SubscribeToEvents()
