@@ -1,0 +1,50 @@
+{
+    "SchemaVersion": 1,
+    "ModName": "Mod Name",
+    "Tabs": [
+        {
+            "TabId": "General",
+            "TabName": "General",
+            "Settings": [
+                {
+                    "Id": "mod_enabled",
+                    "Name": "Enabled",
+                    "Type": "checkbox",
+                    "Default": true,
+                    "Description": "Toggle the mod on/off without having to uninstall it.",
+                    "Handles": {
+                        "DescriptionHandle": "hac6189beeac24a319733a69e9153a24edffb",
+                        "NameHandle": "hc116181043c04c168e06ff11fce144e24136"
+                    }
+                }
+            ]
+        },
+        {
+            "TabId": "debug",
+            "TabName": "Debug",
+            "Sections": [
+                {
+                    "SectionId": "debug",
+                    "SectionName": "Debug",
+                    "Settings": [
+                        {
+                            "Id": "debug_level",
+                            "Name": "Debug level",
+                            "Type": "slider_int",
+                            "Default": 0,
+                            "Options": {
+                                "Min": 0,
+                                "Max": 2
+                            },
+                            "Description": "0 = no debug, 1 = basic debug, 2 = verbose debug.",
+                            "Handles": {
+                                "DescriptionHandle": "h89ed68a2aeb9443ca63f6df114118fa5b4e1",
+                                "NameHandle": "h24baadea05924a84b1cc3c30b34e0fc7a208"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
