@@ -128,8 +128,12 @@ function DumpCCA(debugLevel, cca, options)
         return
     end
 
-    local includeDeepStatic = options and options.includeDeepStatic == true
+    -- TODO: move this
+    if debugLevel > CPFPrinter.DebugLevel then
+        return
+    end
 
+    -- Allows safely accessing CCA userdata properties without errors
     local safeCCA = UserData.Safe(cca)
 
     ---@type table
@@ -149,41 +153,14 @@ function DumpCCA(debugLevel, cca, options)
     -- AdditionalChoices (map indices to names)
     summary.AdditionalChoices = CCAEnums.MapAdditionalChoices(safeCCA.AdditionalChoices)
 
+    -- Elements (material-related, etc?)
+    summary.Elements = CCAEnums.MapElements(safeCCA.Elements)
+
     -- Visuals
     if safeCCA.Visuals then
         for _, v in ipairs(safeCCA.Visuals) do
             table.insert(summary.Visuals, _formatResolvedGuid(v, CCA_RES_TYPES.AppearanceVisual))
         end
-    end
-
-    -- Elements (materials)
-    if safeCCA.Elements then
-        for _, el in ipairs(safeCCA.Elements) do
-            table.insert(summary.Elements, _summarizeMaterialSetting(el))
-        end
-    end
-
-    -- Optionally include the full static data blobs for power users
-    if includeDeepStatic then
-        local deep = {}
-        deep.AccessorySet = _tryStaticData(safeCCA.AccessorySet, CCA_RES_TYPES.AccessorySet)
-        deep.EyeColor = _tryStaticData(safeCCA.EyeColor, CCA_RES_TYPES.EyeColor)
-        deep.SecondEyeColor = _tryStaticData(safeCCA.SecondEyeColor, CCA_RES_TYPES.EyeColor)
-        deep.HairColor = _tryStaticData(safeCCA.HairColor, CCA_RES_TYPES.HairColor)
-        deep.SkinColor = _tryStaticData(safeCCA.SkinColor, CCA_RES_TYPES.SkinColor)
-        deep.Visuals = {}
-        if safeCCA.Visuals then
-            for i, v in ipairs(safeCCA.Visuals) do
-                deep.Visuals[i] = _tryStaticData(v, CCA_RES_TYPES.AppearanceVisual)
-            end
-        end
-        deep.Materials = {}
-        if safeCCA.Elements then
-            for i, el in ipairs(safeCCA.Elements) do
-                deep.Materials[i] = _tryStaticData(el and el.Material or nil, CCA_RES_TYPES.AppearanceMaterial)
-            end
-        end
-        summary.DeepStatic = deep
     end
 
     CPFPrinter:SetFontColor(190, 150, 225) -- Light purple (same as CPFDump)

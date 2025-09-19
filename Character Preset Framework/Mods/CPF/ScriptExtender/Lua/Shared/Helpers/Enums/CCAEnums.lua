@@ -61,17 +61,26 @@ function CCAEnums.MapAdditionalChoices(choices)
     return result
 end
 
---- Map a list of Elements indices to structured entries with Index and Name
---- @param elements integer[]|nil
+--- Map a list of Elements to structured entries with Name and all element properties
+--- @param elements table[]|nil
 --- @return table
 function CCAEnums.MapElements(elements)
     local result = {}
     if elements == nil then
         return result
     end
-    for _, n in ipairs(elements) do
-        local name = CCAEnums.GetElementName(n)
-        table.insert(result, { Index = n, Name = name })
+    for i, element in ipairs(elements) do
+        local name = CCAEnums.GetElementName(i) -- Use array index for enum lookup
+        -- Create a copy of the element adding the Name field
+        local mappedElement = {
+            Type = name,
+        }
+        if element then
+            for k, v in pairs(element) do
+                mappedElement[k] = v
+            end
+        end
+        table.insert(result, mappedElement)
     end
     return result
 end
