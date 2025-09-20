@@ -1,7 +1,7 @@
 ---Shared netchannels for CPF server-client communication
 ---@class CPFNetChannels
 ---@field RequestApplyPreset ExtenderNetChannel
-local NetChannels = {}
+NetChannels = {}
 
 ---Creates and returns a netchannel with the given name
 ---@param channelName string

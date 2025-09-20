@@ -1,5 +1,4 @@
 ---Server-side handlers for CPF NetChannels
-local NetChannels = Ext.Require("Shared/NetChannels.lua")
 
 ---Handles ApplyPreset requests from clients
 ---@param data table
@@ -17,7 +16,7 @@ local function handleApplyPreset(data, userId)
 end
 
 local function initServerHandlers()
-    NetChannels.ApplyPreset:SetRequestHandler(handleApplyPreset)
+    NetChannels.RequestApplyPreset:SetRequestHandler(handleApplyPreset)
 end
 
 initServerHandlers()
