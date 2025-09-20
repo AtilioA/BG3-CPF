@@ -36,5 +36,6 @@ if Ext.Debug.IsDeveloperMode() then
 end
 
 RequireFiles("Shared/", {
+    "NetChannels/_Init",
     "Helpers/_Init",
 })

@@ -14,3 +14,7 @@ Ext.Events.ResetCompleted:Subscribe(function()
     _DS(_C().CharacterCreationAppearance)
     CPFDumpCCA(1, _C().CharacterCreationAppearance)
 end)
+
+RequireFiles("Client/NetChannels/", {
+    "_Init",
+})

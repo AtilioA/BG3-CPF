@@ -13,6 +13,7 @@ RequireFiles("Server/", {
     "Helpers/_Init",
     "EventHandlers",
     "SubscribedEvents",
+    "NetChannels/_Init",
 })
 
 local MODVERSION = Ext.Mod.GetMod(ModuleUUID).Info.ModVersion
