@@ -1,10 +1,17 @@
 --- @class CCAEnums
---- @field AdditionalChoices table<integer, string>
+--- @field AdditionalChoices table<integer, CCAEnums.AdditionalChoiceValue>
 --- @field Elements table<integer, string>
 CCAEnums = {}
 
+---@alias CCAEnums.AdditionalChoiceValue
+---| 'Vitiligo'
+---| 'Freckles'
+---| 'FrecklesWeight'
+---| 'Oldness'
+
 --- AdditionalChoices enum mapping
 --- Index mapping: 1 - Vitiligo, 2 - Freckles, 3 - FrecklesWeight, 4 - Oldness
+--- @enum CCAEnums.AdditionalChoices
 CCAEnums.AdditionalChoices = {
     [1] = "Vitiligo",
     [2] = "Freckles",
@@ -12,8 +19,20 @@ CCAEnums.AdditionalChoices = {
     [4] = "Oldness",
 }
 
+---@alias CCAEnums.ElementValue
+---| 'FaceTats'
+---| 'Makeup'
+---| 'Scales'
+---| 'HairGraying'
+---| 'HairHighlights'
+---| 'Scar'
+---| 'LipsMakeup'
+---| 'HornsColor'
+---| 'HornsTipColor'
+
 --- Elements enum mapping
 --- 1 - Face tats, 2 - Makeup, 3 - Scales, 4 - Hair graying, 5 - Hair highlights, 6 - Scar, 7 - Lips makeup, 8 - Horns color, 9 - Horns tip color
+--- @enum CCAEnums.Elements
 CCAEnums.Elements = {
     [1] = "FaceTats",
     [2] = "Makeup",
@@ -28,7 +47,7 @@ CCAEnums.Elements = {
 
 --- Get the human-readable name for an AdditionalChoices index
 --- @param index integer|nil
---- @return string|nil
+--- @return CCAEnums.AdditionalChoiceValue|nil
 function CCAEnums.GetAdditionalChoiceName(index)
     if type(index) ~= "number" then
         return nil
@@ -38,7 +57,7 @@ end
 
 --- Get the human-readable name for an Elements index
 --- @param index integer|nil
---- @return string|nil
+--- @return CCAEnums.ElementValue|nil
 function CCAEnums.GetElementName(index)
     if type(index) ~= "number" then
         return nil
