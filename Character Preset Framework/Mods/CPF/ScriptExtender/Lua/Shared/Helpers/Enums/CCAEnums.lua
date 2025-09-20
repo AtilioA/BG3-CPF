@@ -1,3 +1,5 @@
+--- Enums and helpers for CharacterCreationAppearance component values
+
 --- @class CCAEnums
 --- @field AdditionalChoices table<integer, CCAEnums.AdditionalChoiceValue>
 --- @field Elements table<integer, string>
