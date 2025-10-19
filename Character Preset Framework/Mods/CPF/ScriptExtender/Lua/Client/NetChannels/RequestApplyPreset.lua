@@ -28,3 +28,5 @@ function RequestApplyPreset(characterUuid, presetPayload, options)
 
     return true
 end
+
+return RequestApplyPreset
