@@ -26,6 +26,7 @@ end
 --- @param CCATable CharacterCreationAppearanceComponent
 --- @return nil
 function CCA.ApplyCCATable(charEntity, CCATable)
+    CPFPrint(2, "Applying CCA table to character " .. VCLoca:GetDisplayName(charEntity))
     local CCA = charEntity.CharacterCreationAppearance
     if CCA then
         local copy = Table.deepcopy(CCATable)

@@ -7,8 +7,8 @@ function Table.deepcopy(origTable)
     local origTable_type = type(origTable)
     local copy
 
-    if origTable_type ~= 'table' then
-        CPFDebug(0, "Table.deepcopy: origTable is not a table")
+    if origTable_type ~= 'table' and origTable_type ~= 'userdata' then
+        CPFDebug(3, "Table.deepcopy: origTable is not a table")
         return origTable
     end
 

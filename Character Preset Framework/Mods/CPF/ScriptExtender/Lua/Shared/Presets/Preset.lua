@@ -1,11 +1,11 @@
 ---@class PresetData
----@field AdditionalChoices string[]
----@field Elements string[]
+---@field AdditionalChoices string[]|userdata
+---@field Elements string[]|userdata
 ---@field EyeColor string
 ---@field HairColor string
 ---@field SecondEyeColor string
 ---@field SkinColor string
----@field Visuals string[]
+---@field Visuals string[]|userdata
 
 ---@class Preset
 ---@field _id string
@@ -19,7 +19,7 @@ Preset = {}
 --- Generates a unique ID for a preset
 ---@return string
 local function generatePresetId()
-    local id = VCHelpers.Format:CreateUUID()
+    local id = VCFormat:CreateUUID()
     return id
 end
 
@@ -90,6 +90,7 @@ function Preset.Serialize(preset, beautify)
         return nil, "Validation failed: " .. err
     end
 
+    _D(preset)
     local success, result = pcall(function()
         return Ext.Json.Stringify(preset, {
             Beautify = beautify,
@@ -170,11 +171,11 @@ function Preset.Validate(preset)
     local data = preset.Data
 
     -- Validate Data subfields (allow missing but check types if present)
-    if data.AdditionalChoices and type(data.AdditionalChoices) ~= "table" then
+    if data.AdditionalChoices and (type(data.AdditionalChoices) ~= "table" and type(data.AdditionalChoices) ~= "userdata") then
         return false, "Invalid 'Data.AdditionalChoices' field - must be a table"
     end
 
-    if data.Elements and type(data.Elements) ~= "table" then
+    if data.Elements and (type(data.Elements) ~= "table" and type(data.Elements) ~= "userdata") then
         return false, "Invalid 'Data.Elements' field - must be a table"
     end
 
@@ -194,7 +195,7 @@ function Preset.Validate(preset)
         return false, "Invalid 'Data.SkinColor' field - must be a string"
     end
 
-    if data.Visuals and type(data.Visuals) ~= "table" then
+    if data.Visuals and (type(data.Visuals) ~= "table" and type(data.Visuals) ~= "userdata") then
         return false, "Invalid 'Data.Visuals' field - must be a table"
     end
 
@@ -205,6 +206,7 @@ end
 ---@param preset Preset
 ---@return CharacterCreationAppearanceComponent ccaTable
 function Preset.ToCCATable(preset)
+    CPFPrint(2, "Converting preset to CCA table")
     -- REVIEW: maybe needs deepcopy?
     local ccaTable = {
         AdditionalChoices = preset.Data.AdditionalChoices or {},

@@ -5,6 +5,9 @@
 ---@param userId integer
 ---@return table response
 local function handleApplyPreset(data, userId)
+    CPFPrint(1, "Received ApplyPreset request from client")
+    CPFDumpCCA(2, data)
+
     local response = {
         Status = "success",
         AppliedAttributes = {},
