@@ -12,8 +12,7 @@ Preset = {}
 --- Generates a unique ID for a preset
 ---@return string
 local function generatePresetId()
-    local id = VCFormat:CreateUUID()
-    return id
+    return VCFormat:CreateUUID()
 end
 
 --- Creates a new preset from character creation appearance data
@@ -135,77 +134,23 @@ function Preset.Deserialize(jsonString)
 end
 
 --- Validates a preset object structure
----@param preset table
+---@param preset Preset
 ---@return boolean isValid
 ---@return string? errorMessage
 function Preset.Validate(preset)
-    if type(preset) ~= "table" then
-        return false, "Preset must be a table"
-    end
-
-    -- Check required top-level fields
-    if not preset._id or type(preset._id) ~= "string" or preset._id == "" then
-        return false, "Missing or invalid '_id' field"
-    end
-
-    if not preset.Name or type(preset.Name) ~= "string" or preset.Name == "" then
-        return false, "Missing or invalid 'Name' field"
-    end
-
-    if not preset.Author or type(preset.Author) ~= "string" then
-        return false, "Missing or invalid 'Author' field"
-    end
-
-    if not preset.Version or type(preset.Version) ~= "string" then
-        return false, "Missing or invalid 'Version' field"
-    end
-
-    -- Check Data field
-    if not preset.Data or type(preset.Data) ~= "table" then
-        return false, "Missing or invalid 'Data' field"
-    end
-
-    local data = preset.Data
-
-    -- Validate Data subfields (allow missing but check types if present)
-    if data.AdditionalChoices and (type(data.AdditionalChoices) ~= "table" and type(data.AdditionalChoices) ~= "userdata") then
-        return false, "Invalid 'Data.AdditionalChoices' field - must be a table"
-    end
-
-    if data.Elements and (type(data.Elements) ~= "table" and type(data.Elements) ~= "userdata") then
-        return false, "Invalid 'Data.Elements' field - must be a table"
-    end
-
-    if data.EyeColor and type(data.EyeColor) ~= "string" then
-        return false, "Invalid 'Data.EyeColor' field - must be a string"
-    end
-
-    if data.HairColor and type(data.HairColor) ~= "string" then
-        return false, "Invalid 'Data.HairColor' field - must be a string"
-    end
-
-    if data.SecondEyeColor and type(data.SecondEyeColor) ~= "string" then
-        return false, "Invalid 'Data.SecondEyeColor' field - must be a string"
-    end
-
-    if data.SkinColor and type(data.SkinColor) ~= "string" then
-        return false, "Invalid 'Data.SkinColor' field - must be a string"
-    end
-
-    if data.Visuals and (type(data.Visuals) ~= "table" and type(data.Visuals) ~= "userdata") then
-        return false, "Invalid 'Data.Visuals' field - must be a table"
-    end
-
-    return true, nil
+    return PresetValidator.Validate(preset)
 end
 
 --- Converts a preset's Data to a CCA-compatible table
 ---@param preset Preset
----@return CharacterCreationAppearanceComponent ccaTable
+---@return CharacterCreationAppearance ccaTable
 function Preset.ToCCATable(preset)
     CPFPrint(2, "Converting preset to CCA table")
     -- REVIEW: maybe needs deepcopy?
     local ccaTable = {
+        AccessorySet = "",
+        Icon = "",
+        field_98 = "",
         AdditionalChoices = preset.Data.AdditionalChoices or {},
         Elements = preset.Data.Elements or {},
         EyeColor = preset.Data.EyeColor or "",

@@ -38,5 +38,6 @@ end
 RequireFiles("Shared/", {
     "NetChannels/_Init",
     "Helpers/_Init",
+    "Validation/_Init",
     "Presets/_Init",
 })
