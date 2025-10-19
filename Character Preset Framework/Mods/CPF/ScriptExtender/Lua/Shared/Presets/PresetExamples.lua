@@ -34,7 +34,7 @@ function PresetExamples.ExportEntityPreset(entity, fileName)
 
     local filePath = "Presets/" .. fileName .. ".json"
     local success, err = Preset.ExportToFile(preset, filePath)
-    
+
     if success then
         CPFPrint(0, "Preset exported successfully to: " .. filePath)
     else
@@ -47,7 +47,7 @@ end
 ---@param targetEntity EntityHandle
 function PresetExamples.ImportAndApplyPreset(filePath, targetEntity)
     local preset, err = Preset.ImportFromFile(filePath)
-    
+
     if not preset then
         CPFWarn(0, "Failed to import preset: " .. tostring(err))
         return
@@ -65,7 +65,7 @@ function PresetExamples.ImportAndApplyPreset(filePath, targetEntity)
     -- Convert to CCA table and apply
     local ccaTable = Preset.ToCCATable(preset)
     CCA.ApplyCCATable(targetEntity, ccaTable)
-    
+
     CPFPrint(0, "Preset '" .. preset.Name .. "' by " .. preset.Author .. " applied successfully")
 end
 
@@ -86,6 +86,8 @@ function PresetExamples.TestRoundTrip(entity)
         CPFWarn(0, "Serialization failed: " .. tostring(serErr))
         return false
     end
+
+    Preset.ExportToFile(originalPreset, "Presets/OriginalPreset.json")
 
     CPFPrint(0, "Serialized JSON:")
     CPFPrint(0, jsonString)

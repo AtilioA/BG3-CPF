@@ -10,24 +10,26 @@ local function testRequestApplyPreset()
         characterUuid = player.Uuid.EntityUuid
         CPFDebug(0, "Using host character UUID: " .. characterUuid)
     else
-        CPFDebug(0, "No host character found, using dummy UUID")
-        characterUuid = "dummy-character-uuid-12345"
+        CPFDebug(0, "No host character found")
     end
 
     -- Create dummy preset payload
     local dummyPreset = {
-        Name = "Test Preset",
-        Race = "Human",
-        Subrace = "High Human",
-        Class = "Fighter",
-        Background = "Soldier",
-        Appearance = {
-            BodyType = 0,
-            HairColor = "Brown",
-            SkinColor = "Light",
-            EyeColor = "Blue"
+        _id = "5e9e40609e564e25836a82569a81036e48bf",
+        Name = "Example Preset",
+        Author = "Volitio",
+        Version = "1.0",
+        Data = {
+            AdditionalChoices = {},
+            Elements = {},
+            EyeColor = "...",
+            HairColor = "...",
+            SecondEyeColor = "...",
+            SkinColor = "...",
+            Visuals = {}
         }
     }
+
 
     CPFDebug(0, "Created dummy preset payload:")
     CPFDump(dummyPreset)

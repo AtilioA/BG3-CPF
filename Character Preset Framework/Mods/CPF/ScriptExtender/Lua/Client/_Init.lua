@@ -11,8 +11,8 @@ end
 
 Ext.Events.ResetCompleted:Subscribe(function()
     CPFDebug(0, "Reset completed, dumping CCA")
-    _DS(_C().CharacterCreationAppearance)
     CPFDumpCCA(1, _C().CharacterCreationAppearance)
+    PresetExamples.TestRoundTrip(_C())
 end)
 
 RequireFiles("Client/NetChannels/", {
