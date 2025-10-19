@@ -1,18 +1,11 @@
----@class PresetData
----@field AdditionalChoices string[]|userdata
----@field Elements string[]|userdata
----@field EyeColor string
----@field HairColor string
----@field SecondEyeColor string
----@field SkinColor string
----@field Visuals string[]|userdata
+---@alias CCAData CharacterCreationAppearance
 
 ---@class Preset
 ---@field _id string
 ---@field Name string
 ---@field Author string
 ---@field Version string
----@field Data PresetData
+---@field Data CCAData
 
 Preset = {}
 
@@ -27,15 +20,19 @@ end
 ---@param name string
 ---@param author string
 ---@param version string
----@param ccaData CharacterCreationAppearanceComponent
+---@param ccaData CCAData
 ---@return Preset
 function Preset.Create(name, author, version, ccaData)
+    ---@type Preset
     local preset = {
         _id = generatePresetId(),
         Name = name,
         Author = author,
         Version = version,
         Data = {
+            AccessorySet = "",
+            Icon = "",
+            field_98 = "",
             AdditionalChoices = {},
             Elements = {},
             EyeColor = "",

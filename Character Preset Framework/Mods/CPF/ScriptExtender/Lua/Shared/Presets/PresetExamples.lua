@@ -124,8 +124,11 @@ function PresetExamples.CreateSamplePreset()
         Author = "Volitio",
         Version = "1.0",
         Data = {
-            AdditionalChoices = {"Choice1", "Choice2"},
-            Elements = {"Element1", "Element2"},
+            AccessorySet = "",
+            Icon = "",
+            field_98 = "",
+            AdditionalChoices = { "Choice1", "Choice2" },
+            Elements = { "Element1", "Element2" },
             EyeColor = "7eb2db1f-fa6b-4d46-8b1c-9d8a81b07c51",
             HairColor = "a4b2c3d4-e5f6-7890-1234-567890abcdef",
             SecondEyeColor = "",

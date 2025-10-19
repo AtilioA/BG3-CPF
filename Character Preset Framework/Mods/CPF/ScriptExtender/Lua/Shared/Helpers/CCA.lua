@@ -1,7 +1,7 @@
 CCA = {}
 
 --- @param entity EntityHandle - Entity to copy CCA from
---- @return CharacterCreationAppearanceComponent? -- CCA component if found, nil if not found
+--- @return CharacterCreationAppearance? -- CCA component if found, nil if not found
 function CCA.CopyCharacterCreationAppearance(entity)
     local CCA = entity.CharacterCreationAppearance
     if CCA then
@@ -11,7 +11,7 @@ function CCA.CopyCharacterCreationAppearance(entity)
 end
 
 --- @param entity EntityHandle - Entity to copy dummy appearance from
---- @return CharacterCreationAppearanceComponent? -- Dummy appearance if found, nil if not found
+--- @return CharacterCreationAppearance? -- Dummy appearance if found, nil if not found
 function CCA.CopyDummyAppearance(entity)
     local dummyCCA = entity.ClientCCDummyDefinition
     if dummyCCA and dummyCCA.Visual then
@@ -23,7 +23,7 @@ end
 
 --- Applies all values from CCATable to the CCA component of charEntity (NOTE: not replicated; must coordinate with server)
 --- @param charEntity EntityHandle
---- @param CCATable CharacterCreationAppearanceComponent
+--- @param CCATable CharacterCreationAppearance
 --- @return nil
 function CCA.ApplyCCATable(charEntity, CCATable)
     CPFPrint(2, "Applying CCA table to character " .. VCLoca:GetDisplayName(charEntity))
