@@ -1,3 +1,0 @@
-RequireFiles("Server/NetChannels/", {
-    "HandleApplyPreset",
-})
