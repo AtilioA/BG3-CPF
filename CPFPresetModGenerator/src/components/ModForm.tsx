@@ -47,13 +47,16 @@ export const ModForm: React.FC<ModFormProps> = ({ config, setConfig, onGenerate,
                         <div className="bg-indigo-500/20 p-2 rounded-lg">
                             <FileJson className="text-primary w-5 h-5" />
                         </div>
-                        <h2 className="text-xl font-bold text-white">Configure Mod Details</h2>
+                        <div>
+                            <h2 className="text-xl font-bold text-white">Configure mod details</h2>
+                            <p className="text-xs text-slate-400">These details are used to generate the meta.lsx configuration file for your mod.</p>
+                        </div>
                     </div>
                     <button
                         onClick={onReset}
                         className="text-xs font-medium text-slate-400 hover:text-white transition-colors uppercase tracking-wider"
                     >
-                        Start Over
+                        Start over
                     </button>
                 </div>
 
@@ -62,7 +65,7 @@ export const ModForm: React.FC<ModFormProps> = ({ config, setConfig, onGenerate,
                     <div className="space-y-6">
                         <div className="space-y-2">
                             <label className="flex items-center gap-2 text-sm font-medium text-slate-300">
-                                <Package className="w-4 h-4 text-primary" /> Mod Name
+                                <Package className="w-4 h-4 text-primary" /> Mod name
                             </label>
                             <input
                                 type="text"
@@ -75,7 +78,7 @@ export const ModForm: React.FC<ModFormProps> = ({ config, setConfig, onGenerate,
 
                         <div className="space-y-2">
                             <label className="flex items-center gap-2 text-sm font-medium text-slate-300">
-                                <Folder className="w-4 h-4 text-primary" /> Folder Name
+                                <Folder className="w-4 h-4 text-primary" /> Folder name
                             </label>
                             <input
                                 type="text"
@@ -138,10 +141,10 @@ export const ModForm: React.FC<ModFormProps> = ({ config, setConfig, onGenerate,
                                 ) : (
                                     <Download className="w-5 h-5" />
                                 )}
-                                {isGenerating ? 'Packaging Mod...' : 'Generate Mod (.zip)'}
+                                {isGenerating ? 'Packaging mod...' : 'Generate mod (.zip)'}
                             </button>
                             <p className="text-center text-xs text-slate-500 mt-3">
-                                Generates a .zip with standard BG3 structure.
+                                Generates a .zip with standard BG3 structure ready for packaging.
                             </p>
                         </div>
                     </div>

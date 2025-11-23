@@ -150,7 +150,7 @@ export default function Home() {
                                             <p className="mb-1">You may now create a .pak for this mod using one of the following tools:</p>
                                             <div className="flex flex-wrap gap-4 mt-2">
                                                 <a
-                                                    href="https://github.com/ShinyHobo/BG3-Modders-Multitool"
+                                                    href="https://github.com/ShinyHobo/BG3-Modders-Multitool/releases/latest"
                                                     target="_blank"
                                                     rel="noreferrer"
                                                     className="flex items-center gap-1 text-primary hover:text-primaryHover hover:underline"
@@ -164,7 +164,7 @@ export default function Home() {
                                                     rel="noreferrer"
                                                     className="flex items-center gap-1 text-primary hover:text-primaryHover hover:underline"
                                                 >
-                                                    LSLib (Divine Tool) <ExternalLink className="w-3 h-3" />
+                                                    LSLib (ConverterApp) <ExternalLink className="w-3 h-3" />
                                                 </a>
                                             </div>
                                         </div>
