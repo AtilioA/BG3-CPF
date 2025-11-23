@@ -5,4 +5,5 @@ RequireFiles("Shared/Helpers/", {
     "Printer",
     "UserData",
     "CCA",
+    "JsonLayer",
 })
