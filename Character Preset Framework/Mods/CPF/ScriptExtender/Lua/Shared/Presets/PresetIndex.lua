@@ -1,7 +1,9 @@
 ---@class PresetIndexEntry
----@field filename string Relative path to the preset file
+---@field filename string Relative path to the preset file (may be empty for mod presets)
 ---@field hidden boolean Whether the preset is hidden (deleted)
 ---@field presetId string The ID of the preset
+---@field source string Source of the preset: "user" or "mod"
+---@field modName string? Name of the mod (for mod presets)
 
 ---@class PresetIndex
 ---@field IndexFilePath string Path to the index file
@@ -12,11 +14,14 @@ PresetIndex = {
 --- Loads the preset index from disk
 ---@return PresetIndexEntry[] entries List of index entries
 function PresetIndex.Load()
+    CPFDebug(2, "PresetIndex.Load: Loading from " .. PresetIndex.IndexFilePath)
     local data, err = JsonLayer:Load(PresetIndex.IndexFilePath)
 
     if not data then
         -- If file doesn't exist or is invalid, return empty list (reconstruction/first run)
         CPFDebug(2, "Preset index not found or invalid, starting fresh.")
+        -- Create the empty index file immediately
+        PresetIndex.Save({})
         return {}
     end
 
@@ -25,6 +30,7 @@ function PresetIndex.Load()
         return {}
     end
 
+    CPFDebug(2, string.format("PresetIndex.Load: Loaded %d entries", #data))
     return data
 end
 
@@ -33,6 +39,7 @@ end
 ---@return boolean success
 ---@return string? error
 function PresetIndex.Save(entries)
+    CPFDebug(2, string.format("PresetIndex.Save: Saving %d entries to %s", #entries, PresetIndex.IndexFilePath))
     local jsonString = Ext.Json.Stringify(entries, { Beautify = true })
     local success, err = pcall(function()
         Ext.IO.SaveFile(PresetIndex.IndexFilePath, jsonString)
@@ -43,36 +50,54 @@ function PresetIndex.Save(entries)
         return false, tostring(err)
     end
 
+    CPFDebug(2, "PresetIndex.Save: Successfully saved index")
     return true
 end
 
 --- Adds or updates an entry in the index
----@param filename string Relative path to the preset file
+---@param filename string Relative path to the preset file (can be empty string for mod presets)
 ---@param presetId string The ID of the preset
+---@param source? string Source: "user" or "mod" (default: "user")
+---@param modName? string Mod name (for mod presets)
 ---@return boolean success
-function PresetIndex.AddEntry(filename, presetId)
+function PresetIndex.AddEntry(filename, presetId, source, modName)
+    source = source or "user"
+    CPFDebug(2, string.format("PresetIndex.AddEntry: filename='%s', presetId='%s', source='%s'", filename, presetId, source))
     local entries = PresetIndex.Load()
     local found = false
 
+    -- Look for existing entry by presetId (not filename, since mod presets may not have filenames)
     for _, entry in ipairs(entries) do
-        if entry.filename == filename then
+        if entry.presetId == presetId then
             entry.hidden = false
-            -- Update ID just in case
-            entry.presetId = presetId
+            entry.filename = filename
+            entry.source = source
+            if modName then
+                entry.modName = modName
+            end
             found = true
+            CPFDebug(2, "PresetIndex.AddEntry: Updated existing entry")
             break
         end
     end
 
     if not found then
-        table.insert(entries, {
+        local newEntry = {
             filename = filename,
             hidden = false,
-            presetId = presetId
-        })
+            presetId = presetId,
+            source = source
+        }
+        if modName then
+            newEntry.modName = modName
+        end
+        table.insert(entries, newEntry)
+        CPFDebug(2, "PresetIndex.AddEntry: Added new entry")
     end
 
-    return PresetIndex.Save(entries)
+    local success = PresetIndex.Save(entries)
+    CPFDebug(2, string.format("PresetIndex.AddEntry: Save result = %s", tostring(success)))
+    return success
 end
 
 --- Removes (hides) an entry from the index by filename

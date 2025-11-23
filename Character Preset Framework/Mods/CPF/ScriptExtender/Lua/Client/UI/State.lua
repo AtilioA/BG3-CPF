@@ -117,29 +117,18 @@ function State:SaveNewPreset()
         return
     end
 
-    -- Save to file
-    local filename = "Presets/" .. name .. ".json"
-    if not Preset.ExportToFile then
-        CPFWarn(0, "Preset.ExportToFile not available")
-        self:SetStatus("Error: Preset.ExportToFile not available")
+    -- Use PresetDiscovery to save and register (handles both file and index)
+    if not (PresetDiscovery and PresetDiscovery.RegisterUserPreset) then
+        CPFWarn(0, "PresetDiscovery not available")
+        self:SetStatus("Error: PresetDiscovery not available")
         return
     end
 
-    local success, err = Preset.ExportToFile(newPreset, filename)
+    local success, err = PresetDiscovery:RegisterUserPreset(newPreset)
     if not success then
-        CPFWarn(0, "Failed to save file: " .. tostring(err))
-        self:SetStatus("Error saving file: " .. tostring(err))
+        CPFWarn(0, "Failed to register preset: " .. tostring(err))
+        self:SetStatus("Error: " .. tostring(err))
         return
-    end
-
-    -- Register with PresetRegistry
-    if PresetRegistry then
-        local regSuccess, regErr = PresetRegistry.Register(newPreset)
-        if not regSuccess then
-            CPFWarn(0, "Failed to register preset: " .. tostring(regErr))
-            self:SetStatus("Error registering preset: " .. tostring(regErr))
-            return
-        end
     end
 
     self:SetStatus("Preset '" .. name .. "' saved")
@@ -150,15 +139,21 @@ end
 function State:DeletePreset(preset)
     if not preset then return end
 
-    self:SetStatus("Preset '" .. preset.Name .. "' deleted (Note: Registry only, file not deleted)")
-
-    -- TODO: update preset index to hide deleted presets
-    -- Remove from PresetRegistry
-    if PresetRegistry and PresetRegistry._presets and preset._id then
-        PresetRegistry._presets[preset._id] = nil
-        CPFPrint(1, "Removed preset from registry: " .. preset._id)
+    -- Use PresetDiscovery to remove (handles both registry and index)
+    if not (PresetDiscovery and PresetDiscovery.RemoveUserPreset) then
+        CPFWarn(0, "PresetDiscovery not available")
+        self:SetStatus("Error: PresetDiscovery not available")
+        return
     end
 
+    local success, err = PresetDiscovery:RemoveUserPreset(preset._id)
+    if not success then
+        CPFWarn(0, "Failed to remove preset: " .. tostring(err))
+        self:SetStatus("Error: " .. tostring(err))
+        return
+    end
+
+    self:SetStatus("Preset '" .. preset.Name .. "' deleted")
     self:RefreshPresets()
     self.SelectedPreset:OnNext(nil)
 end

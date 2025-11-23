@@ -17,7 +17,7 @@ function PresetDiscovery:_LoadAndLogJSON(filePath)
         if err and string.find(err, "Parse error") then
             CPFWarn(0, "Failed to parse JSON file: " .. filePath)
         else
-            CPFDebug(2, "JSON file not found: " .. filePath)
+            CPFDebug(3, "JSON file not found: " .. filePath)
         end
     end
 
@@ -36,6 +36,11 @@ function PresetDiscovery:RegisterPreset(preset, modName, context)
         CPFWarn(0, string.format("Failed to register preset %s from mod '%s': %s", context, modName, regErr))
         return false
     end
+
+    -- Add to index (for all presets, mod or user)
+    local source = (modName == "User") and "user" or "mod"
+    local filename = "" -- Mod presets don't have user-accessible filenames
+    PresetIndex.AddEntry(filename, preset._id, source, modName)
 
     CPFPrint(1, string.format("Loaded preset '%s' from mod '%s' %s", preset.Name, modName, context))
     return true
@@ -123,6 +128,8 @@ end
 ---@return boolean success
 ---@return string? error
 function PresetDiscovery:RegisterUserPreset(preset)
+    CPFPrint(1, "PresetDiscovery:RegisterUserPreset called")
+
     if not preset or not preset._id then
         return false, "Invalid preset"
     end
@@ -132,21 +139,30 @@ function PresetDiscovery:RegisterUserPreset(preset)
     local safeName = preset.Name:gsub("[^%w%-_]", "_")
     local filename = string.format("CPF/preset_%s_%s.json", safeName, preset._id)
 
+    CPFPrint(1, string.format("Saving user preset to: %s", filename))
+
     -- Save the preset file
     local success, err = Preset.ExportToFile(preset, filename)
     if not success then
+        CPFWarn(0, "Failed to save preset file: " .. tostring(err))
         return false, "Failed to save preset file: " .. tostring(err)
     end
 
+    CPFPrint(1, "Preset file saved successfully")
+
     -- Update the index
-    success, err = PresetIndex.AddEntry(filename, preset._id)
+    success, err = PresetIndex.AddEntry(filename, preset._id, "user")
     if not success then
+        CPFWarn(0, "Failed to update preset index: " .. tostring(err))
         return false, "Failed to update preset index: " .. tostring(err)
     end
+
+    CPFPrint(1, "Preset added to index successfully")
 
     -- Register in memory immediately
     self:RegisterPreset(preset, "User", "(User preset)")
 
+    CPFPrint(1, string.format("User preset '%s' registered successfully", preset.Name))
     return true
 end
 

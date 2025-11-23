@@ -22,8 +22,16 @@ function PresetRegistry.Register(preset)
     if PresetRegistry._presets[preset._id] then
         CPFWarn(1, string.format("Preset with ID '%s' already registered. Overwriting.", preset._id))
     end
-
     PresetRegistry._presets[preset._id] = preset
+
+    if not PresetIndex then
+        return false, "PresetIndex not loaded"
+    end
+    local addedToIndex = PresetIndex.AddEntry(preset)
+    if not addedToIndex then
+        return false, "Failed to add preset to index"
+    end
+
     CPFPrint(2, string.format("Registered preset: '%s' by %s (ID: %s)", preset.Name, preset.Author, preset._id))
     return true, nil
 end
@@ -39,6 +47,14 @@ function PresetRegistry.Unregister(id)
 
     if not PresetRegistry._presets[id] then
         return false, "Preset with ID '" .. id .. "' not found"
+    end
+
+    if not PresetIndex then
+        return false, "PresetIndex not loaded"
+    end
+    local removedFromIndex = PresetIndex.RemoveEntryByPresetId(id)
+    if not removedFromIndex then
+        return false, "Failed to remove preset from index"
     end
 
     PresetRegistry._presets[id] = nil
