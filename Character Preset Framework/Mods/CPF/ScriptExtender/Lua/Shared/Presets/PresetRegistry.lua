@@ -28,6 +28,24 @@ function PresetRegistry.Register(preset)
     return true, nil
 end
 
+--- Unregisters a preset
+---@param id string The preset ID
+---@return boolean success Whether the unregistration was successful
+---@return string? errorMessage Error message if unregistration failed
+function PresetRegistry.Unregister(id)
+    if not id then
+        return false, "Preset ID is nil"
+    end
+
+    if not PresetRegistry._presets[id] then
+        return false, "Preset with ID '" .. id .. "' not found"
+    end
+
+    PresetRegistry._presets[id] = nil
+    CPFPrint(2, string.format("Unregistered preset: '%s' (ID: %s)", PresetRegistry._presets[id].Name, id))
+    return true, nil
+end
+
 --- Gets a preset by ID
 ---@param id string The preset ID
 ---@return Preset? preset The preset or nil if not found

@@ -118,7 +118,58 @@ function PresetDiscovery:LoadPresetsForMod(modData)
     return loadedCount
 end
 
---- Loads all presets from all mods in the load order
+--- Registers a new user preset and updates the index
+---@param preset Preset The preset to register
+---@return boolean success
+---@return string? error
+function PresetDiscovery:RegisterUserPreset(preset)
+    if not preset or not preset._id then
+        return false, "Invalid preset"
+    end
+
+    -- Generate filename: CPF/preset_{name}_{id}.json
+    -- REVIEW: Sanitize name to be safe for filenames
+    local safeName = preset.Name:gsub("[^%w%-_]", "_")
+    local filename = string.format("CPF/preset_%s_%s.json", safeName, preset._id)
+
+    -- Save the preset file
+    local success, err = Preset.ExportToFile(preset, filename)
+    if not success then
+        return false, "Failed to save preset file: " .. tostring(err)
+    end
+
+    -- Update the index
+    success, err = PresetIndex.AddEntry(filename, preset._id)
+    if not success then
+        return false, "Failed to update preset index: " .. tostring(err)
+    end
+
+    -- Register in memory immediately
+    self:RegisterPreset(preset, "User", "(User preset)")
+
+    return true
+end
+
+--- Removes a user preset (hides it in the index)
+---@param presetId string The ID of the preset to remove
+---@return boolean success
+---@return string? error
+function PresetDiscovery:RemoveUserPreset(presetId)
+    local success, err = PresetIndex.RemoveEntryByPresetId(presetId)
+    if not success then
+        return false, "Failed to remove preset from index: " .. tostring(err)
+    end
+
+    -- Remove from Registry
+    success, err = PresetRegistry.Unregister(presetId)
+    if not success then
+        return false, "Failed to remove preset from registry: " .. tostring(err)
+    end
+
+    return true
+end
+
+--- Loads all presets from all mods in the load order AND user presets from registry
 ---@return integer totalCount Total number of presets loaded
 function PresetDiscovery:LoadPresets()
     CPFPrint(0, "Starting preset discovery...")
@@ -128,15 +179,28 @@ function PresetDiscovery:LoadPresets()
 
     if not loadOrder then
         CPFWarn(0, "Failed to get mod load order")
-        return 0
+    else
+        -- Iterate through all mods in load order
+        for _, modUUID in ipairs(loadOrder) do
+            local modData = Ext.Mod.GetMod(modUUID)
+            if modData then
+                local count = self:LoadPresetsForMod(modData)
+                totalCount = totalCount + count
+            end
+        end
     end
 
-    -- Iterate through all mods in load order
-    for _, modUUID in ipairs(loadOrder) do
-        local modData = Ext.Mod.GetMod(modUUID)
-        if modData then
-            local count = self:LoadPresetsForMod(modData)
-            totalCount = totalCount + count
+    -- Load User Presets from Registry
+    CPFPrint(1, "Loading user presets from registry...")
+    local registryEntries = PresetIndex.Load()
+    for _, entry in ipairs(registryEntries) do
+        if not entry.hidden then
+            local preset = self:_LoadAndLogJSON(entry.filename)
+            if preset then
+                if self:RegisterPreset(preset, "User", "(Indexed)") then
+                    totalCount = totalCount + 1
+                end
+            end
         end
     end
 
