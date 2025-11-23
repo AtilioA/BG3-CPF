@@ -38,7 +38,11 @@ export const NextSteps: React.FC = () => {
                 </Step>
 
                 <Step number={3}>
-                    Once packed, your mod is ready to be shared or published on Nexus Mods.
+                    Your mod is ready to be shared on{' '}
+                    <ExternalLink href="https://www.nexusmods.com/baldursgate3">
+                        Nexus
+                    </ExternalLink>
+
                 </Step>
             </ul>
         </div>

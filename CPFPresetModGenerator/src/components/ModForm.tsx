@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ModConfig } from '../types';
 import { Download, RefreshCw, FileJson, Package, User, Info, Hash } from 'lucide-react';
 import { generateUUID, sanitizeFolderName } from '../utils/helpers';
@@ -17,6 +17,17 @@ interface ModFormProps {
 export const ModForm: React.FC<ModFormProps> = ({ config, setConfig, onGenerate, onReset }) => {
     const [isGenerating, setIsGenerating] = useState(false);
     const [errors, setErrors] = useState<ModConfigErrors>({});
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    // Cleanup timeout on unmount
+    useEffect(() => {
+        return () => {
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+                timeoutRef.current = null;
+            }
+        };
+    }, []);
 
     const handleChange = (field: keyof ModConfig, value: string) => {
         setConfig(prev => prev ? ({ ...prev, [field]: value }) : null);
@@ -54,10 +65,17 @@ export const ModForm: React.FC<ModFormProps> = ({ config, setConfig, onGenerate,
         }
 
         setIsGenerating(true);
+
+        // Clear any existing timeout
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+
         // Small delay to show spinner interaction
-        setTimeout(() => {
+        timeoutRef.current = setTimeout(() => {
             onGenerate();
             setIsGenerating(false);
+            timeoutRef.current = null; // Clear ref after timeout completes
         }, 600);
     };
 

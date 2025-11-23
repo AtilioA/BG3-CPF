@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useState, useRef } from 'react';
+import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { Upload, AlertCircle, FileJson } from 'lucide-react';
 import { presetJsonSchema } from '../schemas/presetJsonSchema';
 
@@ -12,6 +12,22 @@ export const DropZone: React.FC<DropZoneProps> = ({ onFileLoaded }) => {
     const [isDragging, setIsDragging] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const fileReaderRef = useRef<FileReader | null>(null);
+    const isMountedRef = useRef(true);
+
+    // Cleanup on unmount
+    useEffect(() => {
+        isMountedRef.current = true;
+
+        return () => {
+            isMountedRef.current = false;
+            // Abort any pending file read operations
+            if (fileReaderRef.current) {
+                fileReaderRef.current.abort();
+                fileReaderRef.current = null;
+            }
+        };
+    }, []);
 
     const handleDragEnter = useCallback((e: React.DragEvent) => {
         e.preventDefault();
@@ -39,12 +55,24 @@ export const DropZone: React.FC<DropZoneProps> = ({ onFileLoaded }) => {
 
     const processFile = (file: File) => {
         if (file.type !== "application/json" && !file.name.endsWith('.json')) {
-            setError("Please upload a valid JSON file.");
+            if (isMountedRef.current) {
+                setError("Please upload a valid JSON file.");
+            }
             return;
         }
 
+        // Abort any existing file read operation
+        if (fileReaderRef.current) {
+            fileReaderRef.current.abort();
+        }
+
         const reader = new FileReader();
+        fileReaderRef.current = reader;
+
         reader.onload = (event) => {
+            // Only update state if component is still mounted
+            if (!isMountedRef.current) return;
+
             const result = event.target?.result as string;
             try {
                 const parsed = JSON.parse(result);
@@ -60,11 +88,25 @@ export const DropZone: React.FC<DropZoneProps> = ({ onFileLoaded }) => {
                 setError(null);
             } catch (err) {
                 setError("Invalid JSON format.");
+            } finally {
+                // Clear the ref when done
+                if (fileReaderRef.current === reader) {
+                    fileReaderRef.current = null;
+                }
             }
         };
+
         reader.onerror = () => {
-            setError("Failed to read file.");
+            // Only update state if component is still mounted
+            if (isMountedRef.current) {
+                setError("Failed to read file.");
+            }
+            // Clear the ref on error
+            if (fileReaderRef.current === reader) {
+                fileReaderRef.current = null;
+            }
         };
+
         reader.readAsText(file);
     };
 
