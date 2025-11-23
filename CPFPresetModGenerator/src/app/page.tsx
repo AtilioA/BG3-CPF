@@ -3,12 +3,12 @@
 import React, { useState } from 'react';
 import JSZip from 'jszip';
 import FileSaver from 'file-saver';
-import { DropZone } from '@/components/DropZone';
 import { ModForm } from '@/components/ModForm';
+import { LandingView } from '@/components/LandingView';
+import { GeneratedModView } from '@/components/GeneratedModView';
 import { PresetJson, ModConfig } from '@/types';
 import { generateUUID, sanitizeFolderName, generateMetaLsx, getGeneratedFolderName } from '@/utils/helpers';
-import { Github, Info, CheckCircle, ExternalLink, ArrowRight, Download, ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/Button';
+import { Github, Info } from 'lucide-react';
 import { FaPatreon } from 'react-icons/fa6';
 import { HELP_URL, GITHUB_URL } from '@/constants';
 
@@ -94,6 +94,32 @@ export default function Home() {
         setIsSuccess(false);
     };
 
+    const renderContent = () => {
+        if (!modConfig) {
+            return <LandingView onFileLoaded={handleFileLoaded} />;
+        }
+
+        if (isSuccess) {
+            return (
+                <GeneratedModView
+                    modConfig={modConfig}
+                    onReset={resetApp}
+                    onBackToDetails={() => setIsSuccess(false)}
+                    onDownloadAgain={handleGenerateZip}
+                />
+            );
+        }
+
+        return (
+            <ModForm
+                config={modConfig}
+                setConfig={setModConfig}
+                onGenerate={handleGenerateZip}
+                onReset={resetApp}
+            />
+        );
+    };
+
     return (
         <div className="min-h-screen bg-background text-slate-100 font-sans selection:bg-primary/30 flex flex-col">
 
@@ -120,112 +146,7 @@ export default function Home() {
             </header>
 
             <main className="max-w-7xl mx-auto px-6 py-6 md:py-10">
-                {!modConfig ? (
-                    <div className="space-y-8 animate-fade-in">
-                        <div className="text-center space-y-4 mb-12">
-                            <h2 className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 pb-2">
-                                Turn CPF preset into a mod
-                            </h2>
-                            <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
-                                This tool can parse your Character Preset Framework preset JSON and automatically generate the structure for a standalone Baldur's Gate 3 mod.
-                            </p>
-                        </div>
-                        <DropZone onFileLoaded={handleFileLoaded} />
-                    </div>
-                ) : isSuccess ? (
-                    <div className="max-w-4xl mx-auto animate-fade-in-up">
-                        <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-2xl p-8 md:p-12 text-center">
-                            <div className="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6 ring-1 ring-green-500/50">
-                                <CheckCircle className="w-10 h-10 text-green-500" />
-                            </div>
-
-                            <h2 className="text-3xl font-bold text-white mb-4">Mod generated successfully!</h2>
-                            <p className="text-slate-400 mb-8">
-                                Your <code className="text-white bg-slate-800 px-2 py-1 rounded text-sm">{`CPF_${modConfig.folderName}_Mod.zip`}</code> file has been downloaded.
-                            </p>
-
-                            <div className="bg-slate-950/50 rounded-xl p-6 border border-slate-800 text-left mb-8">
-                                <h3 className="text-indigo-400 font-semibold mb-4 flex items-center gap-2">
-                                    <Info className="w-5 h-5" /> Next steps
-                                </h3>
-                                <ul className="space-y-4 text-sm text-slate-300">
-                                    <li className="flex gap-3">
-                                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-slate-800 flex items-center justify-center text-slate-500 text-xs font-bold border border-slate-700">1</span>
-                                        <p>Extract the downloaded zip file.</p>
-                                    </li>
-                                    <li className="flex gap-3">
-                                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-slate-800 flex items-center justify-center text-slate-500 text-xs font-bold border border-slate-700">2</span>
-                                        <div>
-                                            <p className="mb-1">You may now create a .pak for this mod using one of the following tools:</p>
-                                            <div className="flex flex-wrap gap-4 mt-2">
-                                                <a
-                                                    href="https://github.com/ShinyHobo/BG3-Modders-Multitool/releases/latest"
-                                                    target="_blank"
-                                                    rel="noreferrer"
-                                                    className="flex items-center gap-1 text-primary hover:text-primaryHover hover:underline"
-                                                >
-                                                    BG3 Modders Multitool <ExternalLink className="w-3 h-3" />
-                                                </a>
-                                                <span className="text-slate-600">or</span>
-                                                <a
-                                                    href="https://github.com/Norbyte/lslib"
-                                                    target="_blank"
-                                                    rel="noreferrer"
-                                                    className="flex items-center gap-1 text-primary hover:text-primaryHover hover:underline"
-                                                >
-                                                    LSLib (ConverterApp) <ExternalLink className="w-3 h-3" />
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li className="flex gap-3">
-                                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-slate-800 flex items-center justify-center text-slate-500 text-xs font-bold border border-slate-700">3</span>
-                                        <div>
-                                            <p>Once packed, your mod is ready to be shared or published on Nexus Mods.</p>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <Button
-                                onClick={resetApp}
-                                variant="secondary"
-                                icon={<ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />}
-                                className="group"
-                            >
-                                Create another mod
-                            </Button>
-
-                            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6 pt-6 border-t border-slate-800/50">
-                                <Button
-                                    onClick={() => setIsSuccess(false)}
-                                    variant="ghost"
-                                    icon={<ArrowLeft className="w-4 h-4" />}
-                                    className="text-sm"
-                                >
-                                    Back to details
-                                </Button>
-                                <span className="hidden sm:block text-slate-700">•</span>
-                                <Button
-                                    onClick={handleGenerateZip}
-                                    variant="ghost"
-                                    icon={<Download className="w-4 h-4" />}
-                                    className="text-sm"
-                                >
-                                    Download again
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-                ) : (
-                    <ModForm
-                        config={modConfig}
-                        setConfig={setModConfig}
-                        onGenerate={handleGenerateZip}
-                        onReset={resetApp}
-                    />
-                )
-                }
+                {renderContent()}
             </main >
 
             {/* Footer */}

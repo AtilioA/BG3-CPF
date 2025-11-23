@@ -2,9 +2,10 @@
 
 import React, { useState } from 'react';
 import { ModConfig } from '../types';
-import { Download, RefreshCw, FileJson, Package, User, Folder, Info, Hash, AlertCircle } from 'lucide-react';
-import { generateUUID, sanitizeFolderName, getGeneratedFolderName } from '../utils/helpers';
+import { Download, RefreshCw, FileJson, Package, User, Info, Hash } from 'lucide-react';
+import { generateUUID, sanitizeFolderName } from '../utils/helpers';
 import { modConfigSchema, ModConfigErrors } from '../schemas/modConfigSchema';
+import { FormField } from './FormField';
 
 interface ModFormProps {
     config: ModConfig;
@@ -73,84 +74,39 @@ export const ModForm: React.FC<ModFormProps> = ({ config, setConfig, onGenerate,
                             <p className="text-xs text-slate-400">These details are used to generate the meta.lsx configuration file for your mod.</p>
                         </div>
                     </div>
-                    {/* <button
-                        onClick={onReset}
-                        className="text-xs font-medium text-slate-400 hover:text-white transition-colors uppercase tracking-wider"
-                    >
-                        Start over
-                    </button> */}
                 </div>
 
                 <div className="p-8 grid grid-cols-1 md:grid-cols-1 gap-6">
                     {/* Left Column: Core Info */}
                     <div className="space-y-6">
-                        <div className="space-y-2">
-                            <label className="flex items-center gap-2 text-sm font-medium text-slate-300">
-                                <Package className="w-4 h-4 text-primary" /> Mod name
-                            </label>
-                            <input
-                                type="text"
-                                value={config.modName}
-                                onChange={(e) => handleChange('modName', e.target.value)}
-                                className={`w-full bg-slate-950 border rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all ${errors.modName ? 'border-red-500' : 'border-slate-700'
-                                    }`}
-                            />
-                            {errors.modName && (
-                                <div className="flex items-center gap-2 text-red-400 text-xs mt-1">
-                                    <AlertCircle className="w-3 h-3" />
-                                    <span>{errors.modName}</span>
-                                </div>
-                            )}
-                            <p className="text-xs text-slate-500">The mod name shown in mod managers.</p>
-                        </div>
+                        <FormField
+                            label="Mod name"
+                            icon={Package}
+                            value={config.modName}
+                            onChange={(value) => handleChange('modName', value)}
+                            error={errors.modName}
+                            helperText="The mod name shown in mod managers."
+                        />
 
-                        {/* <div className="space-y-2">
-                            <label className="flex items-center gap-2 text-sm font-medium text-slate-300">
-                                <Folder className="w-4 h-4 text-primary" /> Folder name
-                            </label>
-                            <input
-                                type="text"
-                                value={config.folderName}
-                                onBlur={(e) => handleBlur('folderName', e.target.value)}
-                                onChange={(e) => handleChange('folderName', e.target.value)}
-                                className="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all font-mono text-sm"
-                            />
-                            <p className="text-xs text-slate-500">Must be alphanumeric (no spaces). Auto-sanitized.</p>
-                        </div> */}
-
-                        <div className="space-y-2">
-                            <label className="flex items-center gap-2 text-sm font-medium text-slate-300">
-                                <User className="w-4 h-4 text-primary" /> Author
-                            </label>
-                            <input
-                                type="text"
-                                value={config.author}
-                                onChange={(e) => handleChange('author', e.target.value)}
-                                className={`w-full bg-slate-950 border rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all ${errors.author ? 'border-red-500' : 'border-slate-700'
-                                    }`}
-                            />
-                            {errors.author && (
-                                <div className="flex items-center gap-2 text-red-400 text-xs mt-1">
-                                    <AlertCircle className="w-3 h-3" />
-                                    <span>{errors.author}</span>
-                                </div>
-                            )}
-                        </div>
+                        <FormField
+                            label="Author"
+                            icon={User}
+                            value={config.author}
+                            onChange={(value) => handleChange('author', value)}
+                            error={errors.author}
+                        />
                     </div>
 
                     {/* Right Column: Technical & Preview */}
                     <div className="space-y-6">
-                        <div className="space-y-2">
-                            <label className="flex items-center gap-2 text-sm font-medium text-slate-300">
-                                <Info className="w-4 h-4 text-primary" /> Description
-                            </label>
-                            <textarea
-                                value={config.description}
-                                onChange={(e) => handleChange('description', e.target.value)}
-                                rows={2}
-                                className="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all resize-none"
-                            />
-                        </div>
+                        <FormField
+                            label="Description"
+                            icon={Info}
+                            type="textarea"
+                            value={config.description}
+                            onChange={(value) => handleChange('description', value)}
+                            rows={2}
+                        />
 
                         <div className="space-y-2">
                             <div className="flex justify-between items-center">
