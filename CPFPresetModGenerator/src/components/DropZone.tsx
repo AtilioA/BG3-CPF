@@ -2,6 +2,7 @@
 
 import React, { useCallback, useState, useRef } from 'react';
 import { Upload, AlertCircle, FileJson } from 'lucide-react';
+import { presetJsonSchema } from '../schemas/presetJsonSchema';
 
 interface DropZoneProps {
     onFileLoaded: (jsonContent: string) => void;
@@ -45,8 +46,21 @@ export const DropZone: React.FC<DropZoneProps> = ({ onFileLoaded }) => {
         const reader = new FileReader();
         reader.onload = (event) => {
             const result = event.target?.result as string;
-            onFileLoaded(result);
-            setError(null);
+            try {
+                const parsed = JSON.parse(result);
+                const validation = presetJsonSchema.safeParse(parsed);
+
+                if (!validation.success) {
+                    const firstError = validation.error.issues[0];
+                    setError(`Invalid preset: ${firstError.path.join('.')} - ${firstError.message}`);
+                    return;
+                }
+
+                onFileLoaded(result);
+                setError(null);
+            } catch (err) {
+                setError("Invalid JSON format.");
+            }
         };
         reader.onerror = () => {
             setError("Failed to read file.");
@@ -68,8 +82,15 @@ export const DropZone: React.FC<DropZoneProps> = ({ onFileLoaded }) => {
         const text = e.clipboardData.getData('text');
         if (text) {
             try {
-                // Just validation check
-                JSON.parse(text);
+                const parsed = JSON.parse(text);
+                const validation = presetJsonSchema.safeParse(parsed);
+
+                if (!validation.success) {
+                    const firstError = validation.error.issues[0];
+                    setError(`Invalid preset: ${firstError.path.join('.')} - ${firstError.message}`);
+                    return;
+                }
+
                 onFileLoaded(text);
                 setError(null);
             } catch (err) {
@@ -98,7 +119,7 @@ export const DropZone: React.FC<DropZoneProps> = ({ onFileLoaded }) => {
     };
 
     return (
-        <div className="w-full max-w-2xl mx-auto">
+        <div className="w-full max-w-3xl mx-auto">
             <div
                 onClick={handleZoneClick}
                 onDragEnter={handleDragEnter}
@@ -122,18 +143,18 @@ export const DropZone: React.FC<DropZoneProps> = ({ onFileLoaded }) => {
                     onChange={handleFileInput}
                 />
 
-                <div className="mb-4 p-4 rounded-full bg-slate-800 group-hover:bg-slate-700 transition-colors">
+                <div className="mb-2 p-4 rounded-full bg-slate-800 group-hover:bg-slate-700 transition-colors">
                     <Upload className={`w-10 h-10 ${isDragging ? 'text-primary' : 'text-slate-400'}`} />
                 </div>
 
                 <h3 className="text-xl font-semibold text-white mb-2">
                     Drop your preset JSON here
                 </h3>
-                <p className="text-slate-500 mb-6 text-xs">
+                {/* <p className="text-slate-500 mb-6 text-xs">
                     click anywhere to browse
-                </p>
+                </p> */}
 
-                <div className="w-full max-w-lg flex flex-col items-center gap-4">
+                <div className="w-full max-w-lg flex flex-col items-center gap-4 mt-4">
                     <div className="flex items-center w-full gap-3">
                         <div className="h-px bg-slate-700 flex-1"></div>
                         <span className="text-slate-400 text-xs uppercase font-medium tracking-wider">Or paste JSON content</span>
@@ -143,14 +164,14 @@ export const DropZone: React.FC<DropZoneProps> = ({ onFileLoaded }) => {
                     <div className="w-full relative">
                         <textarea
                             rows={6}
-                            placeholder="Paste JSON code here..."
+                            placeholder="Paste preset JSON contents here..."
                             onPaste={handlePaste}
                             onClick={handleTextAreaClick}
                             className="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-3 text-sm text-slate-300 font-mono focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all resize-y"
                         />
-                        <div className="absolute right-3 top-3 text-slate-600 pointer-events-none">
+                        {/* <div className="absolute right-3 top-3 text-slate-600 pointer-events-none">
                             <FileJson className="w-4 h-4" />
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 
