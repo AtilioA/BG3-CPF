@@ -1,0 +1,5 @@
+{
+  "name": "BG3 Mod Generator",
+  "description": "A static tool to convert JSON presets into Baldur's Gate 3 mod folder structures.",
+  "requestFramePermissions": []
+}
