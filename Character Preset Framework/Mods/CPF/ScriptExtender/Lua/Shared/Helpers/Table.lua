@@ -19,4 +19,21 @@ function Table.deepcopy(origTable)
     return copy
 end
 
+--- Checks if a table is an array (has numeric indices)
+--- @param tbl table The table to check
+--- @return boolean isArray Whether the table is an array
+function Table.IsArray(tbl)
+    if type(tbl) ~= "table" then
+        return false
+    end
+
+    for k, _ in pairs(tbl) do
+        if type(k) == "number" then
+            return true
+        end
+    end
+
+    return false
+end
+
 return Table

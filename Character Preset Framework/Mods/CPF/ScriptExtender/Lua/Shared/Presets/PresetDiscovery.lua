@@ -6,7 +6,92 @@ PresetDiscovery = {}
 PresetDiscovery.SinglePresetPathPattern = "Mods/%s/CPF_preset.json"
 PresetDiscovery.MultiPresetPathPattern = "Mods/%s/CPF_presets.json"
 
+--- Loads a JSON file and logs appropriate errors
+---@param filePath string The file path to load
+---@return table|nil data The loaded data, or nil if failed
+---@private
+function PresetDiscovery:_LoadAndLogJSON(filePath)
+    local data, err = JsonLayer:Load(filePath)
 
+    if not data then
+        if err and string.find(err, "Parse error") then
+            CPFWarn(0, "Failed to parse JSON file: " .. filePath)
+        else
+            CPFDebug(2, "JSON file not found: " .. filePath)
+        end
+    end
+
+    return data
+end
+
+--- Validates and registers a single preset
+---@param preset table The preset to validate and register
+---@param modName string The mod name for logging
+---@param context string Additional context for logging (e.g., "index 1")
+---@return boolean success Whether the preset was successfully registered
+---@private
+function PresetDiscovery:RegisterPreset(preset, modName, context)
+    local success, regErr = PresetRegistry.Register(preset)
+    if not success then
+        CPFWarn(0, string.format("Failed to register preset %s from mod '%s': %s", context, modName, regErr))
+        return false
+    end
+
+    CPFPrint(1, string.format("Loaded preset '%s' from mod '%s' %s", preset.Name, modName, context))
+    return true
+end
+
+--- Loads and registers a single preset file
+---@param modName string The mod name
+---@param modDir string The mod directory
+---@return integer count Number of presets loaded (0 or 1)
+---@private
+function PresetDiscovery:_LoadSinglePreset(modName, modDir)
+    local filePath = string.format(self.SinglePresetPathPattern, modDir)
+    local preset = self:_LoadAndLogJSON(filePath)
+
+    if not preset then
+        return 0
+    end
+
+    CPFPrint(1, string.format("Found CPF_preset.json in mod '%s'", modName))
+
+    if self:RegisterPreset(preset, modName, "") then
+        return 1
+    end
+
+    return 0
+end
+
+--- Loads and registers multiple presets from an array file
+---@param modName string The mod name
+---@param modDir string The mod directory
+---@return integer count Number of presets loaded
+---@private
+function PresetDiscovery:_LoadMultiplePresets(modName, modDir)
+    local filePath = string.format(self.MultiPresetPathPattern, modDir)
+    local presets = self:_LoadAndLogJSON(filePath)
+
+    if not presets then
+        return 0
+    end
+
+    CPFPrint(1, string.format("Found CPF_presets.json in mod '%s'", modName))
+
+    if not Table.IsArray(presets) then
+        CPFWarn(0, string.format("CPF_presets.json in mod '%s' is not a valid array", modName))
+        return 0
+    end
+
+    local loadedCount = 0
+    for i, preset in ipairs(presets) do
+        if self:RegisterPreset(preset, modName, string.format("(index %d)", i)) then
+            loadedCount = loadedCount + 1
+        end
+    end
+
+    return loadedCount
+end
 
 --- Tries to load and register presets for a specific mod
 ---@param modData table The mod data from Ext.Mod.GetMod()
@@ -19,89 +104,12 @@ function PresetDiscovery:LoadPresetsForMod(modData)
 
     local modName = modData.Info.Name or modData.Info.Directory
     local modDir = modData.Info.Directory
-    local loadedCount = 0
 
     CPFDebug(2, string.format("Checking mod '%s' for presets...", modName))
 
-    -- Try to load single preset file (CPF_preset.json)
-    local singlePresetPath = string.format(self.SinglePresetPathPattern, modDir)
-    local singlePreset, singleErr = JsonLayer:Load(singlePresetPath)
-
-    if not singlePreset then
-        if singleErr and string.find(singleErr, "Parse error") then
-            CPFWarn(0, "Failed to parse JSON file: " .. singlePresetPath)
-        else
-            CPFDebug(2, "JSON file not found: " .. singlePresetPath)
-        end
-    end
-
-    if singlePreset then
-        CPFPrint(1, string.format("Found CPF_preset.json in mod '%s'", modName))
-
-        -- Validate and register the preset
-        local valid, validErr = Preset.Validate(singlePreset)
-        if valid then
-            local success, regErr = PresetRegistry.Register(singlePreset)
-            if success then
-                loadedCount = loadedCount + 1
-                CPFPrint(1, string.format("Loaded preset '%s' from mod '%s'", singlePreset.Name, modName))
-            else
-                CPFWarn(0, string.format("Failed to register preset from mod '%s': %s", modName, regErr))
-            end
-        else
-            CPFWarn(0, string.format("Invalid preset in mod '%s': %s", modName, validErr))
-        end
-    end
-
-    -- Try to load multiple presets file (CPF_presets.json)
-    local multiPresetPath = string.format(self.MultiPresetPathPattern, modDir)
-    local multiPresets, multiErr = JsonLayer:Load(multiPresetPath)
-
-    if not multiPresets then
-        if multiErr and string.find(multiErr, "Parse error") then
-            CPFWarn(0, "Failed to parse JSON file: " .. multiPresetPath)
-        else
-            CPFDebug(2, "JSON file not found: " .. multiPresetPath)
-        end
-    end
-
-    if multiPresets then
-        CPFPrint(1, string.format("Found CPF_presets.json in mod '%s'", modName))
-
-        -- Validate that it's an array
-        if type(multiPresets) ~= "table" then
-            CPFWarn(0, string.format("CPF_presets.json in mod '%s' is not a valid array", modName))
-        else
-            -- Check if it's an array (has numeric indices)
-            local isArray = false
-            for k, v in pairs(multiPresets) do
-                if type(k) == "number" then
-                    isArray = true
-                    break
-                end
-            end
-
-            if not isArray then
-                CPFWarn(0, string.format("CPF_presets.json in mod '%s' is not a valid array", modName))
-            else
-                -- Iterate through presets
-                for i, preset in ipairs(multiPresets) do
-                    local valid, validErr = Preset.Validate(preset)
-                    if valid then
-                        local success, regErr = PresetRegistry.Register(preset)
-                        if success then
-                            loadedCount = loadedCount + 1
-                            CPFPrint(1, string.format("Loaded preset '%s' from mod '%s' (index %d)", preset.Name, modName, i))
-                        else
-                            CPFWarn(0, string.format("Failed to register preset %d from mod '%s': %s", i, modName, regErr))
-                        end
-                    else
-                        CPFWarn(0, string.format("Invalid preset %d in mod '%s': %s", i, modName, validErr))
-                    end
-                end
-            end
-        end
-    end
+    local loadedCount = 0
+    loadedCount = loadedCount + self:_LoadSinglePreset(modName, modDir)
+    loadedCount = loadedCount + self:_LoadMultiplePresets(modName, modDir)
 
     if loadedCount > 0 then
         CPFPrint(1, string.format("Loaded %d preset(s) from mod '%s'", loadedCount, modName))
