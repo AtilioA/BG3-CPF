@@ -38,11 +38,10 @@ export const NextSteps: React.FC = () => {
                 </Step>
 
                 <Step number={3}>
-                    Your mod is ready to be shared on{' '}
-                    <ExternalLink href="https://www.nexusmods.com/baldursgate3">
-                        Nexus
-                    </ExternalLink>
-
+                    <div className="flex flex-wrap gap-3 items-center">
+                        Your mod is ready to be shared on
+                        <ExternalLink href="https://www.nexusmods.com/baldursgate3">Nexus Mods</ExternalLink>
+                    </div>
                 </Step>
             </ul>
         </div>
