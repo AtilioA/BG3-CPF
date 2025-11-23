@@ -1,5 +1,5 @@
 export const HELP_URL = "https://www.nexusmods.com/baldursgate3/mods/9162";
-export const GITHUB_URL = "https://github.com/AtilioA/BG3-MCM/";
+export const GITHUB_URL = "https://github.com/AtilioA/BG3-CPF/";
 
 export const META_LSX_TEMPLATE = `<?xml version="1.0" encoding="UTF-8"?>
 <save>
