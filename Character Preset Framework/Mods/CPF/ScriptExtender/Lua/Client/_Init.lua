@@ -10,11 +10,15 @@ else
 end
 
 Ext.Events.ResetCompleted:Subscribe(function()
-    CPFDebug(0, "Reset completed, dumping CCA")
-    CPFDumpCCA(1, _C().CharacterCreationAppearance)
-    PresetExamples.TestRoundTrip(_C())
+    -- CPFDebug(0, "Reset completed, dumping CCA")
+    -- CPFDumpCCA(1, _C().CharacterCreationAppearance)
+    -- PresetExamples.TestRoundTrip(_C())
 end)
 
 RequireFiles("Client/NetChannels/", {
+    "_Init",
+})
+
+RequireFiles("Client/UI/", {
     "_Init",
 })
