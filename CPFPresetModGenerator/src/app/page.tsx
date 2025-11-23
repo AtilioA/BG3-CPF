@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import JSZip from 'jszip';
 import FileSaver from 'file-saver';
 import { ModForm } from '@/components/ModForm';
@@ -15,6 +15,7 @@ import { HELP_URL, GITHUB_URL } from '@/constants';
 export default function Home() {
     const [modConfig, setModConfig] = useState<ModConfig | null>(null);
     const [isSuccess, setIsSuccess] = useState(false);
+    const currentYear = useMemo(() => new Date().getFullYear(), []);
 
     const handleFileLoaded = (jsonContent: string) => {
         try {
@@ -154,7 +155,7 @@ export default function Home() {
                 <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-col items-center justify-center gap-1 text-slate-500 text-sm">
                     <p>Nothing is uploaded, processing is done locally.</p>
                     <div className="flex flex-row items-center gap-2">
-                        <p>&copy; {new Date().getFullYear()} Volitio.</p>
+                        <p>&copy; {currentYear} Volitio.</p>
                         <a
                             href="https://www.patreon.com/volitio/"
                             target="_blank"
