@@ -62,8 +62,17 @@ function State:RefreshPresets()
     -- Get presets from registry
     if PresetRegistry then
         local presetsArray = PresetRegistry.GetAllAsArray()
-        self.Presets:OnNext(presetsArray)
-        local count = #presetsArray
+
+        -- Filter out hidden presets
+        local visiblePresets = {}
+        for _, preset in ipairs(presetsArray) do
+            if not (preset._indexData and preset._indexData.hidden) then
+                table.insert(visiblePresets, preset)
+            end
+        end
+
+        self.Presets:OnNext(visiblePresets)
+        local count = #visiblePresets
         self:SetStatus(string.format("Found %d preset(s)", count))
         CPFPrint(1, string.format("Refreshed UI with %d preset(s)", count))
     else

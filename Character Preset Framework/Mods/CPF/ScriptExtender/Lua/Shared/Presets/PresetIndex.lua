@@ -139,4 +139,19 @@ function PresetIndex.RemoveEntryByPresetId(presetId)
     return true
 end
 
+--- Gets a single entry from the index by preset ID
+---@param presetId string The ID of the preset
+---@return PresetIndexEntry? entry The index entry or nil if not found
+function PresetIndex.GetEntry(presetId)
+    local entries = PresetIndex.Load()
+
+    for _, entry in ipairs(entries) do
+        if entry.presetId == presetId then
+            return entry
+        end
+    end
+
+    return nil
+end
+
 return PresetIndex

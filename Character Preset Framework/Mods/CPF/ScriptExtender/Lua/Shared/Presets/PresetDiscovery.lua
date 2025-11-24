@@ -172,15 +172,17 @@ end
 ---@return boolean success
 ---@return string? error
 function PresetDiscovery:RemoveUserPreset(presetId)
+    -- Mark as hidden in the index
     local success, err = PresetIndex.RemoveEntryByPresetId(presetId)
     if not success then
-        return false, "Failed to remove preset from index: " .. tostring(err)
+        return false, "Failed to hide preset in index: " .. tostring(err)
     end
 
-    -- Remove from Registry
-    success, err = PresetRegistry.Unregister(presetId)
+    -- Update the preset's index data in the registry (don't unregister)
+    -- This keeps the preset loaded but marked as hidden
+    success = PresetRegistry.UpdateIndexData(presetId)
     if not success then
-        return false, "Failed to remove preset from registry: " .. tostring(err)
+        CPFWarn(1, "Failed to update preset index data for: " .. presetId)
     end
 
     return true
@@ -243,16 +245,16 @@ function PresetDiscovery:LoadPresets()
         end
     end
 
-    -- Load User Presets from Registry
+    -- Load User Presets from Registry (including hidden ones)
     CPFPrint(1, "Loading user presets from registry...")
     local registryEntries = PresetIndex.Load()
     for _, entry in ipairs(registryEntries) do
-        if not entry.hidden then
-            local preset = self:_LoadAndLogJSON(entry.filename, 'user')
-            if preset then
-                if self:RegisterPreset(preset, "User", "(Indexed)") then
-                    totalCount = totalCount + 1
-                end
+        -- Load all presets, including hidden ones
+        -- The UI will filter based on preset._indexData.hidden
+        local preset = self:_LoadAndLogJSON(entry.filename, 'user')
+        if preset then
+            if self:RegisterPreset(preset, "User", "(Indexed)") then
+                totalCount = totalCount + 1
             end
         end
     end

@@ -22,7 +22,6 @@ function PresetRegistry.Register(preset)
     if PresetRegistry._presets[preset._id] then
         CPFWarn(1, string.format("Preset with ID '%s' already registered. Overwriting.", preset._id))
     end
-    PresetRegistry._presets[preset._id] = preset
 
     if not PresetIndex then
         return false, "PresetIndex not loaded"
@@ -31,6 +30,14 @@ function PresetRegistry.Register(preset)
     if not addedToIndex then
         return false, "Failed to add preset to index"
     end
+
+    -- Attach index data to the preset object
+    local indexEntry = PresetIndex.GetEntry(preset._id)
+    if indexEntry then
+        preset._indexData = indexEntry
+    end
+
+    PresetRegistry._presets[preset._id] = preset
 
     CPFPrint(2, string.format("Registered preset: '%s' by %s (ID: %s)", preset.Name, preset.Author, preset._id))
     return true, nil
@@ -99,6 +106,28 @@ function PresetRegistry.Count()
         count = count + 1
     end
     return count
+end
+
+--- Updates the index data for a preset (e.g., when hidden status changes)
+---@param id string The preset ID
+---@return boolean success Whether the update was successful
+function PresetRegistry.UpdateIndexData(id)
+    local preset = PresetRegistry._presets[id]
+    if not preset then
+        return false
+    end
+
+    if not PresetIndex then
+        return false
+    end
+
+    local indexEntry = PresetIndex.GetEntry(id)
+    if indexEntry then
+        preset._indexData = indexEntry
+        return true
+    end
+
+    return false
 end
 
 return PresetRegistry

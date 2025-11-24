@@ -138,7 +138,8 @@ function PresetExamples.CreateSamplePreset()
                 "Visual2",
                 "Visual3"
             }
-        }
+        },
+        Dependencies = {}
     }
 end
 
