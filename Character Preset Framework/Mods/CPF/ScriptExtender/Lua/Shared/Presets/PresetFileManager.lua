@@ -12,6 +12,7 @@ function PresetFileManager:_GenerateFilename(preset)
     return string.format("CPF/preset_%s_%s.json", safeName, preset._id)
 end
 
+-- TODO: generate Ext.IO.SaveFile("preset_preview.webp", _C().CustomIcon.Icon) (gate with MCM setting)
 --- Saves a user preset to file
 ---@param preset Preset The preset to save
 ---@return boolean success

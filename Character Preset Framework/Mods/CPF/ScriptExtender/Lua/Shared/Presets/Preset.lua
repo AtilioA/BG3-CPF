@@ -1,3 +1,11 @@
+-- TODO: missing info:
+-- BodyShape = CharacterCreationStats.BodyShape,
+-- BodyType = CharacterCreationStats.BodyType,
+-- Race = CharacterCreationStats.Race,
+-- Subrace = CharacterCreationStats.SubRace,
+-- Voice? CCCharacterDefinition
+-- TODO: apply to dummy during character creation
+
 ---@alias CCAData CharacterCreationAppearance
 
 ---@class Preset
