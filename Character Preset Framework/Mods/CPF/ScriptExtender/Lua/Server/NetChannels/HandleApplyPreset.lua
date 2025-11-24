@@ -54,12 +54,16 @@ local function handleApplyPreset(data, userId)
     local ccaTable = Preset.ToCCATable(data.Preset)
     CCA.ApplyCCATable(entity, ccaTable)
 
+    -- Update character's appearance
+    entity:Replicate("CharacterCreationAppearance")
+    entity:Replicate("CharacterCreationStats")
+
     -- Track which attributes were applied
     for key, _ in pairs(ccaTable) do
         table.insert(response.AppliedAttributes, key)
     end
 
-    local charName = VCHelpers.Loca:GetDisplayName(entity)
+    local charName = Ext.Loca.GetTranslatedString(entity.DisplayName.NameKey.Handle.Handle)
 
     CPFPrint(1, string.format("Applied preset '%s' by %s to character %s",
         data.Preset.Name,

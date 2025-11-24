@@ -161,7 +161,11 @@ function PresetDiscovery:RegisterUserPreset(preset)
     CPFPrint(1, "Preset added to index successfully")
 
     -- Register in memory immediately
-    self:RegisterPreset(preset, "User", "(User preset)")
+    local regSuccess, regErr = PresetRegistry.Register(preset)
+    if not regSuccess then
+        CPFWarn(0, string.format("Failed to register user preset in registry: %s", regErr))
+        return false, "Failed to register preset in registry: " .. tostring(regErr)
+    end
 
     CPFPrint(1, string.format("User preset '%s' registered successfully", preset.Name))
     return true

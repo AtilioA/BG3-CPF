@@ -31,7 +31,7 @@ function ViewMode:Render(parent)
             -- Actions
             local btnApply = group:AddButton("Apply")
             btnApply.OnClick = function()
-                State:ApplyPreset(preset)
+                State:ApplyPreset(record)
             end
 
             btnApply.SameLine = true
