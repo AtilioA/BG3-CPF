@@ -70,7 +70,7 @@ function PresetIndex.AddEntry(filename, presetId, source)
     for _, entry in ipairs(entries) do
         if entry.presetId == presetId then
             entry.hidden = entry.hidden
-            entry.filename = filename
+            entry.filename = filename ~= "" and filename or entry.filename
             entry.source = source
             found = true
             CPFDebug(2, "PresetIndex.AddEntry: Updated existing entry")
@@ -80,7 +80,7 @@ function PresetIndex.AddEntry(filename, presetId, source)
 
     if not found then
         local newEntry = {
-            filename = filename,
+            filename = filename ~= "" and filename or "",
             hidden = false,
             presetId = presetId,
             source = source

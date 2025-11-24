@@ -171,7 +171,7 @@ end
 ---@param presetId string The ID of the preset to remove
 ---@return boolean success
 ---@return string? error
-function PresetDiscovery:RemoveUserPreset(presetId)
+function PresetDiscovery:HideUserPreset(presetId)
     -- Mark as hidden in the index
     local success, err = PresetIndex.RemoveEntryByPresetId(presetId)
     if not success then

@@ -8,7 +8,6 @@
 ---@field Data CCAData
 ---@field Dependencies ModDependency[]
 
-
 Preset = {}
 
 --- Generates a unique ID for a preset
@@ -92,7 +91,6 @@ function Preset.Serialize(preset, beautify)
         return nil, "Validation failed: " .. err
     end
 
-    _D(preset)
     local success, result = pcall(function()
         return Ext.Json.Stringify(preset, {
             Beautify = beautify,

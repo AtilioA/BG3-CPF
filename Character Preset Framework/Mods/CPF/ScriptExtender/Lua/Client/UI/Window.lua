@@ -25,7 +25,8 @@ function Window:DrawSidebar(parent)
     local btnCreate = parent:AddButton("Create from Self")
     btnCreate.OnClick = function()
         -- TODO: Get actual player name
-        State:CaptureCharacterData("Self") end
+        State:CaptureCharacterData("Self")
+    end
 
     btnCreate.SameLine = true
 
@@ -34,15 +35,18 @@ function Window:DrawSidebar(parent)
     -- Preset List - reactive group that updates when Presets changes
     local listChild = parent:AddChildWindow("PresetList")
 
-    RenderHelper.CreateReactiveGroup(listChild, "PresetsList", State.Presets, function(group, presets)
-        for i, preset in ipairs(presets) do
-            local label = preset.Name or ("Preset " .. i)
-            local item = group:AddButton(label)
-            item.OnClick = function()
-                State:SelectPreset(preset)
+    RenderHelper.CreateReactiveGroup(listChild, "PresetsList", State.Presets,
+        ---@param group ExtuiGroup
+        ---@param records PresetRecord[]
+        function(group, records)
+            for i, record in ipairs(records) do
+                local label = (record.preset.Name .. "##" .. record.preset._id) or ("Preset " .. i)
+                local item = group:AddButton(label)
+                item.OnClick = function()
+                    State:SelectPreset(record)
+                end
             end
-        end
-    end)
+        end)
 end
 
 function Window:RenderCPFWindow()

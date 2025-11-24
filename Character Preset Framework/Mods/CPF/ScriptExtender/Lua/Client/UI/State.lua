@@ -113,14 +113,36 @@ function State:SelectPreset(record)
 end
 
 function State:CaptureCharacterData(characterName)
-    -- TODO: Get actual player data
-    local data = {
-        Visuals = { "Visual1", "Visual2" },
-        Colors = { Skin = "Red", Hair = "Blue" }
-    }
-    self.CapturedData:OnNext(data)
+    -- Get the client player entity
+    local player = Ext.Entity.GetAllEntitiesWithComponent("ClientControl")[1]
+
+    if not player then
+        CPFWarn(0, "Could not find player entity")
+        self:SetStatus("Error: Could not find player character")
+        return
+    end
+
+    -- Get the CharacterCreationAppearance component
+    local ccaData = CCA.CopyCharacterCreationAppearance(player)
+
+    if not ccaData then
+        CPFWarn(0, "Player entity does not have CharacterCreationAppearance component")
+        self:SetStatus("Error: Could not capture character appearance data")
+        return
+    end
+
+    -- Store the captured data
+    self.CapturedData:OnNext(ccaData)
+
+    -- Get character name for display
+    local displayName = characterName
+    if player.DisplayName and player.DisplayName.NameKey then
+        displayName = Ext.Loca.GetTranslatedString(player.DisplayName.NameKey.Handle.Handle)
+    end
+
     self:SetMode("CREATE")
-    self:SetStatus("Captured data from " .. tostring(characterName))
+    self:SetStatus("Captured appearance data from " .. tostring(displayName))
+    CPFPrint(1, "Successfully captured CCA data from player")
 end
 
 function State:SaveNewPreset()
@@ -175,17 +197,20 @@ function State:SaveNewPreset()
     end
 end
 
-function State:DeletePreset(record)
+--- Mark a preset as hidden
+---@param record PresetRecord
+function State:HidePreset(record)
     if not record or not record.preset then return end
 
+    -- TODO: refactor
     -- Use PresetDiscovery to remove (handles both registry and index)
-    if not (PresetDiscovery and PresetDiscovery.RemoveUserPreset) then
+    if not (PresetDiscovery and PresetDiscovery.HideUserPreset) then
         CPFWarn(0, "PresetDiscovery not available")
         self:SetStatus("Error: PresetDiscovery not available")
         return
     end
 
-    local success, err = PresetDiscovery:RemoveUserPreset(record.preset._id)
+    local success, err = PresetDiscovery:HideUserPreset(record.preset._id)
     if not success then
         CPFWarn(0, "Failed to remove preset: " .. tostring(err))
         self:SetStatus("Error: " .. tostring(err))
@@ -201,27 +226,48 @@ function State:ApplyPreset(record)
     if not record or not record.preset then return end
     local preset = record.preset
 
-    if not (Preset and Preset.ToCCATable) then
-        CPFWarn(0, "Preset module not loaded")
-        self:SetStatus("Error: Preset module not loaded")
+    if not RequestApplyPreset then
+        CPFWarn(0, "RequestApplyPreset not available")
+        self:SetStatus("Error: RequestApplyPreset not available")
         return
     end
 
-    -- Check for warnings first
-    if Preset.GetWarnings then
-        local warnings = Preset.GetWarnings(preset)
-        if warnings and #warnings > 0 then
-            local msg = "Warnings: " .. table.concat(warnings, "; ")
-            self:SetStatus(msg)
-        end
+    -- Get the client player entity
+    local player = Ext.Entity.GetAllEntitiesWithComponent("ClientControl")[1]
+
+    if not player then
+        CPFWarn(0, "Could not find player entity")
+        self:SetStatus("Error: Could not find player character")
+        return
     end
 
-    local ccaTable = Preset.ToCCATable(preset)
-    -- Find client player entity
-    -- local entity = _C()
-    -- CCA.ApplyCCATable(entity, ccaTable)
+    -- Get the player's UUID
+    local playerUuid = player.Uuid.EntityUuid
+    if not playerUuid then
+        CPFWarn(0, "Could not get player UUID")
+        self:SetStatus("Error: Could not get player UUID")
+        return
+    end
 
-    self:SetStatus("Preset '" .. preset.Name .. "' applied (Mock)")
+    -- Send request to server to apply preset
+    RequestApplyPreset(playerUuid, preset, {
+        OnSuccess = function(response)
+            local msg = "Applied preset '" .. preset.Name .. "'"
+            if response.Warnings and #response.Warnings > 0 then
+                msg = msg .. " (Warnings: " .. table.concat(response.Warnings, "; ") .. ")"
+            end
+            self:SetStatus(msg)
+            CPFPrint(1, "Successfully applied preset: " .. preset.Name)
+        end,
+        OnFailure = function(warnings, response)
+            local msg = "Failed to apply preset"
+            if warnings and #warnings > 0 then
+                msg = msg .. ": " .. table.concat(warnings, "; ")
+            end
+            self:SetStatus(msg)
+            CPFWarn(0, "Failed to apply preset: " .. preset.Name)
+        end
+    })
 end
 
 function State:ImportFromBuffer()
