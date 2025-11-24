@@ -57,12 +57,12 @@ end
 --- Adds or updates an entry in the index
 ---@param filename string Relative path to the preset file (can be empty string for mod presets)
 ---@param presetId string The ID of the preset
----@param source? string Source: "user" or "mod" (default: "user")
----@param modName? string Mod name (for mod presets)
+---@param source string Source: Mod Name or "User"
 ---@return boolean success
-function PresetIndex.AddEntry(filename, presetId, source, modName)
+function PresetIndex.AddEntry(filename, presetId, source)
     source = source or "user"
-    CPFDebug(2, string.format("PresetIndex.AddEntry: filename='%s', presetId='%s', source='%s'", filename, presetId, source))
+    CPFDebug(2,
+        string.format("PresetIndex.AddEntry: filename='%s', presetId='%s', source='%s'", filename, presetId, source))
     local entries = PresetIndex.Load()
     local found = false
 
@@ -72,9 +72,6 @@ function PresetIndex.AddEntry(filename, presetId, source, modName)
             entry.hidden = entry.hidden
             entry.filename = filename
             entry.source = source
-            if modName then
-                entry.modName = modName
-            end
             found = true
             CPFDebug(2, "PresetIndex.AddEntry: Updated existing entry")
             break
@@ -88,9 +85,6 @@ function PresetIndex.AddEntry(filename, presetId, source, modName)
             presetId = presetId,
             source = source
         }
-        if modName then
-            newEntry.modName = modName
-        end
         table.insert(entries, newEntry)
         CPFDebug(2, "PresetIndex.AddEntry: Added new entry")
     end

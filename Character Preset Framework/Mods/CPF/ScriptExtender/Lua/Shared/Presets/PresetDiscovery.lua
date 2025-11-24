@@ -39,9 +39,9 @@ function PresetDiscovery:RegisterPreset(preset, modName, context)
     end
 
     -- Add to index (for all presets, mod or user)
-    local source = (modName == "User") and "user" or "mod"
+    local source = (modName == "User") and "User" or modName
     local filename = "" -- Mod presets don't have user-accessible filenames
-    PresetIndex.AddEntry(filename, preset._id, source, modName)
+    PresetIndex.AddEntry(filename, preset._id, source)
 
     CPFPrint(1, string.format("Loaded preset '%s' from mod '%s' %s", preset.Name, modName, context))
     return true
@@ -152,7 +152,7 @@ function PresetDiscovery:RegisterUserPreset(preset)
     CPFPrint(1, "Preset file saved successfully")
 
     -- Update the index
-    success, err = PresetIndex.AddEntry(filename, preset._id, "user")
+    success, err = PresetIndex.AddEntry(filename, preset._id, "User")
     if not success then
         CPFWarn(0, "Failed to update preset index: " .. tostring(err))
         return false, "Failed to update preset index: " .. tostring(err)
@@ -204,7 +204,7 @@ function PresetDiscovery:_LoadNumberedUserPresets()
             if not PresetRegistry.Get(preset._id) then
                 if self:RegisterPreset(preset, "User", string.format("(Numbered: %01d)", i)) then
                     loadedCount = loadedCount + 1
-                    PresetIndex.AddEntry(filename, preset._id, "user")
+                    PresetIndex.AddEntry(filename, preset._id, "User")
                 end
             else
                 CPFDebug(2, string.format("Preset %s already loaded, skipping numbered file %s", preset._id, filename))
