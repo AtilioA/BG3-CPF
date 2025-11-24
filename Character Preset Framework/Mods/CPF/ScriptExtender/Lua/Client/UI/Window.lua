@@ -22,7 +22,7 @@ function Window:DrawSidebar(parent)
     btnImport.OnClick = function() State:SetMode("IMPORT") end
 
     btnImport.SameLine = true
-    local btnCreate = parent:AddButton("Create from Self")
+    local btnCreate = parent:AddButton("Create")
     btnCreate.OnClick = function()
         -- TODO: Get actual player name
         State:CaptureCharacterData("Self")
@@ -67,8 +67,8 @@ function Window:RenderCPFWindow()
     local table = window:AddTable("MainLayout", 2)
     table.Borders = true
     table.Resizable = true
-    table:AddColumn("Sidebar")
-    table:AddColumn("Content")
+    local sidebar = table:AddColumn("Sidebar", "WidthFixed", 200)
+    local content = table:AddColumn("Content", "WidthStretch")
 
     local row = table:AddRow()
 
