@@ -69,7 +69,7 @@ function PresetIndex.AddEntry(filename, presetId, source, modName)
     -- Look for existing entry by presetId (not filename, since mod presets may not have filenames)
     for _, entry in ipairs(entries) do
         if entry.presetId == presetId then
-            entry.hidden = false
+            entry.hidden = entry.hidden
             entry.filename = filename
             entry.source = source
             if modName then
