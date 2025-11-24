@@ -11,7 +11,7 @@ PresetDiscovery.MultiPresetPathPattern = "Mods/%s/CPF_presets.json"
 ---@return table|nil data The loaded data, or nil if failed
 ---@private
 function PresetDiscovery:_LoadAndLogJSON(filePath)
-    local data, err = JsonLayer:Load(filePath)
+    local data, err = JsonLayer:Load(filePath, 'data')
 
     if not data then
         if err and string.find(err, "Parse error") then
@@ -110,7 +110,7 @@ function PresetDiscovery:LoadPresetsForMod(modData)
     local modName = modData.Info.Name or modData.Info.Directory
     local modDir = modData.Info.Directory
 
-    CPFDebug(2, string.format("Checking mod '%s' for presets...", modName))
+    CPFDebug(3, string.format("Checking mod '%s' for presets...", modName))
 
     local loadedCount = 0
     loadedCount = loadedCount + self:_LoadSinglePreset(modName, modDir)

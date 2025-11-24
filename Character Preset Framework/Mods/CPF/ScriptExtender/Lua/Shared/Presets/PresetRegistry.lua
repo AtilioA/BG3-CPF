@@ -27,7 +27,7 @@ function PresetRegistry.Register(preset)
     if not PresetIndex then
         return false, "PresetIndex not loaded"
     end
-    local addedToIndex = PresetIndex.AddEntry(preset)
+    local addedToIndex = PresetIndex.AddEntry(preset.filename, preset._id, "user")
     if not addedToIndex then
         return false, "Failed to add preset to index"
     end
@@ -57,8 +57,8 @@ function PresetRegistry.Unregister(id)
         return false, "Failed to remove preset from index"
     end
 
-    PresetRegistry._presets[id] = nil
     CPFPrint(2, string.format("Unregistered preset: '%s' (ID: %s)", PresetRegistry._presets[id].Name, id))
+    PresetRegistry._presets[id] = nil
     return true, nil
 end
 

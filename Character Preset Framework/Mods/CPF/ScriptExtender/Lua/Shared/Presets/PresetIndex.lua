@@ -119,7 +119,7 @@ function PresetIndex.RemoveEntry(filename)
         return PresetIndex.Save(entries)
     end
 
-    return false
+    return true
 end
 
 --- Removes (hides) an entry from the index by preset ID
@@ -142,7 +142,7 @@ function PresetIndex.RemoveEntryByPresetId(presetId)
         return PresetIndex.Save(entries)
     end
 
-    return false
+    return true
 end
 
 return PresetIndex

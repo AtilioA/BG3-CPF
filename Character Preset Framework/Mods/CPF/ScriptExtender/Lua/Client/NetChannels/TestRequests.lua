@@ -74,6 +74,6 @@ end
 
 -- Start tests when the session loads
 Ext.Events.SessionLoaded:Subscribe(function()
-    CPFDebug(0, "Session loaded, scheduling tests...")
-    initTestLogic()
+    -- CPFDebug(0, "Session loaded, scheduling tests...")
+    -- initTestLogic()
 end)
