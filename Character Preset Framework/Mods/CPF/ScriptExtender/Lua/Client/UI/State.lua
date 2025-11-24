@@ -64,7 +64,7 @@ function State:RefreshPresets()
         local presetsArray = PresetRegistry.GetAllAsArray()
         self.Presets:OnNext(presetsArray)
         local count = #presetsArray
-        self:SetStatus(string.format("Loaded %d preset(s)", count))
+        self:SetStatus(string.format("Found %d preset(s)", count))
         CPFPrint(1, string.format("Refreshed UI with %d preset(s)", count))
     else
         CPFWarn(0, "PresetRegistry not available")
