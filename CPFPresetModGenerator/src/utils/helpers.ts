@@ -25,11 +25,11 @@ export const sanitizeFolderName = (name: string): string => {
 
 /**
  * Generates the final folder name with CPF prefix and UUID suffix.
- * Truncates the user-provided name to 50 characters to avoid path length issues.
+ * Truncates the user-provided name to 36 characters to avoid path length issues.
  */
 export const getGeneratedFolderName = (folderName: string, uuid: string): string => {
-    const truncatedName = folderName.slice(0, 50);
-    return `CPF_${truncatedName}_${uuid}`;
+    const truncatedName = folderName;
+    return `CPF_${truncatedName}_${uuid}`.slice(0, 50);
 };
 
 /**
