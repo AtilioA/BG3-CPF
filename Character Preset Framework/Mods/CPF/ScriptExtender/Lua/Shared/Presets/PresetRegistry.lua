@@ -1,7 +1,12 @@
+---@class PresetRecord
+---@field preset Preset
+---@field indexData? PresetIndexEntry
+
 ---@class PresetRegistry
 --- Manages registration and retrieval of character presets
 PresetRegistry = {}
-PresetRegistry._presets = {}
+---@type table<string, PresetRecord>
+PresetRegistry._records = {}
 
 --- Registers a new preset
 ---@param preset Preset The preset to register
@@ -19,7 +24,7 @@ function PresetRegistry.Register(preset)
     end
 
     -- Check if preset already exists
-    if PresetRegistry._presets[preset._id] then
+    if PresetRegistry._records[preset._id] then
         CPFWarn(1, string.format("Preset with ID '%s' already registered. Overwriting.", preset._id))
     end
 
@@ -31,13 +36,14 @@ function PresetRegistry.Register(preset)
         return false, "Failed to add preset to index"
     end
 
-    -- Attach index data to the preset object
-    local indexEntry = PresetIndex.GetEntry(preset._id)
-    if indexEntry then
-        preset._indexData = indexEntry
-    end
+    -- Create wrapper record
+    ---@type PresetRecord
+    local record = {
+        preset = preset,
+        indexData = PresetIndex.GetEntry(preset._id)
+    }
 
-    PresetRegistry._presets[preset._id] = preset
+    PresetRegistry._records[preset._id] = record
 
     CPFPrint(2, string.format("Registered preset: '%s' by %s (ID: %s)", preset.Name, preset.Author, preset._id))
     return true, nil
@@ -52,7 +58,7 @@ function PresetRegistry.Unregister(id)
         return false, "Preset ID is nil"
     end
 
-    if not PresetRegistry._presets[id] then
+    if not PresetRegistry._records[id] then
         return false, "Preset with ID '" .. id .. "' not found"
     end
 
@@ -64,37 +70,37 @@ function PresetRegistry.Unregister(id)
         return false, "Failed to remove preset from index"
     end
 
-    CPFPrint(2, string.format("Unregistered preset: '%s' (ID: %s)", PresetRegistry._presets[id].Name, id))
-    PresetRegistry._presets[id] = nil
+    CPFPrint(2, string.format("Unregistered preset: '%s' (ID: %s)", PresetRegistry._records[id].preset.Name, id))
+    PresetRegistry._records[id] = nil
     return true, nil
 end
 
---- Gets a preset by ID
+--- Gets a preset record by ID
 ---@param id string The preset ID
----@return Preset? preset The preset or nil if not found
+---@return PresetRecord? record The preset record or nil if not found
 function PresetRegistry.Get(id)
-    return PresetRegistry._presets[id]
+    return PresetRegistry._records[id]
 end
 
---- Gets all registered presets
----@return table<string, Preset> presets Map of preset IDs to preset objects
+--- Gets all registered preset records
+---@return table<string, PresetRecord> records Map of preset IDs to preset records
 function PresetRegistry.GetAll()
-    return PresetRegistry._presets
+    return PresetRegistry._records
 end
 
---- Gets all presets as an array
----@return Preset[] presets Array of all registered presets
+--- Gets all preset records as an array
+---@return PresetRecord[] records Array of all registered preset records
 function PresetRegistry.GetAllAsArray()
-    local presets = {}
-    for _, preset in pairs(PresetRegistry._presets) do
-        table.insert(presets, preset)
+    local records = {}
+    for _, record in pairs(PresetRegistry._records) do
+        table.insert(records, record)
     end
-    return presets
+    return records
 end
 
 --- Clears all registered presets (useful for testing)
 function PresetRegistry.Clear()
-    PresetRegistry._presets = {}
+    PresetRegistry._records = {}
     CPFPrint(2, "Cleared all registered presets")
 end
 
@@ -102,7 +108,7 @@ end
 ---@return integer count Number of registered presets
 function PresetRegistry.Count()
     local count = 0
-    for _ in pairs(PresetRegistry._presets) do
+    for _ in pairs(PresetRegistry._records) do
         count = count + 1
     end
     return count
@@ -112,8 +118,8 @@ end
 ---@param id string The preset ID
 ---@return boolean success Whether the update was successful
 function PresetRegistry.UpdateIndexData(id)
-    local preset = PresetRegistry._presets[id]
-    if not preset then
+    local record = PresetRegistry._records[id]
+    if not record then
         return false
     end
 
@@ -123,7 +129,7 @@ function PresetRegistry.UpdateIndexData(id)
 
     local indexEntry = PresetIndex.GetEntry(id)
     if indexEntry then
-        preset._indexData = indexEntry
+        record.indexData = indexEntry
         return true
     end
 

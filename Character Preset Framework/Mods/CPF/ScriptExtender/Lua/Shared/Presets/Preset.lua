@@ -7,8 +7,6 @@
 ---@field Version string
 ---@field Data CCAData
 ---@field Dependencies ModDependency[]
----@field filename? string Optional filename for user presets
----@field _indexData? PresetIndexEntry Optional index metadata attached at runtime
 
 
 Preset = {}

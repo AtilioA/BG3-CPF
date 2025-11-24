@@ -61,18 +61,18 @@ end
 function State:RefreshPresets()
     -- Get presets from registry
     if PresetRegistry then
-        local presetsArray = PresetRegistry.GetAllAsArray()
+        local recordsArray = PresetRegistry.GetAllAsArray()
 
         -- Filter out hidden presets
-        local visiblePresets = {}
-        for _, preset in ipairs(presetsArray) do
-            if not (preset._indexData and preset._indexData.hidden) then
-                table.insert(visiblePresets, preset)
+        local visibleRecords = {}
+        for _, record in ipairs(recordsArray) do
+            if not (record.indexData and record.indexData.hidden) then
+                table.insert(visibleRecords, record)
             end
         end
 
-        self.Presets:OnNext(visiblePresets)
-        local count = #visiblePresets
+        self.Presets:OnNext(visibleRecords)
+        local count = #visibleRecords
         self:SetStatus(string.format("Found %d preset(s)", count))
         CPFPrint(1, string.format("Refreshed UI with %d preset(s)", count))
     else
@@ -82,9 +82,11 @@ function State:RefreshPresets()
     end
 end
 
-function State:SelectPreset(preset)
-    self.SelectedPreset:OnNext(preset)
-    self:SetStatus("Selected preset: " .. tostring(preset.Name))
+function State:SelectPreset(record)
+    self.SelectedPreset:OnNext(record)
+    if record and record.preset then
+        self:SetStatus("Selected preset: " .. tostring(record.preset.Name))
+    end
     self:SetMode("VIEW")
 end
 
@@ -142,11 +144,16 @@ function State:SaveNewPreset()
 
     self:SetStatus("Preset '" .. name .. "' saved")
     self:RefreshPresets()
-    self:SelectPreset(newPreset)
+
+    -- Select the new preset (need to fetch the record)
+    local record = PresetRegistry.Get(newPreset._id)
+    if record then
+        self:SelectPreset(record)
+    end
 end
 
-function State:DeletePreset(preset)
-    if not preset then return end
+function State:DeletePreset(record)
+    if not record or not record.preset then return end
 
     -- Use PresetDiscovery to remove (handles both registry and index)
     if not (PresetDiscovery and PresetDiscovery.RemoveUserPreset) then
@@ -155,20 +162,21 @@ function State:DeletePreset(preset)
         return
     end
 
-    local success, err = PresetDiscovery:RemoveUserPreset(preset._id)
+    local success, err = PresetDiscovery:RemoveUserPreset(record.preset._id)
     if not success then
         CPFWarn(0, "Failed to remove preset: " .. tostring(err))
         self:SetStatus("Error: " .. tostring(err))
         return
     end
 
-    self:SetStatus("Preset '" .. preset.Name .. "' deleted")
+    self:SetStatus("Preset '" .. record.preset.Name .. "' deleted")
     self:RefreshPresets()
     self.SelectedPreset:OnNext(nil)
 end
 
-function State:ApplyPreset(preset)
-    if not preset then return end
+function State:ApplyPreset(record)
+    if not record or not record.preset then return end
+    local preset = record.preset
 
     if not (Preset and Preset.ToCCATable) then
         CPFWarn(0, "Preset module not loaded")
@@ -222,7 +230,11 @@ function State:ImportFromBuffer()
 
     self:SetStatus("Imported '" .. preset.Name .. "'")
     self:RefreshPresets()
-    self:SelectPreset(preset)
+
+    local record = PresetRegistry.Get(preset._id)
+    if record then
+        self:SelectPreset(record)
+    end
 end
 
 return State
