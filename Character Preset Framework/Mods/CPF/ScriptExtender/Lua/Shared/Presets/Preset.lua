@@ -6,6 +6,7 @@
 ---@field Author string
 ---@field Version string
 ---@field Data CCAData
+---@field Dependencies ModDependency[]
 
 Preset = {}
 
@@ -39,7 +40,8 @@ function Preset.Create(name, author, version, ccaData)
             SecondEyeColor = "",
             SkinColor = "",
             Visuals = {}
-        }
+        },
+        Dependencies = {}
     }
 
     -- Populate Data from CCA component
@@ -65,6 +67,9 @@ function Preset.Create(name, author, version, ccaData)
         if ccaData.Visuals then
             preset.Data.Visuals = Table.deepcopy(ccaData.Visuals)
         end
+
+        -- Calculate dependencies
+        preset.Dependencies = DependencyScanner:GetDependencies(ccaData)
     end
 
     return preset

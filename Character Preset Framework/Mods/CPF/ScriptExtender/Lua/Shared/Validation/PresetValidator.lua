@@ -14,11 +14,11 @@ function PresetValidator.Validate(preset)
 
     -- Check required top-level fields
     local requiredFields = {
-        {name = "_id", type = "string", allowEmpty = false},
-        {name = "Name", type = "string", allowEmpty = false},
-        {name = "Author", type = "string", allowEmpty = true},
-        {name = "Version", type = "string", allowEmpty = false},
-        {name = "Data", type = "table", allowEmpty = false}
+        { name = "_id",          type = "string", allowEmpty = false },
+        { name = "Name",         type = "string", allowEmpty = false },
+        { name = "Author",       type = "string", allowEmpty = true },
+        { name = "Version",      type = "string", allowEmpty = false },
+        { name = "Data",         type = "table",  allowEmpty = false },
     }
 
     -- Validate top-level structure
@@ -28,7 +28,13 @@ function PresetValidator.Validate(preset)
     end
 
     -- Delegate to specialized validators for the Data section
-    return PresetValidator.ValidateData(preset.Data)
+    local dataValid, dataErr = PresetValidator.ValidateData(preset.Data)
+    if not dataValid then
+        return false, dataErr
+    end
+
+    -- Validate dependencies
+    return PresetValidator.ValidateDependencies(preset.Dependencies)
 end
 
 --- Validates top-level preset fields
@@ -75,13 +81,13 @@ function PresetValidator.ValidateData(data)
 
     -- Validate UUID fields
     local uuidFields = {
-        {name = "EyeColor", required = false},
-        {name = "HairColor", required = false},
-        {name = "SecondEyeColor", required = false},
-        {name = "SkinColor", required = false},
-        {name = "AccessorySet", required = false},
-        {name = "Icon", required = false},
-        {name = "field_98", required = false}
+        { name = "EyeColor",       required = false },
+        { name = "HairColor",      required = false },
+        { name = "SecondEyeColor", required = false },
+        { name = "SkinColor",      required = false },
+        { name = "AccessorySet",   required = false },
+        { name = "Icon",           required = false },
+        { name = "field_98",       required = false }
     }
 
     for _, field in ipairs(uuidFields) do
@@ -104,6 +110,36 @@ function PresetValidator.ValidateData(data)
                 return false, err
             end
         end
+    end
+
+    return true
+end
+
+--- Validates the Dependencies section of a preset
+---@param dependencies ModDependency[]
+---@return boolean isValid
+---@return string? errorMessage
+function PresetValidator.ValidateDependencies(dependencies)
+    if not dependencies then
+        return true -- Dependencies are optional
+    end
+
+    if type(dependencies) ~= "table" then
+        return false, "Dependencies must be a table (array)"
+    end
+
+    local missingMods = {}
+
+    for _, dep in ipairs(dependencies) do
+        if dep.ModUUID then
+            if not Ext.Mod.IsModLoaded(dep.ModUUID) then
+                table.insert(missingMods, dep.ModUUID)
+            end
+        end
+    end
+
+    if #missingMods > 0 then
+        return false, string.format("Missing required mod dependencies: %s", table.concat(missingMods, ", "))
     end
 
     return true
