@@ -38,7 +38,7 @@ export const DependencyList: React.FC<DependencyListProps> = ({
                         Include mod dependencies in meta.lsx
                     </label>
                     <p className="text-xs text-slate-400 mt-1">
-                        This preset uses resources from {dependencies.length} mod{dependencies.length !== 1 ? 's' : ''}
+                        This prevents players from missing dependencies
                     </p>
                 </div>
             </div>
@@ -54,11 +54,11 @@ export const DependencyList: React.FC<DependencyListProps> = ({
                     ) : (
                         <ChevronRight className="w-4 h-4" />
                     )}
-                    {isExpanded ? 'Hide' : 'Show'} dependency details
+                    {isExpanded ? 'Hide' : 'Show'} resources from {dependencies.length} mod{dependencies.length !== 1 ? 's' : ''}
                 </span>
-                <span className="text-xs text-slate-500">
+                {/* <span className="text-xs text-slate-500">
                     {dependencies.length} mod{dependencies.length !== 1 ? 's' : ''}
-                </span>
+                </span> */}
             </button>
 
             {/* Collapsible dependency list */}
@@ -103,12 +103,6 @@ export const DependencyList: React.FC<DependencyListProps> = ({
                         ))}
                     </ul>
                 </div>
-            )}
-
-            {includeDependencies && (
-                <p className="text-xs text-slate-500 mt-4 pt-4 border-t border-slate-700/50">
-                    💡 Dependencies will be included in the generated meta.lsx file
-                </p>
             )}
         </div>
     );

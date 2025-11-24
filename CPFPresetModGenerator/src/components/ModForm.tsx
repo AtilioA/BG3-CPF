@@ -101,7 +101,7 @@ export const ModForm: React.FC<ModFormProps> = ({ config, setConfig, onGenerate,
 
                 <div className="p-8 grid grid-cols-1 md:grid-cols-1 gap-6">
                     {/* Left Column: Core Info */}
-                    <div className="space-y-6">
+                    <div className="space-y-3">
                         <FormField
                             label="Mod name"
                             icon={Package}
@@ -121,7 +121,7 @@ export const ModForm: React.FC<ModFormProps> = ({ config, setConfig, onGenerate,
                     </div>
 
                     {/* Right Column: Technical & Preview */}
-                    <div className="space-y-6">
+                    <div className="space-y-3">
                         <FormField
                             label="Description"
                             icon={Info}
