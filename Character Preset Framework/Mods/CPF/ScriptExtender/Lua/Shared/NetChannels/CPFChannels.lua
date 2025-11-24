@@ -21,4 +21,8 @@ NetChannels.RequestApplyPreset = createChannel("RequestApplyPreset")
 ---@class RequestUserInfoChannel : ExtenderNetChannel
 NetChannels.RequestUserInfo = createChannel("RequestUserInfo")
 
+---ApplyCCAToClientDummy channel for applying CCA to client-side dummy
+---@class ApplyCCAToClientDummyChannel : ExtenderNetChannel
+NetChannels.ApplyCCAToClientDummy = createChannel("ApplyCCAToClientDummy")
+
 return NetChannels

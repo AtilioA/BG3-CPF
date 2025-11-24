@@ -38,6 +38,12 @@ function CCA.ApplyCCATable(charEntity, CCATable)
             end
         end
     end
-        end
+
+    -- Send CCA table to client to apply to dummy (only on server)
+    if Ext.IsServer() then
+        NetChannels.ApplyCCAToClientDummy:Broadcast({
+            CCATable = CCATable
+        })
+        CPFPrint(2, "Sent CCA table to client for dummy application")
     end
 end
