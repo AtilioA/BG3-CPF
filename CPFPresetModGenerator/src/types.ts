@@ -35,6 +35,7 @@ export interface ModConfig {
     uuid: string;
     originalJson: string; // Keep the string version to save as file
     dependencies: ModDependency[]; // Parsed dependencies from the preset
+    includeDependencies: boolean; // Whether to include dependencies in meta.lsx
 }
 
 export interface ParsedData {

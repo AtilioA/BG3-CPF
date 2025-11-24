@@ -39,7 +39,8 @@ export default function Home() {
                 description,
                 uuid,
                 originalJson: jsonContent,
-                dependencies
+                dependencies,
+                includeDependencies: true 
             });
             setIsSuccess(false);
 
