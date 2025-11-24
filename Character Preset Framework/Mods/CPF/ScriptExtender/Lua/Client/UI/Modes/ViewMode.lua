@@ -11,7 +11,11 @@ function ViewMode:Render(parent)
         ---@param record PresetRecord
         function(group, record)
             if not record or not record.preset then
-                group:AddText("No preset selected.")
+                if State.Presets:GetValue() and #State.Presets:GetValue() == 0 then
+                    group:AddText("No presets available.\nStart by importing or creating a new preset.")
+                else
+                    group:AddText("Click a preset on the left to view details.")
+                end
                 return
             end
 
