@@ -7,4 +7,5 @@ RequireFiles("Shared/Helpers/", {
     "UserData",
     "CCA",
     "JsonLayer",
+    "UserID",
 })

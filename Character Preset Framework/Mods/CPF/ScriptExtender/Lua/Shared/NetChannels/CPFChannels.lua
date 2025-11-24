@@ -1,6 +1,7 @@
 ---Shared netchannels for CPF server-client communication
 ---@class CPFNetChannels
 ---@field RequestApplyPreset ExtenderNetChannel
+---@field RequestUserInfo ExtenderNetChannel
 NetChannels = {}
 
 ---Creates and returns a netchannel with the given name
@@ -15,5 +16,9 @@ end
 ---RequestApplyPreset channel for applying character presets
 ---@class RequestApplyPresetChannel : ExtenderNetChannel
 NetChannels.RequestApplyPreset = createChannel("RequestApplyPreset")
+
+---RequestUserInfo channel for retrieving user information
+---@class RequestUserInfoChannel : ExtenderNetChannel
+NetChannels.RequestUserInfo = createChannel("RequestUserInfo")
 
 return NetChannels

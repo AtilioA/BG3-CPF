@@ -135,18 +135,18 @@ function PresetDiscovery:RegisterUserPreset(preset)
         return false, "Invalid preset"
     end
 
-    -- Generate filename: CPF/preset_{name}_{id}.json
-    -- REVIEW: Sanitize name to be safe for filenames
-    local safeName = preset.Name:gsub("[^%w%-_]", "_")
-    local filename = string.format("CPF/preset_%s_%s.json", safeName, preset._id)
+    -- Use PresetFileManager to save the file
+    if not PresetFileManager then
+        return false, "PresetFileManager not loaded"
+    end
 
-    CPFPrint(1, string.format("Saving user preset to: %s", filename))
-
-    -- Save the preset file
-    local success, err = Preset.ExportToFile(preset, filename)
+    local success, err, filename = PresetFileManager:SaveUserPreset(preset)
     if not success then
-        CPFWarn(0, "Failed to save preset file: " .. tostring(err))
-        return false, "Failed to save preset file: " .. tostring(err)
+        return false, err
+    end
+
+    if not filename then
+        return false, "Failed to generate filename"
     end
 
     CPFPrint(1, "Preset file saved successfully")

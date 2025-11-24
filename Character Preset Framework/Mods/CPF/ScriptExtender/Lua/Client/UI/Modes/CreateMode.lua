@@ -10,22 +10,33 @@ function CreateMode:Render(parent)
         g:AddText("Create New Preset")
         g:AddSeparator()
 
-        -- TODO: add netchannel request to server asking user named and character name
-        -- TODO: Default to character's name
-        local inputName = g:AddInputText("Name")
-        inputName.Text = State.NewPresetData.Name
-        inputName.OnChange = function() State.NewPresetData.Name = inputName.Text end
+        -- Create reactive group for input fields that updates when NewPresetData changes
+        RenderHelper.CreateReactiveGroup(g, "PresetInputFields", State.NewPresetData,
+            function(inputGroup, presetData)
+                local inputName = inputGroup:AddInputText("Name")
+                inputName.Text = presetData.Name
+                inputName.OnChange = function()
+                    local data = State.NewPresetData:GetValue()
+                    data.Name = inputName.Text
+                    State.NewPresetData:OnNext(data)
+                end
 
-        -- TODO: Default to user name
-        -- Osi.GetUserName(userId)) (only on server)
-        local inputAuthor = g:AddInputText("Author")
-        inputAuthor.Text = State.NewPresetData.Author
+                local inputAuthor = inputGroup:AddInputText("Author")
+                inputAuthor.Text = presetData.Author
+                inputAuthor.OnChange = function()
+                    local data = State.NewPresetData:GetValue()
+                    data.Author = inputAuthor.Text
+                    State.NewPresetData:OnNext(data)
+                end
 
-        inputAuthor.OnChange = function() State.NewPresetData.Author = inputAuthor.Text end
-
-        local inputVer = g:AddInputText("Version")
-        inputVer.Text = State.NewPresetData.Version
-        inputVer.OnChange = function() State.NewPresetData.Version = inputVer.Text end
+                local inputVer = inputGroup:AddInputText("Version")
+                inputVer.Text = presetData.Version
+                inputVer.OnChange = function()
+                    local data = State.NewPresetData:GetValue()
+                    data.Version = inputVer.Text
+                    State.NewPresetData:OnNext(data)
+                end
+            end)
 
         g:AddSeparator()
         g:AddText("Captured attributes (preview):")

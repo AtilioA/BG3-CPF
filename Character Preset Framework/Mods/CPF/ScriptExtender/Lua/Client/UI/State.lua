@@ -10,11 +10,11 @@ local State = {
     CapturedData = rx.BehaviorSubject.Create(nil),
 
     -- Buffers
-    NewPresetData = {
+    NewPresetData = rx.BehaviorSubject.Create({
         Name = "",
         Author = "",
         Version = "1.0"
-    },
+    }),
     ImportBuffer = "",
 
     _statusSubscription = nil
@@ -52,7 +52,29 @@ function State:SetMode(mode)
 
     -- REVIEW: reset buffers when switching modes?
     if mode == "CREATE" then
-        -- self.NewPresetData = { Name = "", Author = "", Version = "1.0" }
+        -- self.NewPresetData:OnNext({ Name = "", Author = "", Version = "1.0" })
+
+        -- Request user info from server to populate defaults
+        if RequestUserInfo then
+            RequestUserInfo({
+                OnSuccess = function(response)
+                    local data = self.NewPresetData:GetValue()
+                    if response.UserName and response.UserName ~= "" then
+                        data.Author = response.UserName
+                    end
+                    if response.CharacterName and response.CharacterName ~= "" then
+                        data.Name = response.CharacterName
+                    end
+                    -- Trigger reactive update
+                    self.NewPresetData:OnNext(data)
+                    CPFPrint(1, string.format("Populated preset defaults: Author=%s, Name=%s",
+                        data.Author, data.Name))
+                end,
+                OnFailure = function(response)
+                    CPFWarn(1, "Failed to retrieve user info from server")
+                end
+            })
+        end
     elseif mode == "IMPORT" then
         -- self.ImportBuffer = ""
     end
@@ -108,7 +130,8 @@ function State:SaveNewPreset()
         return
     end
 
-    local name = self.NewPresetData.Name
+    local presetData = self.NewPresetData:GetValue()
+    local name = presetData.Name
     if name == "" then
         self:SetStatus("Error: Name is required")
         return
@@ -121,7 +144,7 @@ function State:SaveNewPreset()
         return
     end
 
-    local newPreset = Preset.Create(name, self.NewPresetData.Author, self.NewPresetData.Version, data)
+    local newPreset = Preset.Create(name, presetData.Author, presetData.Version, data)
     if not newPreset then
         CPFWarn(0, "Failed to create preset object")
         self:SetStatus("Error creating preset object")
