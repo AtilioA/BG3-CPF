@@ -8,10 +8,11 @@ PresetDiscovery.MultiPresetPathPattern = "Mods/%s/CPF_presets.json"
 
 --- Loads a JSON file and logs appropriate errors
 ---@param filePath string The file path to load
+---@param mode string The mode to load the file with
 ---@return table|nil data The loaded data, or nil if failed
 ---@private
-function PresetDiscovery:_LoadAndLogJSON(filePath)
-    local data, err = JsonLayer:Load(filePath, 'data')
+function PresetDiscovery:_LoadAndLogJSON(filePath, mode)
+    local data, err = JsonLayer:Load(filePath, mode)
 
     if not data then
         if err and string.find(err, "Parse error") then
@@ -53,7 +54,7 @@ end
 ---@private
 function PresetDiscovery:_LoadSinglePreset(modName, modDir)
     local filePath = string.format(self.SinglePresetPathPattern, modDir)
-    local preset = self:_LoadAndLogJSON(filePath)
+    local preset = self:_LoadAndLogJSON(filePath, 'data')
 
     if not preset then
         return 0
@@ -75,7 +76,7 @@ end
 ---@private
 function PresetDiscovery:_LoadMultiplePresets(modName, modDir)
     local filePath = string.format(self.MultiPresetPathPattern, modDir)
-    local presets = self:_LoadAndLogJSON(filePath)
+    local presets = self:_LoadAndLogJSON(filePath, 'data')
 
     if not presets then
         return 0
@@ -185,6 +186,42 @@ function PresetDiscovery:RemoveUserPreset(presetId)
     return true
 end
 
+--- Loads and registers numbered user presets (preset_0.json to preset_9.json)
+---@return integer count Number of presets loaded
+---@private
+function PresetDiscovery:_LoadNumberedUserPresets()
+    CPFPrint(1, "Scanning for numbered user presets (preset_0 to preset_9)...")
+
+    local loadedCount = 0
+
+    -- Scan from 0 to 9
+    for i = 0, 9 do
+        local filename = string.format("CPF/preset_%01d.json", i)
+        local preset = self:_LoadAndLogJSON(filename, 'user')
+
+        if preset then
+            -- Check if already in registry (avoid duplicates from index)
+            if not PresetRegistry.Get(preset._id) then
+                if self:RegisterPreset(preset, "User", string.format("(Numbered: %01d)", i)) then
+                    loadedCount = loadedCount + 1
+                    PresetIndex.AddEntry(filename, preset._id, "user")
+                end
+            else
+                CPFDebug(2, string.format("Preset %s already loaded, skipping numbered file %s", preset._id, filename))
+            end
+        else
+            CPFPrint(1, string.format("No numbered user preset found at %s; stopping scan", filename))
+            break
+        end
+    end
+
+    if loadedCount > 0 then
+        CPFPrint(2, string.format("Loaded %d numbered user preset(s)", loadedCount))
+    end
+
+    return loadedCount
+end
+
 --- Loads all presets from all mods in the load order AND user presets from registry
 ---@return integer totalCount Total number of presets loaded
 function PresetDiscovery:LoadPresets()
@@ -211,7 +248,7 @@ function PresetDiscovery:LoadPresets()
     local registryEntries = PresetIndex.Load()
     for _, entry in ipairs(registryEntries) do
         if not entry.hidden then
-            local preset = self:_LoadAndLogJSON(entry.filename)
+            local preset = self:_LoadAndLogJSON(entry.filename, 'user')
             if preset then
                 if self:RegisterPreset(preset, "User", "(Indexed)") then
                     totalCount = totalCount + 1
@@ -219,6 +256,10 @@ function PresetDiscovery:LoadPresets()
             end
         end
     end
+
+    -- Load 'Numbered User Presets' (preset_0.json to preset_9.json)
+    local numberedCount = self:_LoadNumberedUserPresets()
+    totalCount = totalCount + numberedCount
 
     CPFPrint(0, string.format("Preset discovery complete. Loaded %d preset(s) total.", totalCount))
     return totalCount
