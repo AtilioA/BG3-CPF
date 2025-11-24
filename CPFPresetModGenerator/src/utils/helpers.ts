@@ -85,8 +85,10 @@ export const generateMetaLsx = (config: ModConfig): string => {
     xml = xml.replace('{{NAME}}', config.modName);
     xml = xml.replace('{{UUID}}', config.uuid);
 
-    // Add additional mod dependencies after CPF dependency
-    const additionalDeps = generateDependenciesXml(config.dependencies);
+    // Add additional mod dependencies after CPF dependency only if includeDependencies is true
+    const additionalDeps = config.includeDependencies
+        ? generateDependenciesXml(config.dependencies)
+        : '';
     xml = xml.replace('{{ADDITIONAL_DEPENDENCIES}}', additionalDeps);
 
     return xml;
