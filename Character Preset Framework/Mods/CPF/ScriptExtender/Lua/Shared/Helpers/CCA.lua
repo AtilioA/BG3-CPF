@@ -31,7 +31,13 @@ function CCA.ApplyCCATable(charEntity, CCATable)
     if CCA then
         local copy = Table.deepcopy(CCATable)
         for k, v in pairs(copy) do
-            CCA[k] = v
+            local success, err = pcall(function() CCA[k] = v end)
+            -- TODO: Add missing fields to CCA somehow?
+            if not success then
+                CPFPrint(2, "Failed to set property " .. k .. " on CCA: " .. tostring(err))
+            end
+        end
+    end
         end
     end
 end
