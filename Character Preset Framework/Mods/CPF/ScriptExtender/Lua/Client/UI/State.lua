@@ -53,28 +53,6 @@ function State:SetMode(mode)
     -- REVIEW: reset buffers when switching modes?
     if mode == "CREATE" then
         -- self.NewPresetData:OnNext({ Name = "", Author = "", Version = "1.0" })
-
-        -- Request user info from server to populate defaults
-        if RequestUserInfo then
-            RequestUserInfo({
-                OnSuccess = function(response)
-                    local data = self.NewPresetData:GetValue()
-                    if response.UserName and response.UserName ~= "" then
-                        data.Author = response.UserName
-                    end
-                    if response.CharacterName and response.CharacterName ~= "" then
-                        data.Name = response.CharacterName
-                    end
-                    -- Trigger reactive update
-                    self.NewPresetData:OnNext(data)
-                    CPFPrint(1, string.format("Populated preset defaults: Author=%s, Name=%s",
-                        data.Author, data.Name))
-                end,
-                OnFailure = function(response)
-                    CPFWarn(1, "Failed to retrieve user info from server")
-                end
-            })
-        end
     elseif mode == "IMPORT" then
         -- self.ImportBuffer = ""
     end
@@ -112,37 +90,62 @@ function State:SelectPreset(record)
     self:SetMode("VIEW")
 end
 
-function State:CaptureCharacterData(characterName)
+function State:CaptureCharacterData()
+    local function captureData(player)
+        if not player then
+            CPFWarn(0, "Could not find player entity")
+            self:SetStatus("Error: Could not find player character")
+            return
+        end
+
+        -- Get the CharacterCreationAppearance component
+        local ccaData = CCA.CopyCharacterCreationAppearance(player)
+
+        if not ccaData then
+            CPFWarn(0, "Player entity does not have CharacterCreationAppearance component")
+            self:SetStatus("Error: Could not capture character appearance data")
+            return
+        end
+
+        -- Store the captured data
+        self.CapturedData:OnNext(ccaData)
+
+        -- Get character name for display
+        local displayName = ""
+        if player.DisplayName and player.DisplayName.NameKey then
+            displayName = Ext.Loca.GetTranslatedString(player.DisplayName.NameKey.Handle.Handle)
+        end
+
+        self:SetMode("CREATE")
+        self:SetStatus("Captured appearance data from " .. tostring(displayName))
+        CPFPrint(1, "Successfully captured CCA data from player")
+    end
+
     -- Get the client player entity
-    local player = Ext.Entity.GetAllEntitiesWithComponent("ClientControl")[1]
+    if RequestUserInfo then
+        RequestUserInfo({
+            OnSuccess = function(response)
+                local characterUUID = response.CharacterUUID
+                local character = Ext.Entity.Get(characterUUID)
+                local data = self.NewPresetData:GetValue()
+                if response.UserName and response.UserName ~= "" then
+                    data.Author = response.UserName
+                end
+                if response.CharacterName and response.CharacterName ~= "" then
+                    data.Name = response.CharacterName
+                end
 
-    if not player then
-        CPFWarn(0, "Could not find player entity")
-        self:SetStatus("Error: Could not find player character")
-        return
+                captureData(character)
+                -- Trigger reactive update
+                self.NewPresetData:OnNext(data)
+                CPFPrint(1, string.format("Populated preset defaults: Author=%s, Name=%s",
+                    data.Author, data.Name))
+            end,
+            OnFailure = function(response)
+                CPFWarn(1, "Failed to retrieve user info from server")
+            end
+        })
     end
-
-    -- Get the CharacterCreationAppearance component
-    local ccaData = CCA.CopyCharacterCreationAppearance(player)
-
-    if not ccaData then
-        CPFWarn(0, "Player entity does not have CharacterCreationAppearance component")
-        self:SetStatus("Error: Could not capture character appearance data")
-        return
-    end
-
-    -- Store the captured data
-    self.CapturedData:OnNext(ccaData)
-
-    -- Get character name for display
-    local displayName = characterName
-    if player.DisplayName and player.DisplayName.NameKey then
-        displayName = Ext.Loca.GetTranslatedString(player.DisplayName.NameKey.Handle.Handle)
-    end
-
-    self:SetMode("CREATE")
-    self:SetStatus("Captured appearance data from " .. tostring(displayName))
-    CPFPrint(1, "Successfully captured CCA data from player")
 end
 
 function State:SaveNewPreset()
