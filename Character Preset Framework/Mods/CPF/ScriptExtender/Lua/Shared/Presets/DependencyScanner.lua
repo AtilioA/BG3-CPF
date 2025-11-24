@@ -7,11 +7,12 @@ DependencyScanner = {}
 ---@field SlotName string
 
 ---@class ModDependency
----@field ModUUID string
+---@field ModName string
 ---@field Resources DependencyResource[]
 
 -- Cache for reverse lookup: ResourceUUID -> ModUUID
 local resourceToModMap = {}
+local modUUIDToNameMap = {}
 
 --- Builds the reverse lookup map for resources to mods
 ---@private
@@ -23,6 +24,7 @@ function DependencyScanner:_BuildReverseLookup()
     for _, mod in pairs(modManager.AvailableMods) do
         if ModValidation:IsModRelevant(mod) then
             local modUUID = mod.Info.ModuleUUID
+            modUUIDToNameMap[modUUID] = mod.Info.Name
             local resources = Ext.StaticData.GetByModId("CharacterCreationSharedVisual", modUUID)
 
             if resources then
@@ -53,7 +55,7 @@ end
 
 --- Scans a character's appearance data for mod dependencies
 ---@param ccaData CharacterCreationAppearance
----@return ModDependency[]
+---@return table[]
 function DependencyScanner:GetDependencies(ccaData)
     self:_BuildReverseLookup()
 
@@ -109,13 +111,16 @@ function DependencyScanner:GetDependencies(ccaData)
     checkResource(ccaData.SecondEyeColor)
     checkResource(ccaData.SkinColor)
 
-    -- Convert map to array
+    -- Convert map to array with new structure
     local result = {}
     for modUUID, resources in pairs(dependencies) do
-        table.insert(result, {
-            ModUUID = modUUID,
+        local modName = modUUIDToNameMap[modUUID] or "Unknown"
+        local entry = {}
+        entry[modUUID] = {
+            ModName = modName,
             Resources = resources
-        })
+        }
+        table.insert(result, entry)
     end
 
     return result
