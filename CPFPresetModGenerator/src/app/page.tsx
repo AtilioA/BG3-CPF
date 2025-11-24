@@ -7,7 +7,7 @@ import { ModForm } from '@/components/ModForm';
 import { LandingView } from '@/components/LandingView';
 import { GeneratedModView } from '@/components/GeneratedModView';
 import { PresetJson, ModConfig } from '@/types';
-import { generateUUID, sanitizeFolderName, generateMetaLsx, getGeneratedFolderName } from '@/utils/helpers';
+import { generateUUID, sanitizeFolderName, generateMetaLsx, getGeneratedFolderName, parseDependencies } from '@/utils/helpers';
 import { Github, Info } from 'lucide-react';
 import { FaPatreon } from 'react-icons/fa6';
 import { HELP_URL, GITHUB_URL } from '@/constants';
@@ -29,13 +29,17 @@ export default function Home() {
             const description = `CPF Preset '${modName}'`;
             const uuid = generateUUID();
 
+            // Parse dependencies from the preset
+            const dependencies = parseDependencies(parsed.Dependencies);
+
             setModConfig({
                 modName,
                 folderName,
                 author,
                 description,
                 uuid,
-                originalJson: jsonContent
+                originalJson: jsonContent,
+                dependencies
             });
             setIsSuccess(false);
 

@@ -1,5 +1,5 @@
 import { META_LSX_TEMPLATE } from '../constants';
-import { ModConfig } from '../types';
+import { ModConfig, ModDependency, PresetDependencies } from '../types';
 
 /**
  * Generates a random UUID v4 using the browser Crypto API.
@@ -33,6 +33,48 @@ export const getGeneratedFolderName = (folderName: string, uuid: string): string
 };
 
 /**
+ * Parses dependencies from preset JSON structure into a normalized format.
+ */
+export const parseDependencies = (dependencies?: PresetDependencies[]): ModDependency[] => {
+    if (!dependencies || !Array.isArray(dependencies)) {
+        return [];
+    }
+
+    const result: ModDependency[] = [];
+
+    for (const depObj of dependencies) {
+        for (const [modUUID, modData] of Object.entries(depObj)) {
+            result.push({
+                modUUID,
+                modName: modData.ModName,
+                resources: modData.Resources || []
+            });
+        }
+    }
+
+    return result;
+};
+
+/**
+ * Generates XML nodes for dependencies in meta.lsx format.
+ */
+export const generateDependenciesXml = (dependencies: ModDependency[]): string => {
+    if (dependencies.length === 0) {
+        return '';
+    }
+
+    return dependencies.map(dep => `
+                        <node id="ModuleShortDesc">
+                            <attribute id="Folder" type="LSString" value=""/>
+                            <attribute id="MD5" type="LSString" value=""/>
+                            <attribute id="Name" type="LSString" value="${dep.modName}"/>
+                            <attribute id="PublishHandle" type="uint64" value="0"/>
+                            <attribute id="UUID" type="guid" value="${dep.modUUID}"/>
+                            <attribute id="Version64" type="int64" value="36028797018963968"/>
+                        </node>`).join('');
+};
+
+/**
  * Replaces placeholders in the XML template with actual values.
  */
 export const generateMetaLsx = (config: ModConfig): string => {
@@ -42,5 +84,10 @@ export const generateMetaLsx = (config: ModConfig): string => {
     xml = xml.replace('{{FOLDER}}', getGeneratedFolderName(config.folderName, config.uuid));
     xml = xml.replace('{{NAME}}', config.modName);
     xml = xml.replace('{{UUID}}', config.uuid);
+
+    // Add additional mod dependencies after CPF dependency
+    const additionalDeps = generateDependenciesXml(config.dependencies);
+    xml = xml.replace('{{ADDITIONAL_DEPENDENCIES}}', additionalDeps);
+
     return xml;
 };

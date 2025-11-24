@@ -1,0 +1,69 @@
+{
+    "_id": "5e9e40609e564e25836a82569a81036e48bf",
+    "Name": "Dev Preset with Dependencies",
+    "Author": "Volitio",
+    "Version": "1.0",
+    "Dependencies": [
+        {
+            "06ba1746-2bcf-774d-3589-6b2f58c6c2ce": {
+                "ModName": "PL_Fantastical_Hairstyles",
+                "Resources": [
+                    {
+                        "DisplayName": "Refined Bun",
+                        "ResourceUUID": "ca534c6c-694a-4295-90e0-424726464766",
+                        "SlotName": "Hair"
+                    }
+                ]
+            }
+        },
+        {
+            "a1b2c3d4-e5f6-7890-abcd-ef1234567890": {
+                "ModName": "Custom Eyes Pack",
+                "Resources": [
+                    {
+                        "DisplayName": "Emerald Eyes",
+                        "ResourceUUID": "12345678-1234-1234-1234-123456789012",
+                        "SlotName": "Eyes"
+                    },
+                    {
+                        "DisplayName": "Sapphire Eyes",
+                        "ResourceUUID": "98765432-9876-9876-9876-987654321098",
+                        "SlotName": "Eyes"
+                    }
+                ]
+            }
+        }
+    ],
+    "Data": {
+        "AdditionalChoices": [
+            0.18999999761581421,
+            1.0,
+            0.029999999329447746,
+            0.37000000476837158
+        ],
+        "Elements": [
+            {
+                "Color": "3aec249a-b8a0-4520-b660-f25b4eb40970",
+                "ColorIntensity": 0.94999998807907104,
+                "GlossyTint": 1.0,
+                "Material": "75d4f9ac-67f9-413c-98d7-04817c8cd69f",
+                "MetallicTint": 0
+            },
+            {
+                "Color": "68677cb0-9f2c-4a2d-bb33-6bcfb823aec9",
+                "ColorIntensity": 0.42000007629394531,
+                "GlossyTint": 0.27000001072883606,
+                "Material": "66470b0a-6d9a-4b21-a3d7-d8f7179eb24d",
+                "MetallicTint": 1058474557
+            }
+        ],
+        "EyeColor": "830e79a7-7ae8-4e76-a9fd-5baf7c2c637c",
+        "HairColor": "00000000-0000-0000-0000-000000000000",
+        "SecondEyeColor": "830e79a7-7ae8-4e76-a9fd-5baf7c2c637c",
+        "SkinColor": "bc372dfb-3a0a-4fc4-a23d-068a12699d78",
+        "Visuals": [
+            "c28d9c96-c329-4bf6-b876-f447fb6bb488",
+            "ae1ce151-6944-435a-a616-30c4d59bfb31"
+        ]
+    }
+}
