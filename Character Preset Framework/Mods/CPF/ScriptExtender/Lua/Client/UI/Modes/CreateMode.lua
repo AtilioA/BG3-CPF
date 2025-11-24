@@ -7,13 +7,15 @@ local CreateMode = {}
 function CreateMode:Render(parent)
     -- Wrap entire content in a managed group
     local group = RenderHelper.CreateManagedGroup(parent, "CreateModeContent", function(g)
-        g:AddText("Create New Preset")
+        g:AddText("Create new preset from selected character")
         g:AddSeparator()
 
         -- Create reactive group for input fields that updates when NewPresetData changes
         RenderHelper.CreateReactiveGroup(g, "PresetInputFields", State.NewPresetData,
             function(inputGroup, presetData)
-                local inputName = inputGroup:AddInputText("Name")
+                inputGroup:AddText("Name")
+                local inputName = inputGroup:AddInputText("")
+                inputName.SameLine = true
                 inputName.Text = presetData.Name
                 inputName.OnChange = function()
                     local data = State.NewPresetData:GetValue()
@@ -21,7 +23,9 @@ function CreateMode:Render(parent)
                     State.NewPresetData:OnNext(data)
                 end
 
-                local inputAuthor = inputGroup:AddInputText("Author")
+                inputGroup:AddText("Author")
+                local inputAuthor = inputGroup:AddInputText("")
+                inputAuthor.SameLine = true
                 inputAuthor.Text = presetData.Author
                 inputAuthor.OnChange = function()
                     local data = State.NewPresetData:GetValue()
@@ -29,29 +33,14 @@ function CreateMode:Render(parent)
                     State.NewPresetData:OnNext(data)
                 end
 
-                local inputVer = inputGroup:AddInputText("Version")
+                inputGroup:AddText("Version")
+                local inputVer = inputGroup:AddInputText("")
+                inputVer.SameLine = true
                 inputVer.Text = presetData.Version
                 inputVer.OnChange = function()
                     local data = State.NewPresetData:GetValue()
                     data.Version = inputVer.Text
                     State.NewPresetData:OnNext(data)
-                end
-            end)
-
-        g:AddSeparator()
-        g:AddText("Captured attributes (preview):")
-
-        -- Create reactive preview that updates when CapturedData changes
-        RenderHelper.CreateReactiveGroup(g, "CapturedDataPreview", State.CapturedData,
-            function(previewGroup, capturedData)
-                local previewChild = previewGroup:AddChildWindow("CreatePreview")
-                previewChild.Size = { 0, 250 }
-
-                if capturedData then
-                    -- Show captured data
-                    previewChild:AddText(Ext.Json.Stringify(capturedData))
-                else
-                    previewChild:AddText("No data captured.")
                 end
             end)
 
@@ -69,6 +58,23 @@ function CreateMode:Render(parent)
         end
 
         btnCancel.SameLine = true
+
+        g:AddSeparator()
+        local detailsCH = g:AddCollapsingHeader("Captured attributes (preview; for dev purposes):")
+        detailsCH.DefaultOpen = false
+        -- Create reactive preview that updates when CapturedData changes
+        RenderHelper.CreateReactiveGroup(detailsCH, "CapturedDataPreview", State.CapturedData,
+            function(previewGroup, capturedData)
+                local previewChild = previewGroup:AddChildWindow("CreatePreview")
+                previewChild.Size = { 0, 250 }
+
+                if capturedData then
+                    -- Show captured data
+                    previewChild:AddText(Ext.Json.Stringify(capturedData))
+                else
+                    previewChild:AddText("No data captured.")
+                end
+            end)
     end)
 end
 
