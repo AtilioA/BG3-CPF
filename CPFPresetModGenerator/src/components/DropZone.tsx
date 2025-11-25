@@ -196,7 +196,7 @@ export const DropZone: React.FC<DropZoneProps> = ({ onFileLoaded }) => {
                     click anywhere to browse
                 </p> */}
 
-                <div className="w-full max-w-lg flex flex-col items-center gap-4 mt-4">
+                <div className="w-full max-w-lg flex flex-col items-center gap-4 mt-6">
                     <div className="flex items-center w-full gap-3">
                         <div className="h-px bg-slate-700 flex-1"></div>
                         <span className="text-slate-400 text-xs uppercase font-medium tracking-wider">Or paste JSON content</span>
@@ -205,11 +205,11 @@ export const DropZone: React.FC<DropZoneProps> = ({ onFileLoaded }) => {
 
                     <div className="w-full relative">
                         <textarea
-                            rows={6}
+                            rows={5}
                             placeholder="Paste preset JSON contents here..."
                             onPaste={handlePaste}
                             onClick={handleTextAreaClick}
-                            className="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-3 text-sm text-slate-300 font-mono focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all resize-y"
+                            className="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-3 text-sm text-slate-300 font-mono focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all resize-y placeholder:text-slate-500"
                         />
                         {/* <div className="absolute right-3 top-3 text-slate-600 pointer-events-none">
                             <FileJson className="w-4 h-4" />
