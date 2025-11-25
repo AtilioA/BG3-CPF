@@ -76,6 +76,12 @@
                                 "DescriptionHandle": "h89ed68a2aeb9443ca63f6df114118fa5b4e1",
                                 "NameHandle": "h24baadea05924a84b1cc3c30b34e0fc7a208"
                             }
+                        },
+                        {
+                            "Id": "reset_presets_index",
+                            "Name": "Reset presets index",
+                            "Type": "event_button",
+                            "Description": "Click this button to reset the presets index.\nThis will unhide presets."
                         }
                     ]
                 }

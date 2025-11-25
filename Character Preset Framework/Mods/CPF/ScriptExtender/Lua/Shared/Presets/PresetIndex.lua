@@ -25,7 +25,7 @@ function PresetIndex.Load()
         return {}
     end
 
-    if not Table.IsArray(data) then
+    if not Table.IsArray(data) and next(data) ~= nil then
         CPFWarn(1, "Preset index is not an array, resetting.")
         return {}
     end
@@ -152,6 +152,13 @@ function PresetIndex.GetEntry(presetId)
     end
 
     return nil
+end
+
+--- Clears the entire preset index
+---@return boolean success
+function PresetIndex.Clear()
+    CPFDebug(1, "PresetIndex.Clear: Clearing all entries")
+    return PresetIndex.Save({})
 end
 
 return PresetIndex

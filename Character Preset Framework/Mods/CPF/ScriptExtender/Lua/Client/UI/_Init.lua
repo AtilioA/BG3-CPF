@@ -14,6 +14,27 @@ MCM.InsertModMenuTab({
     tabName = "Preset manager"
 })
 
+MCM.EventButton.RegisterCallback({
+    buttonId = "reset_presets_index",
+    callback = function()
+        local cleared = PresetIndex:Clear()
+        local loaded = PresetDiscovery:LoadPresets()
+        if cleared and loaded >= 0 then
+            MCM.EventButton.ShowFeedback({
+                buttonId = "reset_presets_index",
+                message = string.format("Reset presets index. %d presets loaded.", loaded),
+                feedbackType = "success"
+            })
+        else
+            MCM.EventButton.ShowFeedback({
+                buttonId = "reset_presets_index",
+                message = "Failed to reset presets index.",
+                feedbackType = "error"
+            })
+        end
+    end
+})
+
 MCM.Keybinding.SetCallback({
     settingId = 'open_cpf',
     callback = function()
