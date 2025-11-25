@@ -17,9 +17,11 @@ function CreateMode:Render(parent)
                 local inputName = inputGroup:AddInputText("")
                 inputName.SameLine = true
                 inputName.Text = presetData.Name
+                local data = State.NewPresetData:GetValue()
                 inputName.OnChange = function()
-                    local data = State.NewPresetData:GetValue()
                     data.Name = inputName.Text
+                end
+                inputName.OnDeactivate = function()
                     State.NewPresetData:OnNext(data)
                 end
 
@@ -28,8 +30,10 @@ function CreateMode:Render(parent)
                 inputAuthor.SameLine = true
                 inputAuthor.Text = presetData.Author
                 inputAuthor.OnChange = function()
-                    local data = State.NewPresetData:GetValue()
                     data.Author = inputAuthor.Text
+                end
+
+                inputAuthor.OnDeactivate = function()
                     State.NewPresetData:OnNext(data)
                 end
 
@@ -38,8 +42,10 @@ function CreateMode:Render(parent)
                 inputVer.SameLine = true
                 inputVer.Text = presetData.Version
                 inputVer.OnChange = function()
-                    local data = State.NewPresetData:GetValue()
                     data.Version = inputVer.Text
+                end
+
+                inputVer.OnDeactivate = function()
                     State.NewPresetData:OnNext(data)
                 end
             end)
