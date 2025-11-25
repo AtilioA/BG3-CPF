@@ -78,10 +78,25 @@
                             }
                         },
                         {
+                            "Id": "unhide_presets",
+                            "Name": "Unhide all presets",
+                            "Type": "event_button",
+                            "Description": "Click this button to unhide all presets."
+                        },
+                        {
                             "Id": "reset_presets_index",
                             "Name": "Reset presets index",
                             "Type": "event_button",
-                            "Description": "Click this button to reset the presets index.\nThis will unhide presets."
+                            "Description": "Click this button to reset the presets index.\nThis will unhide presets, but you will lose presets that you have created.",
+                            "VisibleIf": {
+                                "Conditions": [
+                                    {
+                                        "SettingId": "debug_level",
+                                        "ExpectedValue": "1",
+                                        "Operator": ">="
+                                    }
+                                ]
+                            }
                         }
                     ]
                 }

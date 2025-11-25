@@ -161,4 +161,15 @@ function PresetIndex.Clear()
     return PresetIndex.Save({})
 end
 
+--- Unhide all presets in the preset index
+---@return boolean success
+function PresetIndex.UnhideAll()
+    CPFDebug(1, "PresetIndex.UnhideAll: Unhiding all presets")
+    local entries = PresetIndex.Load()
+    for _, entry in ipairs(entries) do
+        entry.hidden = false
+    end
+    return PresetIndex.Save(entries)
+end
+
 return PresetIndex
