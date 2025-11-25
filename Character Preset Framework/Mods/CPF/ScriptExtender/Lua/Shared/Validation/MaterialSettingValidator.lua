@@ -11,7 +11,7 @@ function MaterialSettingValidator.Validate(materialSetting, fieldPath)
     fieldPath = fieldPath or "MaterialSetting"
 
     if materialSetting == nil then
-        return true -- Optional field
+        return true
     end
 
     if type(materialSetting) ~= "table" and type(materialSetting) ~= "userdata" then
