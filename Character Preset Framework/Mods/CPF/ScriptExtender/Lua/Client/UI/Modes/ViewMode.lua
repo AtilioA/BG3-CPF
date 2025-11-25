@@ -1,6 +1,6 @@
 local State = Ext.Require("Client/UI/State.lua")
 local RenderHelper = Ext.Require("Client/UI/RenderHelper.lua")
-local COLOR_RED = { 1.0, 0.2, 0.2, 1.0 }
+local COLOR_RED = { 0.8, 0.2, 0.2, 1.0 }
 
 local ViewMode = {}
 
@@ -26,23 +26,21 @@ function ViewMode:Render(parent)
             group:AddText("Author: " .. (preset.Author or "Unknown"))
             group:AddText("Version: " .. (preset.Version or "Unknown"))
 
-            group:AddSeparator()
-
             -- Actions
             local btnApply = group:AddButton("Apply")
             btnApply.OnClick = function()
                 State:ApplyPreset(record)
             end
 
-            btnApply.SameLine = true
+            btnApply.SameLine = false
 
-            local btnDelete = group:AddButton("Delete")
+            local btnDelete = group:AddButton("Hide")
             btnDelete:SetColor("Button", COLOR_RED)
             btnDelete.OnClick = function()
                 State:HidePreset(record)
             end
 
-            group:AddSeparator()
+            btnApply.SameLine = true
 
             -- Attributes (read-only)
             local attrChild = group:AddChildWindow("AttributesView")

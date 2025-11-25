@@ -61,8 +61,6 @@ function Window:RenderCPFWindow()
         self.StatusText.Label = msg or ""
     end)
 
-    window:AddSeparator()
-
     -- Main Layout Table
     local table = window:AddTable("MainLayout", 2)
     table.Borders = true
