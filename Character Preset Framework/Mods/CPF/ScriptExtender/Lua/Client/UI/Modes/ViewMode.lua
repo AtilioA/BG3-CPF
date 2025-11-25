@@ -1,6 +1,6 @@
 local State = Ext.Require("Client/UI/State.lua")
 local RenderHelper = Ext.Require("Client/UI/RenderHelper.lua")
-local COLOR_RED = { 0.8, 0.2, 0.2, 1.0 }
+local COLOR_RED = { 0.8, 0.2, 0.2, 0.67 }
 
 local ViewMode = {}
 
@@ -40,7 +40,9 @@ function ViewMode:Render(parent)
                 State:HidePreset(record)
             end
 
-            btnApply.SameLine = true
+            btnDelete.SameLine = true
+
+            group:AddSeparator()
 
             -- Attributes (read-only)
             local attrChild = group:AddChildWindow("AttributesView")

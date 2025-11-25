@@ -6,7 +6,7 @@ local ImportMode = {}
 function ImportMode:Render(parent)
     -- Wrap entire content in a managed group
     RenderHelper.CreateManagedGroup(parent, "ImportModeContent", function(group)
-        group:AddText("Paste a preset JSON below:")
+        group:AddText("WIP: paste a preset JSON below:\nNOTE: this is pending a new SE fix slated for v30?")
 
         local input = group:AddInputText("")
         input.Multiline = true
@@ -15,6 +15,7 @@ function ImportMode:Render(parent)
         input.OnChange = function() State.ImportBuffer = input.Text end
 
         local btnImport = group:AddButton("Import")
+        btnImport.Disabled = true
         btnImport.OnClick = function()
             State:ImportFromBuffer()
         end

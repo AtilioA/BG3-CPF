@@ -1,6 +1,6 @@
 local State = Ext.Require("Client/UI/State.lua")
 local RenderHelper = Ext.Require("Client/UI/RenderHelper.lua")
-local COLOR_GREEN = { 0.2, 0.5, 0.2, 1.0 }
+local COLOR_GREEN = { 0.2, 0.67, 0.2, 0.67 }
 
 local CreateMode = {}
 
