@@ -40,7 +40,7 @@ export default function Home() {
                 uuid,
                 originalJson: jsonContent,
                 dependencies,
-                includeDependencies: true 
+                includeDependencies: true
             });
             setIsSuccess(false);
 
@@ -137,7 +137,7 @@ export default function Home() {
                             P
                         </div>
                         <h1 className="text-lg font-bold tracking-tight text-white">
-                            BG3 <span className="text-slate-400 font-medium">Character Preset Generator</span>
+                            BG3 <span className="text-slate-400 font-medium">Preset Mod Generator</span>
                         </h1>
                     </button>
                     <div className="flex items-center gap-4 text-sm text-slate-400">

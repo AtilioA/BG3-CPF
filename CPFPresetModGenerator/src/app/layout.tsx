@@ -7,7 +7,7 @@ import { Analytics } from "@vercel/analytics/next"
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    title: "BG3 Character Preset Generator",
+    title: "BG3 Preset Mod Generator",
     description: "Turn CPF preset into a mod",
 };
 

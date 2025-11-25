@@ -25,7 +25,7 @@ const dataSchema = z.object({
 
 // Main preset schema
 export const presetJsonSchema = z.object({
-    _id: z.string().regex(/^[a-f0-9]{36}$/, 'Invalid _id format (must be 36 hex characters)'),
+    _id: z.string().regex(uuidPattern, 'Invalid _id format (must be 36 hex characters)'),
     Name: z.string().min(1, 'Name is required'),
     Author: z.string().min(1, 'Author is required'),
     Version: z.string().min(1, 'Version is required'),
