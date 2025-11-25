@@ -24,7 +24,7 @@ function Window:DrawSidebar(parent)
     btnImport.SameLine = true
     local btnCreate = parent:AddButton("Create")
     btnCreate.OnClick = function()
-        -- TODO: Get actual player name
+        -- TODO: Get actual character name
         State:CaptureCharacterData("Self")
     end
 
@@ -49,10 +49,11 @@ function Window:DrawSidebar(parent)
         end)
 end
 
-function Window:RenderCPFWindow()
-    local window = Ext.IMGUI.NewWindow("Character Preset Framework")
+function Window:RenderCPF(window)
+    -- local window = Ext.IMGUI.NewWindow("Character Preset Framework")
 
     -- Status bar (at the top)
+    -- TODO: Add some distinctive color to the status bar?
     if not self.StatusText then
         self.StatusText = window:AddText("")
     end
@@ -64,8 +65,7 @@ function Window:RenderCPFWindow()
     -- Main Layout Table
     local table = window:AddTable("MainLayout", 2)
     table.Borders = true
-    table.Resizable = true
-    local sidebar = table:AddColumn("Sidebar", "WidthFixed", 200)
+    local sidebar = table:AddColumn("Sidebar", "WidthFixed", 400)
     local content = table:AddColumn("Content", "WidthStretch")
 
     local row = table:AddRow()

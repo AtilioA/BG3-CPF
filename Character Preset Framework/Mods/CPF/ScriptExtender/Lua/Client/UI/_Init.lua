@@ -9,4 +9,18 @@ CPFPrint(0, string.format("Discovered %d preset(s)", presetCount))
 State:RefreshPresets()
 
 -- Create CPF window and render presets
-Window:RenderCPFWindow()
+MCM.InsertModMenuTab({
+    tabCallback = function(window) Window:RenderCPF(window) end,
+    tabName = "Preset manager"
+})
+
+MCM.Keybinding.SetCallback({
+    settingId = 'open_cpf',
+    callback = function()
+        MCM.OpenModPage({
+            tabName = 'Preset manager',
+            modUUID = ModuleUUID,
+            shouldEmitEvent = true
+        })
+    end
+})
