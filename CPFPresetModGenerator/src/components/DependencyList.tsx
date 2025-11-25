@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Package, ChevronDown, ChevronRight } from 'lucide-react';
+import { ChevronDown, ChevronRight, Package } from 'lucide-react';
 import { ModDependency } from '@/types';
+import { Checkbox } from './Checkbox';
 
 interface DependencyListProps {
     dependencies: ModDependency[];
@@ -21,27 +22,18 @@ export const DependencyList: React.FC<DependencyListProps> = ({
 
     return (
         <div className="bg-slate-950/50 rounded-xl p-6 border border-slate-800">
-            <div className="flex items-start gap-3 mb-4">
-                <input
-                    type="checkbox"
-                    id="includeDependencies"
-                    checked={includeDependencies}
-                    onChange={(e) => onToggleInclude(e.target.checked)}
-                    className="mt-1 w-4 h-4 rounded border-slate-700 bg-slate-900 text-primary focus:ring-primary focus:ring-offset-0 cursor-pointer"
-                />
-                <div className="flex-1">
-                    <label
-                        htmlFor="includeDependencies"
-                        className="text-sm font-medium text-slate-300 cursor-pointer flex items-center gap-2"
-                    >
+            <Checkbox
+                checked={includeDependencies}
+                onChange={onToggleInclude}
+                label={
+                    <div className="flex items-center gap-2">
                         <Package className="w-4 h-4 text-indigo-400" />
                         Include mod dependencies in meta.lsx
-                    </label>
-                    <p className="text-xs text-slate-400 mt-1">
-                        This prevents players from missing dependencies
-                    </p>
-                </div>
-            </div>
+                    </div>
+                }
+                description="This prevents players from missing dependencies."
+                className="mb-2"
+            />
 
             {/* Accordion for dependency list */}
             <button
@@ -104,6 +96,6 @@ export const DependencyList: React.FC<DependencyListProps> = ({
                     </ul>
                 </div>
             )}
-        </div>
+        </div >
     );
 };

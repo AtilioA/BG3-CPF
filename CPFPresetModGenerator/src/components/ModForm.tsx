@@ -95,11 +95,12 @@ export const ModForm: React.FC<ModFormProps> = ({ config, setConfig, onGenerate,
                         <div>
                             <h2 className="text-xl font-bold text-white">Configure mod details</h2>
                             <p className="text-xs text-slate-400">These details are used to generate the meta.lsx configuration file for your mod.</p>
+                            <p className="text-xs text-slate-300">Default values work perfectly.</p>
                         </div>
                     </div>
                 </div>
 
-                <div className="p-8 grid grid-cols-1 md:grid-cols-1 gap-6">
+                <div className="p-6 grid grid-cols-1 md:grid-cols-1 gap-6">
                     {/* Left Column: Core Info */}
                     <div className="space-y-3">
                         <FormField
