@@ -24,22 +24,32 @@ export const META_LSX_TEMPLATE = `<?xml version="1.0" encoding="UTF-8"?>
                     <attribute id="Author" type="LSString" value="{{AUTHOR}}"/>
                     <attribute id="CharacterCreationLevelName" type="FixedString" value=""/>
                     <attribute id="Description" type="LSString" value="{{DESCRIPTION}}"/>
-                    <attribute id="FileSize" type="uint64" value="881247"/>
+                    <attribute id="FileSize" type="uint64" value="0"/>
                     <attribute id="Folder" type="LSString" value="{{FOLDER}}"/>
                     <attribute id="LobbyLevelName" type="FixedString" value=""/>
-                    <attribute id="MD5" type="LSString" value="c0a8f3412870277331306e0719fc6f77"/>
+                    <attribute id="MD5" type="LSString" value=""/>
                     <attribute id="MenuLevelName" type="FixedString" value=""/>
                     <attribute id="Name" type="LSString" value="{{NAME}}"/>
                     <attribute id="NumPlayers" type="uint8" value="4"/>
                     <attribute id="PhotoBooth" type="FixedString" value=""/>
                     <attribute id="StartupLevelName" type="FixedString" value=""/>
                     <attribute id="UUID" type="FixedString" value="{{UUID}}"/>
-                    <attribute id="Version64" type="int64" value="36028797018963978"/>
+                    <attribute id="Version64" type="int64" value="36028797018963968"/>
+                    <attribute id="Type" type="FixedString" value="Add-on" />
+                    <attribute id="Tags" type="LSString" value="Preset;CPF" />
+                    <attribute id="PublishHandle" type="uint64" value="0" />
                     <children>
                         <node id="PublishVersion">
-                            <attribute id="Version64" type="int64" value="36028797018963978"/>
+                        <attribute id="Version64" type="int64" value="41376821576466432" />
                         </node>
                         <node id="Scripts" />
+                        <node id="TargetModes">
+                        <children>
+                            <node id="Target">
+                            <attribute id="Object" type="FixedString" value="Story" />
+                            </node>
+                        </children>
+                        </node>
                     </children>
                 </node>
             </children>
