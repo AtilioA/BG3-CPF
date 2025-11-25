@@ -11,6 +11,7 @@ import { generateUUID, sanitizeFolderName, generateMetaLsx, getGeneratedFolderNa
 import { Github, Info } from 'lucide-react';
 import { FaPatreon } from 'react-icons/fa6';
 import { HELP_URL, GITHUB_URL } from '@/constants';
+import { SiNexusmods } from 'react-icons/si';
 
 export default function Home() {
     const [modConfig, setModConfig] = useState<ModConfig | null>(null);
@@ -142,7 +143,7 @@ export default function Home() {
                     </button>
                     <div className="flex items-center gap-4 text-sm text-slate-400">
                         <a href={HELP_URL} target="_blank" rel="noreferrer" className="hover:text-white transition-colors flex items-center gap-1">
-                            <Info className="w-4 h-4" /> Help
+                            <SiNexusmods /> Nexus
                         </a>
                         <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="hover:text-white transition-colors">
                             <Github className="w-5 h-5" />
