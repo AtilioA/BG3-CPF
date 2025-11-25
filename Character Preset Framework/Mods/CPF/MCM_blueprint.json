@@ -6,20 +6,45 @@
     },
     "Tabs": [
         {
+            "TabId": "preset_manager",
+            "TabName": "Preset manager",
+            "Settings": [
+                {
+                    "Id": "open_cpf",
+                    "Name": "Open CPF preset manager",
+                    "Type": "keybinding_v2",
+                    "Default": {
+                        "Keyboard": {
+                            "ModifierKeys": [
+                                "LShift",
+                            ],
+                            "Key": "P"
+                        }
+                    },
+                    "Description": "Opens the preset manager.",
+                    "Options": {
+                        "ShouldTriggerOnKeyDown": true,
+                        "ShouldTriggerOnKeyUp": false,
+                        "ShouldTriggerOnRepeat": false
+                    }
+                }
+            ]
+        },
+        {
             "TabId": "General",
             "TabName": "General",
             "Settings": [
-                {
-                    "Id": "mod_enabled",
-                    "Name": "Enabled",
-                    "Type": "checkbox",
-                    "Default": true,
-                    "Description": "Toggle the mod on/off without having to uninstall it.",
-                    "Handles": {
-                        "DescriptionHandle": "hac6189beeac24a319733a69e9153a24edffb",
-                        "NameHandle": "hc116181043c04c168e06ff11fce144e24136"
-                    }
-                }
+                // {
+                //     "Id": "mod_enabled",
+                //     "Name": "Enabled",
+                //     "Type": "checkbox",
+                //     "Default": true,
+                //     "Description": "Toggle the mod on/off without having to uninstall it.",
+                //     "Handles": {
+                //         "DescriptionHandle": "hac6189beeac24a319733a69e9153a24edffb",
+                //         "NameHandle": "hc116181043c04c168e06ff11fce144e24136"
+                //     }
+                // }
             ]
         },
         {
