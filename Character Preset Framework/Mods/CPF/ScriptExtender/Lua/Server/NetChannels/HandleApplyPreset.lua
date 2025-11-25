@@ -70,6 +70,12 @@ local function handleApplyPreset(data, userId)
         data.Preset.Author,
         charName))
 
+    -- Auto-enter mirror/appearance change mode if setting is enabled
+    if MCM.Get("auto_enter_mirror") then
+        CPFPrint(1, "Auto-entering mirror for " .. charName)
+        Osi.StartChangeAppearance(data.CharacterUuid)
+    end
+
     return response
 end
 

@@ -86,7 +86,7 @@ function PresetIndex.AddEntry(filename, presetId, source)
             source = source
         }
         table.insert(entries, newEntry)
-        CPFDebug(2, "PresetIndex.AddEntry: Added new entry")
+        CPFDebug(1, "PresetIndex.AddEntry: Added new entry")
     end
 
     local success = PresetIndex.Save(entries)

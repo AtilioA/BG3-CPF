@@ -1,3 +1,5 @@
+--- TODO: Use Ext.StaticData.Get("bc372dfb-3a0a-4fc4-a23d-068a12699d78", "CharacterCreationSharedVisual") to validate preset data
+
 ---@class PresetValidator
 --- Coordinates validation of preset objects by delegating to registered validators
 PresetValidator = {}

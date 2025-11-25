@@ -149,6 +149,8 @@ function State:CaptureCharacterData()
 end
 
 function State:SaveNewPreset()
+    -- TODO: capture data on save instead of using potentially stale data
+
     local data = self.CapturedData:GetValue()
     if not data then
         self:SetStatus("Error: No captured data to save")

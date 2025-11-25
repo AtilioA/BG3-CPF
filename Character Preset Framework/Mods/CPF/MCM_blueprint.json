@@ -34,6 +34,13 @@
             "TabId": "General",
             "TabName": "General",
             "Settings": [
+                {
+                    "Id": "auto_enter_mirror",
+                    "Name": "Auto-enter mirror after applying preset",
+                    "Type": "checkbox",
+                    "Default": true,
+                    "Description": "Automatically enter the mirror/appearance change mode after applying a preset"
+                }
                 // {
                 //     "Id": "mod_enabled",
                 //     "Name": "Enabled",

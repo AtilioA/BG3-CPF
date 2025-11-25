@@ -39,6 +39,41 @@ function CCA.ApplyCCATable(charEntity, CCATable)
         end
     end
 
+    -- local CCADummies = Ext.Entity.GetAllEntitiesWithComponent('CCChangeAppearanceDefinition')
+    -- if not CCADummies or #CCADummies == 0 then
+    --     CPFPrint(2, "No CCChangeAppearanceDefinition entity found")
+    --     return
+    -- end
+    -- if CCADummies[1] then
+    --     local dummyCCA = CCADummies[1].CCChangeAppearanceDefinition
+    --     local dummyCCADA = dummyCCA.Appearance
+    --     if dummyCCADA and dummyCCADA.Visual then
+    --         local vis = dummyCCADA.Visual
+    --         local copy = Table.deepcopy(CCATable)
+    --         for k, v in pairs(copy) do
+    --             local success, err = pcall(function() vis[k] = v end)
+    --             -- TODO: Add missing fields to CCA somehow?
+    --             if not success then
+    --                 CPFPrint(2, "Failed to set property " .. k .. " on dummyCCADA: " .. tostring(err))
+    --             end
+    --         end
+    --     end
+    --     local dummyCCADV = dummyCCA.Definition
+    --     if dummyCCADV and dummyCCADV.Visual then
+    --         local vis = dummyCCADV.Visual
+    --         local copy = Table.deepcopy(CCATable)
+    --         for k, v in pairs(copy) do
+    --             local success, err = pcall(function() vis[k] = v end)
+    --             -- TODO: Add missing fields to CCA somehow?
+    --             if not success then
+    --                 CPFPrint(2, "Failed to set property " .. k .. " on dummyCCADV: " .. tostring(err))
+    --             end
+    --         end
+    --     end
+
+    --     CCADummies[1]:Replicate("CCChangeAppearanceDefinition")
+    -- end
+
     -- Send CCA table to client to apply to dummy (only on server)
     if Ext.IsServer() then
         NetChannels.ApplyCCAToClientDummy:Broadcast({
