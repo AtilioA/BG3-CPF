@@ -14,15 +14,21 @@ local Window = {
 
 function Window:DrawSidebar(parent)
     -- Toolbar
-    local btnRefresh = parent:AddButton("Refresh")
-    btnRefresh.OnClick = function() State:RefreshPresets() end
+    if tonumber(MCM.Get("debug_level")) >= 2 then
+        local btnRefresh = parent:AddButton("Refresh")
+        btnRefresh.OnClick = function() State:RefreshPresets() end
+        btnRefresh.SameLine = true
+    end
 
-    btnRefresh.SameLine = true
     local btnImport = parent:AddButton("Import")
     btnImport.OnClick = function() State:SetMode("IMPORT") end
 
     btnImport.SameLine = true
-    local btnCreate = parent:AddButton("Create")
+
+    local vSeparator = parent:AddText("|")
+    vSeparator.SameLine = true
+
+    local btnCreate = parent:AddButton("Preset creation")
     btnCreate.OnClick = function()
         -- TODO: Get actual character name
         State:CaptureCharacterData()
