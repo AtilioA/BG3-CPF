@@ -10,6 +10,7 @@
 
 ---@class Preset
 ---@field _id string
+---@field PresetSchema string
 ---@field Name string
 ---@field Author string
 ---@field Version string
@@ -37,6 +38,7 @@ function Preset.Create(name, author, version, ccaData)
         Name = name,
         Author = author,
         Version = version,
+        PresetSchema = Constants.PRESET_SCHEMA,
         Data = {
             AccessorySet = "",
             Icon = "",

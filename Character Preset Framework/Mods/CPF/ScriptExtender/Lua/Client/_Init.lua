@@ -23,7 +23,6 @@ RequireFiles("Client/UI/", {
     "_Init",
 })
 
-
 RequireFiles("Client/Helpers/", {
     "_Init",
 })
