@@ -312,7 +312,10 @@ function State:ApplyPreset(record)
 end
 
 function State:ImportFromBuffer()
-    if self.ImportBuffer == "" then return end
+    if self.ImportBuffer == "" then
+        self:SetStatus("Error: Import buffer is empty")
+        return
+    end
 
     if not Preset or not Preset.Deserialize then
         CPFWarn(0, "Preset module not loaded")
@@ -320,28 +323,56 @@ function State:ImportFromBuffer()
         return
     end
 
-    local preset, err = Preset.Deserialize(self.ImportBuffer)
-    if not preset then
-        CPFWarn(0, "Failed to deserialize import buffer: " .. tostring(err))
-        self:SetStatus("Import Error: " .. tostring(err))
+    local success, presetOrError, presetDeserializeError = xpcall(
+        function()
+            return Preset.Deserialize(self.ImportBuffer)
+        end,
+        function(err)
+            return debug.traceback(tostring(err), 2)
+        end
+    )
+
+    if not success then
+        CPFWarn(0, "Import failed: " .. tostring(presetOrError))
+        self:SetStatus("Import error: " .. tostring(presetOrError))
         return
     end
 
-    -- Register with PresetRegistry
-    -- TODO: reduce code duplication
-    if PresetRegistry then
-        local regSuccess, regErr = PresetRegistry.Register(preset)
-        if not regSuccess then
-            CPFWarn(0, "Failed to register preset: " .. tostring(regErr))
-            self:SetStatus("Import Error: " .. tostring(regErr))
-            return
-        end
+    -- Handle xpcall result (first return is success boolean)
+    if not presetOrError then
+        CPFWarn(0, "Failed to parse/validate import buffer: " .. tostring(presetDeserializeError))
+        self:SetStatus("Import error: " .. tostring(presetDeserializeError))
+        return
     end
 
-    self:SetStatus("Imported '" .. preset.Name .. "'")
+    -- Deserialize returns (preset, err), so we need to check the actual result
+    local actualPreset, validationErr = presetOrError, presetDeserializeError
+    if not actualPreset then
+        CPFWarn(0, "Failed to deserialize import buffer: " .. tostring(validationErr))
+        self:SetStatus("Import error: " .. tostring(validationErr))
+        return
+    end
+
+    -- Use PresetDiscovery to register (handles both registry and index, will refactor later :gladge:)
+    if not (PresetDiscovery and PresetDiscovery.RegisterUserPreset) then
+        CPFWarn(0, "PresetDiscovery not available")
+        self:SetStatus("Error: PresetDiscovery not available")
+        return
+    end
+
+    local registrationSuccess, err = PresetDiscovery:RegisterUserPreset(actualPreset)
+    if not registrationSuccess then
+        CPFWarn(0, "Failed to register imported preset: " .. tostring(err))
+        self:SetStatus("Import error: " .. tostring(err))
+        return
+    end
+
+    -- Unhide preset just in case
+    PresetIndex.SetHidden(actualPreset._id, false)
+    self:SetStatus("Imported '" .. actualPreset.Name .. "'")
     self:RefreshPresets()
 
-    local record = PresetRegistry.Get(preset._id)
+    local record = PresetRegistry.Get(actualPreset._id)
     if record then
         self:SelectPreset(record)
     end

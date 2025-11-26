@@ -57,6 +57,8 @@ local function handleApplyPreset(data, userId)
     -- Update character's appearance
     entity:Replicate("CharacterCreationAppearance")
     entity:Replicate("CharacterCreationStats")
+    -- entity:Replicate("CustomIcon")
+    -- entity:Replicate("Voice")
 
     -- Track which attributes were applied
     for key, _ in pairs(ccaTable) do
