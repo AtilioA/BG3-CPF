@@ -1,6 +1,5 @@
 local State = Ext.Require("Client/UI/State.lua")
 local RenderHelper = Ext.Require("Client/UI/RenderHelper.lua")
-local COLOR_RED = { 0.8, 0.2, 0.2, 0.67 }
 
 local ViewMode = {}
 
@@ -35,7 +34,7 @@ function ViewMode:Render(parent)
             btnApply.SameLine = false
 
             local btnDelete = group:AddButton("Hide")
-            btnDelete:SetColor("Button", COLOR_RED)
+            btnDelete:SetColor("Button", UIColors.COLOR_RED)
             btnDelete.OnClick = function()
                 State:HidePreset(record)
             end

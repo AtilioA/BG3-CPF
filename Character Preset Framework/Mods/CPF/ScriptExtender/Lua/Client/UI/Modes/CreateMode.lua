@@ -1,6 +1,5 @@
 local State = Ext.Require("Client/UI/State.lua")
 local RenderHelper = Ext.Require("Client/UI/RenderHelper.lua")
-local COLOR_GREEN = { 0.2, 0.67, 0.2, 0.67 }
 
 local CreateMode = {}
 
@@ -51,7 +50,7 @@ function CreateMode:Render(parent)
             end)
 
         local btnSave = g:AddButton("Save")
-        btnSave:SetColor("Button", COLOR_GREEN)
+        btnSave:SetColor("Button", UIColors.COLOR_GREEN)
         btnSave.OnClick = function()
             State:SaveNewPreset()
         end

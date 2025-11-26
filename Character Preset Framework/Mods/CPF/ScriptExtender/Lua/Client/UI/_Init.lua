@@ -1,5 +1,7 @@
 local State = Ext.Require("Client/UI/State.lua")
-local Window = Ext.Require("Client/UI/Window.lua")
+RequireFiles("Client/UI/Styles/", {
+    "_Init"
+})
 
 -- Run preset discovery on client initialization
 local presetCount = PresetDiscovery:LoadPresets()
