@@ -45,9 +45,20 @@ function Window:DrawSidebar(parent)
         ---@param group ExtuiGroup
         ---@param records PresetRecord[]
         function(group, records)
+            local table = group:AddTable("PresetsTable", 1)
+
+            local _colName = table:AddColumn("Name", "WidthStretch")
+            -- Add header row
+            local headerRow = table:AddRow()
+            headerRow:AddCell():AddSeparatorText("Preset list")
+            -- Add preset rows
             for i, record in ipairs(records) do
+                local row = table:AddRow()
+
+                local nameCell = row:AddCell()
                 local label = (record.preset.Name .. "##" .. record.preset._id) or ("Preset " .. i)
-                local item = group:AddButton(label)
+                local item = nameCell:AddButton(label)
+                item.Size = { -1, 50 }
                 item.OnClick = function()
                     State:SelectPreset(record)
                 end
