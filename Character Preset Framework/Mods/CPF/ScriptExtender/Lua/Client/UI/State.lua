@@ -1,6 +1,6 @@
 local rx = Ext.Require("Lib/reactivex/_init.lua")
 
-local STATUS_MESSAGE_TIMEOUT = 5000
+local STATUS_MESSAGE_TIMEOUT = 3000
 
 local State = {
     ViewMode = rx.BehaviorSubject.Create("VIEW"),
@@ -21,6 +21,11 @@ local State = {
     _statusSubscription = nil
 }
 
+function State:GetStatusMessageDuration(msg)
+    local increase = #msg / 20 * 1000
+    return STATUS_MESSAGE_TIMEOUT + increase
+end
+
 -- Helper to set status
 function State:SetStatus(msg)
     self.StatusMessage:OnNext(msg)
@@ -33,7 +38,7 @@ function State:SetStatus(msg)
 
     if msg ~= "" then
         -- Clear after STATUS_MESSAGE_TIMEOUT using Ext.Timer
-        self._statusTimerHandle = Ext.Timer.WaitFor(STATUS_MESSAGE_TIMEOUT, function()
+        self._statusTimerHandle = Ext.Timer.WaitFor(self:GetStatusMessageDuration(msg), function()
             self._statusTimerHandle = nil
             if self.StatusMessage:GetValue() == msg then
                 self.StatusMessage:OnNext("")
