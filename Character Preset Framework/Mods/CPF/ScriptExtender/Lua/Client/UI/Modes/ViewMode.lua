@@ -26,14 +26,19 @@ function ViewMode:Render(parent)
             group:AddText("Version: " .. (preset.Version or "Unknown"))
 
             -- Actions
-            local btnApply = group:AddButton("Apply")
+            local btnApply = group:AddButton("Apply preset")
+            btnApply:SetColor("Button", UIColors.COLOR_GREEN)
             btnApply.OnClick = function()
                 State:ApplyPreset(record)
             end
 
             btnApply.SameLine = false
 
-            local btnDelete = group:AddButton("Hide")
+            local buttonSpacing = group:AddSpacing()
+
+            buttonSpacing.SameLine = true
+
+            local btnDelete = group:AddButton("Hide preset")
             btnDelete:SetColor("Button", UIColors.COLOR_RED)
             btnDelete.OnClick = function()
                 State:HidePreset(record)

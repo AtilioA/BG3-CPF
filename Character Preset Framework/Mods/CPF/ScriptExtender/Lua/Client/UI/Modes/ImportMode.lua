@@ -6,7 +6,7 @@ local ImportMode = {}
 function ImportMode:Render(parent)
     -- Wrap entire content in a managed group
     RenderHelper.CreateManagedGroup(parent, "ImportModeContent", function(group)
-        if (not Ext.Debug.IsDeveloperMode()) or (Ext.Utils.Version() <= 30) then
+        if (not Ext.Debug.IsDeveloperMode()) and (Ext.Utils.Version() <= 30) then
             group:AddText("You need SE v30 or Devel to use this feature.")
             CPFWarn(1, "Import feature is still not available!")
             return false
@@ -20,7 +20,6 @@ function ImportMode:Render(parent)
         input.OnChange = function() State.ImportBuffer = input.Text end
 
         local btnImport = group:AddButton("Import")
-        btnImport.Disabled = true
         btnImport.OnClick = function()
             State:ImportFromBuffer()
         end
