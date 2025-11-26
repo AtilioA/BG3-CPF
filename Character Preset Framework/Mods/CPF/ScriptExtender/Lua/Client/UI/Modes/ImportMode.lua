@@ -6,11 +6,16 @@ local ImportMode = {}
 function ImportMode:Render(parent)
     -- Wrap entire content in a managed group
     RenderHelper.CreateManagedGroup(parent, "ImportModeContent", function(group)
-        group:AddText("WIP: paste a preset JSON below:\nNOTE: this is pending a new SE fix slated for v30?")
+        if (not Ext.Debug.IsDeveloperMode()) or (Ext.Utils.Version() <= 30) then
+            group:AddText("You need SE v30 or Devel to use this feature.")
+            CPFWarn(1, "Import feature is still not available!")
+            return false
+        end
+        group:AddText("WIP: paste a preset JSON below:")
 
         local input = group:AddInputText("")
         input.Multiline = true
-        input.SizeHint = {450, 400}
+        input.SizeHint = { 450, 400 }
         input.Text = State.ImportBuffer
         input.OnChange = function() State.ImportBuffer = input.Text end
 
