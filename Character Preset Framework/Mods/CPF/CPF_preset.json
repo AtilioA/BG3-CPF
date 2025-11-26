@@ -1,97 +1,98 @@
 {
-        "_id": "5e9e40609e564e25836a82569a81036e48bf",
-        "Name": "Dev Preset",
-        "Author": "Volitio",
-        "Version": "1.0",
-        "Data": {
-            "AdditionalChoices": [
-                0.18999999761581421,
-                1.0,
-                0.029999999329447746,
-                0.37000000476837158
-            ],
-            "Elements": [
-                {
-                    "Color": "3aec249a-b8a0-4520-b660-f25b4eb40970",
-                    "ColorIntensity": 0.94999998807907104,
-                    "GlossyTint": 1.0,
-                    "Material": "75d4f9ac-67f9-413c-98d7-04817c8cd69f",
-                    "MetallicTint": 0
-                },
-                {
-                    "Color": "68677cb0-9f2c-4a2d-bb33-6bcfb823aec9",
-                    "ColorIntensity": 0.42000007629394531,
-                    "GlossyTint": 0.27000001072883606,
-                    "Material": "66470b0a-6d9a-4b21-a3d7-d8f7179eb24d",
-                    "MetallicTint": 1058474557
-                },
-                {
-                    "Color": "00000000-0000-0000-0000-000000000000",
-                    "ColorIntensity": 1.0,
-                    "GlossyTint": 1.0,
-                    "Material": "f03b33ae-5d47-4cb5-80bc-ea06a3c55c96",
-                    "MetallicTint": 0
-                },
-                {
-                    "Color": "d26d15fc-b637-4d70-8b77-ff89f916a592",
-                    "ColorIntensity": 0.21324795484542847,
-                    "GlossyTint": 1.0,
-                    "Material": "dbf4ab14-44c2-4ef9-b8be-35d1dfdd1c0f",
-                    "MetallicTint": 0
-                },
-                {
-                    "Color": "2d3335df-66db-4276-bab0-31820f69b368",
-                    "ColorIntensity": 0.0,
-                    "GlossyTint": 1.0,
-                    "Material": "32f58f2c-525d-4b09-86ba-0c6cb0baca28",
-                    "MetallicTint": 0
-                },
-                {
-                    "Color": "00000000-0000-0000-0000-000000000000",
-                    "ColorIntensity": 1.0,
-                    "GlossyTint": 1.0,
-                    "Material": "b5d23e2d-6222-4b05-b7e6-8bec4fa475c2",
-                    "MetallicTint": 0
-                },
-                {
-                    "Color": "11d0f888-5e7a-47b1-97ae-9c04fe595e0b",
-                    "ColorIntensity": 0.1593143492937088,
-                    "GlossyTint": 0.0,
-                    "Material": "3c642923-f0ec-4df2-a918-8ac63d7b8d26",
-                    "MetallicTint": 1044134973
-                },
-                {
-                    "Color": "41b62f73-091c-4025-8c7b-b49d9d1f5385",
-                    "ColorIntensity": 1.0,
-                    "GlossyTint": 1.0,
-                    "Material": "23d0f6e2-8491-4e3d-bfd5-73b8e671f80c",
-                    "MetallicTint": 0
-                },
-                {
-                    "Color": "9926ab15-fbe8-4ec6-8a0e-18a6aa0a5a70",
-                    "ColorIntensity": 1.0,
-                    "GlossyTint": 1.0,
-                    "Material": "292b191c-7dc3-4bc6-8e92-5b01ff5cf6b3",
-                    "MetallicTint": 0
-                }
-            ],
-            "EyeColor": "830e79a7-7ae8-4e76-a9fd-5baf7c2c637c",
-            "HairColor": "00000000-0000-0000-0000-000000000000",
-            "SecondEyeColor": "830e79a7-7ae8-4e76-a9fd-5baf7c2c637c",
-            "SkinColor": "bc372dfb-3a0a-4fc4-a23d-068a12699d78",
-            "Visuals": [
-                "c28d9c96-c329-4bf6-b876-f447fb6bb488",
-                "ae1ce151-6944-435a-a616-30c4d59bfb31",
-                "f78287d8-6dea-4106-acc7-0560f6afdb87",
-                "2ebe0954-f771-4b72-b910-b30529d3f945",
-                "427012ca-9b18-424c-8ee9-a59ff55b152e",
-                "79ae4309-bd93-4620-b0d6-a80bb7e7e8a4",
-                "3248f9d5-05cc-42f8-a111-772f894439a7",
-                "514dcb13-e15f-4cb0-94a2-cf22d9cf2965",
-                "e4998190-4621-4de6-a49b-8e43d751c074",
-                "be72fe8d-a81a-4459-a637-344f4e508ac7",
-                "43e7eb3d-ca85-42b9-b32d-ad1be18d1001",
-                "a8e9f550-edac-41d0-9a1e-8ccb1033fb25"
-            ]
-        }
+    "_id": "4755eb8a-69db-4496-82dc-7f07e8c15077",
+    "PresetSchema": "1",
+    "Name": "Dev preset",
+    "Author": "Volitio",
+    "Version": "1.0",
+    "Data": {
+        "AdditionalChoices": [
+            0.18999999761581421,
+            1.0,
+            0.029999999329447746,
+            0.37000000476837158
+        ],
+        "Elements": [
+            {
+                "Color": "3aec249a-b8a0-4520-b660-f25b4eb40970",
+                "ColorIntensity": 0.94999998807907104,
+                "GlossyTint": 1.0,
+                "Material": "75d4f9ac-67f9-413c-98d7-04817c8cd69f",
+                "MetallicTint": 0
+            },
+            {
+                "Color": "68677cb0-9f2c-4a2d-bb33-6bcfb823aec9",
+                "ColorIntensity": 0.42000007629394531,
+                "GlossyTint": 0.27000001072883606,
+                "Material": "66470b0a-6d9a-4b21-a3d7-d8f7179eb24d",
+                "MetallicTint": 1058474557
+            },
+            {
+                "Color": "00000000-0000-0000-0000-000000000000",
+                "ColorIntensity": 1.0,
+                "GlossyTint": 1.0,
+                "Material": "f03b33ae-5d47-4cb5-80bc-ea06a3c55c96",
+                "MetallicTint": 0
+            },
+            {
+                "Color": "d26d15fc-b637-4d70-8b77-ff89f916a592",
+                "ColorIntensity": 0.21324795484542847,
+                "GlossyTint": 1.0,
+                "Material": "dbf4ab14-44c2-4ef9-b8be-35d1dfdd1c0f",
+                "MetallicTint": 0
+            },
+            {
+                "Color": "2d3335df-66db-4276-bab0-31820f69b368",
+                "ColorIntensity": 0.0,
+                "GlossyTint": 1.0,
+                "Material": "32f58f2c-525d-4b09-86ba-0c6cb0baca28",
+                "MetallicTint": 0
+            },
+            {
+                "Color": "00000000-0000-0000-0000-000000000000",
+                "ColorIntensity": 1.0,
+                "GlossyTint": 1.0,
+                "Material": "b5d23e2d-6222-4b05-b7e6-8bec4fa475c2",
+                "MetallicTint": 0
+            },
+            {
+                "Color": "11d0f888-5e7a-47b1-97ae-9c04fe595e0b",
+                "ColorIntensity": 0.1593143492937088,
+                "GlossyTint": 0.0,
+                "Material": "3c642923-f0ec-4df2-a918-8ac63d7b8d26",
+                "MetallicTint": 1044134973
+            },
+            {
+                "Color": "41b62f73-091c-4025-8c7b-b49d9d1f5385",
+                "ColorIntensity": 1.0,
+                "GlossyTint": 1.0,
+                "Material": "23d0f6e2-8491-4e3d-bfd5-73b8e671f80c",
+                "MetallicTint": 0
+            },
+            {
+                "Color": "9926ab15-fbe8-4ec6-8a0e-18a6aa0a5a70",
+                "ColorIntensity": 1.0,
+                "GlossyTint": 1.0,
+                "Material": "292b191c-7dc3-4bc6-8e92-5b01ff5cf6b3",
+                "MetallicTint": 0
+            }
+        ],
+        "EyeColor": "830e79a7-7ae8-4e76-a9fd-5baf7c2c637c",
+        "HairColor": "00000000-0000-0000-0000-000000000000",
+        "SecondEyeColor": "830e79a7-7ae8-4e76-a9fd-5baf7c2c637c",
+        "SkinColor": "bc372dfb-3a0a-4fc4-a23d-068a12699d78",
+        "Visuals": [
+            "c28d9c96-c329-4bf6-b876-f447fb6bb488",
+            "ae1ce151-6944-435a-a616-30c4d59bfb31",
+            "f78287d8-6dea-4106-acc7-0560f6afdb87",
+            "2ebe0954-f771-4b72-b910-b30529d3f945",
+            "427012ca-9b18-424c-8ee9-a59ff55b152e",
+            "79ae4309-bd93-4620-b0d6-a80bb7e7e8a4",
+            "3248f9d5-05cc-42f8-a111-772f894439a7",
+            "514dcb13-e15f-4cb0-94a2-cf22d9cf2965",
+            "e4998190-4621-4de6-a49b-8e43d751c074",
+            "be72fe8d-a81a-4459-a637-344f4e508ac7",
+            "43e7eb3d-ca85-42b9-b32d-ad1be18d1001",
+            "a8e9f550-edac-41d0-9a1e-8ccb1033fb25"
+        ]
     }
+}
