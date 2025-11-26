@@ -1,8 +1,37 @@
+-- FIXME: remove client-side code from here (dummy-related)
+
 CCA = {}
+
+--- Return whether entity has a dummy in CC/Mirror
+---@param entity EntityHandle
+---@return boolean
+function CCA.HasDummy(entity)
+    if not entity.CCState then
+        return false
+    end
+    return entity.CCState.HasDummy
+end
 
 --- @param entity EntityHandle - Entity to copy CCA from
 --- @return CharacterCreationAppearance? -- CCA component if found, nil if not found
 function CCA.CopyCharacterCreationAppearance(entity)
+    --- Copy from dummy if dummy has been found
+    local CCA = entity.CharacterCreationAppearance
+    if CCA then
+        return Table.deepcopy(CCA)
+    end
+    return nil
+end
+
+function CCA.CopyCCAOrDummy(entity)
+    --- Copy from dummy instead if dummy has been found
+    if CCA.HasDummy(entity) then
+        CPFDebug(1, "Entity has dummy, copying from it instead")
+        _D(entity)
+        return CCA.CopyDummyAppearance(entity)
+    end
+
+    CPFDebug(1, "Entity has no dummy, copying from CCA")
     local CCA = entity.CharacterCreationAppearance
     if CCA then
         return Table.deepcopy(CCA)
@@ -13,11 +42,21 @@ end
 --- @param entity EntityHandle - Entity to copy dummy appearance from
 --- @return CharacterCreationAppearance? -- Dummy appearance if found, nil if not found
 function CCA.CopyDummyAppearance(entity)
-    local dummyCCA = entity.ClientCCDummyDefinition
-    if dummyCCA and dummyCCA.Visual then
-        local vis = dummyCCA.Visual
-        return Table.deepcopy(vis)
+    if Ext.IsServer() then
+        CPFWarn(1, "Trying to get dummy appearance on server!")
+        return
     end
+
+    local dummy = DummyClient.GetDummyForEntity(entity)
+    if not dummy then
+        CPFWarn(0, "No dummy found for entity " .. entity.Uuid.EntityUuid)
+        return
+    end
+
+    if dummy.ClientCCDummyDefinition and dummy.ClientCCDummyDefinition.Visual then
+        return Table.deepcopy(dummy.ClientCCDummyDefinition and dummy.ClientCCDummyDefinition.Visual)
+    end
+
     return nil
 end
 

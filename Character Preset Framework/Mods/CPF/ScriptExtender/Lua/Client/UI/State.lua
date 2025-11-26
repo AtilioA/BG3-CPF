@@ -99,7 +99,7 @@ function State:CaptureCharacterData()
         end
 
         -- Get the CharacterCreationAppearance component
-        local ccaData = CCA.CopyCharacterCreationAppearance(player)
+        local ccaData = CCA.CopyCCAOrDummy(player)
 
         if not ccaData then
             CPFWarn(0, "Player entity does not have CharacterCreationAppearance component")
