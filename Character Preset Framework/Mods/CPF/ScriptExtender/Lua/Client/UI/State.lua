@@ -8,6 +8,7 @@ local State = {
     Presets = rx.BehaviorSubject.Create({}),
     StatusMessage = rx.BehaviorSubject.Create(""),
     CapturedData = rx.BehaviorSubject.Create(nil),
+    TargetCharacterUUID = nil,
 
     -- Buffers
     NewPresetData = rx.BehaviorSubject.Create({
@@ -98,7 +99,12 @@ function State:CaptureCharacterData()
             return
         end
 
-        -- Get the CharacterCreationAppearance component
+        -- Store the target UUID for later use (saving)
+        if player.Uuid then
+            self.TargetCharacterUUID = player.Uuid.EntityUuid
+        end
+
+        -- Get the CharacterCreationAppearance component for PREVIEW purposes
         local ccaData = CCA.CopyCCAOrDummy(player)
 
         if not ccaData then
@@ -148,10 +154,35 @@ function State:CaptureCharacterData()
     end
 end
 
-function State:SaveNewPreset()
-    -- TODO: capture data on save instead of using potentially stale data
+--- Refreshes CapturedData with TargetCharacterUUID info
+--- @return CharacterCreationAppearance|nil
+function State:RefreshTargetCharacterData()
+    local data = nil
+    if not self.TargetCharacterUUID then
+        self.TargetCharacterUUID = _C().Uuid.EntityUuid
+    end
 
-    local data = self.CapturedData:GetValue()
+    if self.TargetCharacterUUID then
+        local character = Ext.Entity.Get(self.TargetCharacterUUID)
+        if character then
+            data = CCA.CopyCCAOrDummy(character)
+            -- Update the preview as well (?)
+            self.CapturedData:OnNext(data)
+        end
+    end
+
+    -- Fallback to existing captured data if re-capture failed (e.g. entity gone)
+    if not data then
+        data = self.CapturedData:GetValue()
+    end
+
+    return data
+end
+
+function State:SaveNewPreset()
+    -- Re-capture data on save to ensure it's up-to-date
+    local data = self:RefreshTargetCharacterData()
+
     if not data then
         self:SetStatus("Error: No captured data to save")
         return
