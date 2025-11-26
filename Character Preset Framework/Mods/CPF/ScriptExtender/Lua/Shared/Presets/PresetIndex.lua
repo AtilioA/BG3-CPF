@@ -161,6 +161,30 @@ function PresetIndex.Clear()
     return PresetIndex.Save({})
 end
 
+--- Sets the hidden state of a single entry from the index by preset ID
+---@param presetId string The ID of the preset
+---@param hidden boolean Whether the preset should be hidden
+---@return boolean success
+function PresetIndex.SetHidden(presetId, hidden)
+    local entries = PresetIndex.Load()
+    local changed = false
+
+    for _, entry in ipairs(entries) do
+        if entry.presetId == presetId then
+            entry.hidden = hidden
+            changed = true
+            -- IDs should be unique safe to break.
+            break
+        end
+    end
+
+    if changed then
+        return PresetIndex.Save(entries)
+    end
+
+    return true
+end
+
 --- Unhide all presets in the preset index
 ---@return boolean success
 function PresetIndex.UnhideAll()
