@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
     title: "BG3 Preset Mod Generator",
-    description: "Turn CPF preset into a mod",
+    description: "Turn any CPF preset into a mod",
 };
 
 export default function RootLayout({
