@@ -1,0 +1,3 @@
+RequireFiles("Client/Helpers/", {
+    "Dummy"
+})
