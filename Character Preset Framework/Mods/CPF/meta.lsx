@@ -18,7 +18,7 @@
         <node id="ModuleInfo">
           <attribute id="Author" type="LSString" value="Volitio" />
           <attribute id="CharacterCreationLevelName" type="FixedString" value="" />
-          <attribute id="Description" type="LSString" value="Framework/manager that allows players to create, share, and import character creation presets easily." />
+          <attribute id="Description" type="LSString" value="Framework/manager that allows players to create, share, and import character creation presets easily. Visit bg3-cpf.vercel.app for more info." />
           <attribute id="Folder" type="LSString" value="CPF" />
           <attribute id="LobbyLevelName" type="FixedString" value="" />
           <attribute id="MD5" type="LSString" value="" />
@@ -31,10 +31,10 @@
           <attribute id="Tags" type="LSString" value="" />
           <attribute id="Type" type="FixedString" value="Add-on" />
           <attribute id="UUID" type="FixedString" value="4fa17abe-993c-4e7e-ab2a-e7370b166ac9" />
-          <attribute id="Version64" type="int64" value="140737488355328" />
+          <attribute id="Version64" type="int64" value="422212465065984" />
           <children>
             <node id="PublishVersion">
-              <attribute id="Version64" type="int64" value="140737488355328" />
+              <attribute id="Version64" type="int64" value="422212465065984" />
             </node>
             <node id="Scripts" />
             <node id="TargetModes">
