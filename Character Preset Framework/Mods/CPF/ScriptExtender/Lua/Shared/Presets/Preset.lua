@@ -148,7 +148,7 @@ function Preset.Deserialize(jsonString)
 end
 
 --- Validates a preset object structure
----@param preset Preset
+---@param preset Preset|table
 ---@return boolean isValid
 ---@return string? errorMessage
 function Preset.Validate(preset)
