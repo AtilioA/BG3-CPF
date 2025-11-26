@@ -25,7 +25,7 @@ function Window:DrawSidebar(parent)
     local btnCreate = parent:AddButton("Create")
     btnCreate.OnClick = function()
         -- TODO: Get actual character name
-        State:CaptureCharacterData("Self")
+        State:CaptureCharacterData()
     end
 
     btnCreate.SameLine = true
