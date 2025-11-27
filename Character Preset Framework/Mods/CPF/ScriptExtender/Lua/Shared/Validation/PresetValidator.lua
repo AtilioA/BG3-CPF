@@ -16,12 +16,12 @@ function PresetValidator.Validate(preset)
 
     -- Check required top-level fields
     local requiredFields = {
-        { name = "_id",          type = "string", allowEmpty = false },
-        { name = "PresetSchema", type = "string", allowEmpty = false },
-        { name = "Name",         type = "string", allowEmpty = false },
-        { name = "Author",       type = "string", allowEmpty = true },
-        { name = "Version",      type = "string", allowEmpty = false },
-        { name = "Data",         type = "table",  allowEmpty = false },
+        { name = "_id",           type = "string", allowEmpty = false },
+        { name = "SchemaVersion", type = "string", allowEmpty = false },
+        { name = "Name",          type = "string", allowEmpty = false },
+        { name = "Author",        type = "string", allowEmpty = true },
+        { name = "Version",       type = "string", allowEmpty = false },
+        { name = "Data",          type = "table",  allowEmpty = false },
     }
 
     -- Validate top-level structure

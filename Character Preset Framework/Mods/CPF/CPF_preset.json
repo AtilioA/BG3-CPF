@@ -1,6 +1,6 @@
 {
     "_id": "4755eb8a-69db-4496-82dc-7f07e8c15077",
-    "PresetSchema": "1",
+    "SchemaVersion": "1",
     "Name": "Dev preset",
     "Author": "Volitio",
     "Version": "1.0",
