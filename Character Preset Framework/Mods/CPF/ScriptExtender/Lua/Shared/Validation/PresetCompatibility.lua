@@ -1,28 +1,14 @@
 ---@class PresetCompatibility
 PresetCompatibility = {}
 
---- Checks if a preset is compatible with the target entity
----@param preset Preset
----@param targetEntity EntityHandle
+--- Checks if preset stats are compatible with target stats
+---@param presetStats CCStats
+---@param targetStats CCStats|CharacterCreationStats
 ---@return string[] warnings
-function PresetCompatibility.Check(preset, targetEntity)
+function PresetCompatibility.CheckStats(presetStats, targetStats)
     local warnings = {}
 
-    if not preset or not preset.Data or not preset.Data.CCStats then
-        CPFWarn(0, "PresetCompatibility.Check: Preset is missing CCStats")
-        return warnings
-    end
-
-    if not targetEntity or not targetEntity.CharacterCreationStats then
-        CPFWarn(0, "PresetCompatibility.Check: Target entity is missing CharacterCreationStats")
-        return warnings
-    end
-
-    local presetStats = preset.Data.CCStats
-    local targetStats = targetEntity.CharacterCreationStats
-
     if not presetStats or not targetStats then
-        CPFWarn(0, "PresetCompatibility.Check: Preset or target entity is missing CCStats")
         return warnings
     end
 
@@ -44,7 +30,7 @@ function PresetCompatibility.Check(preset, targetEntity)
     if presetStats.Race and targetStats.Race and presetStats.Race ~= targetStats.Race then
         table.insert(warnings,
             string.format("Race mismatch: Preset uses %s, Character uses %s.", tostring(presetStats.Race),
-            tostring(targetStats.Race)))
+                tostring(targetStats.Race)))
     end
 
     -- Check SubRace
@@ -55,6 +41,26 @@ function PresetCompatibility.Check(preset, targetEntity)
     end
 
     return warnings
+end
+
+--- Checks if a preset is compatible with the target entity
+---@param preset Preset
+---@param targetEntity EntityHandle
+---@return string[] warnings
+function PresetCompatibility.Check(preset, targetEntity)
+    local warnings = {}
+
+    if not preset or not preset.Data or not preset.Data.CCStats then
+        CPFWarn(0, "PresetCompatibility.Check: Preset is missing CCStats")
+        return warnings
+    end
+
+    if not targetEntity or not targetEntity.CharacterCreationStats then
+        CPFWarn(0, "PresetCompatibility.Check: Target entity is missing CharacterCreationStats")
+        return warnings
+    end
+
+    return PresetCompatibility.CheckStats(preset.Data.CCStats, targetEntity.CharacterCreationStats)
 end
 
 --- Checks if required mods for a preset are loaded
