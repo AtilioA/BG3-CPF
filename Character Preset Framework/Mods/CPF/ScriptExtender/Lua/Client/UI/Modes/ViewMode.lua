@@ -39,13 +39,13 @@ function ViewMode:Render(parent)
             end
 
             if #missingMods > 0 then
-                local missingModsWarning = group:AddText("Missing mods:\n" .. table.concat(missingMods, "\n"))
+                local missingModsWarning = group:AddBulletText("Missing mods:\n" .. table.concat(missingMods, "\n"))
                 missingModsWarning:SetColor("Text", UIColors.COLOR_RED)
                 missingModsWarning.TextWrapPos = -1
             end
 
             if #warnings > 0 then
-                local compatibilityWarning = group:AddText("Compatibility warnings:\n" .. table.concat(warnings, "\n"))
+                local compatibilityWarning = group:AddBulletText("Compatibility warnings:\n" .. table.concat(warnings, "\n"))
                 compatibilityWarning:SetColor("Text", UIColors.COLOR_ORANGE)
                 compatibilityWarning.TextWrapPos = -1
             end

@@ -1,7 +1,5 @@
 VCFormat = {}
 
-VCFormat.NullUuid = "00000000-0000-0000-0000-000000000000"
-
 ---@return Guid
 function VCFormat:CreateUUID()
     return string.gsub("xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx", "[xy]", function(c)

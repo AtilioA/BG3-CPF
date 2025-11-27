@@ -13,6 +13,10 @@ local function serializeRace(uuid)
         return "None"
     end
 
+    if uuid == Constants.NULL_UUID then
+        return "None"
+    end
+
     local success, race = pcall(function()
         return Ext.StaticData.Get(uuid, "Race")
     end)

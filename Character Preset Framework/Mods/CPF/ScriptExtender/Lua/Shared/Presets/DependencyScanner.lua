@@ -63,7 +63,7 @@ function DependencyScanner:GetDependencies(ccaData)
     local dependencies = {} -- Map<ModUUID, DependencyResource[]>
 
     local function checkResource(uuid)
-        if not uuid or uuid == "" or uuid == "00000000-0000-0000-0000-000000000000" then return end
+        if not uuid or uuid == "" or uuid == Constants.NULL_UUID then return end
 
         local modUUID = resourceToModMap[uuid]
         if modUUID then
