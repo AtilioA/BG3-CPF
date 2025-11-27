@@ -140,7 +140,7 @@ function MessageBox:Show(parentGroup)
 
     -- Add title text
     local titleText = self.PopupDialog:AddText(self.Title)
-    titleText:SetColor("Text", Color.NormalizedRGBA(255, 255, 255, 1))
+    -- titleText:SetColor("Text", Color.NormalizedRGBA(255, 255, 255, 1))
     titleText.TextWrapPos = 0
 
     -- Add separator
@@ -148,7 +148,7 @@ function MessageBox:Show(parentGroup)
 
     -- Add message text
     local messageText = self.PopupDialog:AddText(self.Message)
-    messageText:SetColor("Text", Color.NormalizedRGBA(200, 200, 200, 0.9))
+    -- messageText:SetColor("Text", Color.NormalizedRGBA(200, 200, 200, 0.9))
     messageText.TextWrapPos = 0
 
     self.PopupDialog:AddDummy(0, 5)
@@ -180,7 +180,7 @@ function MessageBox:AddOkButton()
     local buttonText = self.OkLabel or Ext.Loca.GetTranslatedString("hf03356ba46684764b32d26ff28d3e709af5a") or "OK"
     local button = self.PopupDialog:AddButton(buttonText)
     button.IDContext = self.ModUUID .. "_" .. self.ContextId .. "_OkButton"
-    button:SetColor("Button", Color.NormalizedRGBA(117, 140, 74, 0.33))
+    -- button:SetColor("Button", Color.NormalizedRGBA(117, 140, 74, 0.33))
     button.OnClick = function()
         if self.OkCallback then
             self.OkCallback()

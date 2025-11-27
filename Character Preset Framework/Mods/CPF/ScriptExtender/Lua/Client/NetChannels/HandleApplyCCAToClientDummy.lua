@@ -52,13 +52,6 @@ local function handleApplyCCAToClientDummy(data, userId)
                     entity.ClientCCChangeAppearanceDefinition.Definition.Visual
             end
         },
-        {
-            name = "ClientCCDummyDefinition.Visual",
-            getter = function(entity)
-                return entity.ClientCCDummyDefinition and
-                    entity.ClientCCDummyDefinition.Visual
-            end
-        }
     }
 
     local totalSuccessCount = 0
