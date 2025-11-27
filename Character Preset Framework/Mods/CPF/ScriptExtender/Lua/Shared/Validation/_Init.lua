@@ -5,6 +5,7 @@ RequireFiles("Shared/Validation/", {
     "AdditionalChoicesValidator",
     "ValidatorRegistry",
     "PresetValidator",
+    "PresetCompatibility",
 })
 
 -- Register field validators
