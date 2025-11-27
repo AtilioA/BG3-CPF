@@ -3,7 +3,7 @@ PresetCompatibility = {}
 
 --- Checks if preset stats are compatible with target stats
 ---@param presetStats CCStats
----@param targetStats CCStats|CharacterCreationStats
+---@param targetStats CCStats|CharacterCreationStatsComponent
 ---@return string[] warnings
 function PresetCompatibility.CheckStats(presetStats, targetStats)
     local warnings = {}
@@ -15,29 +15,33 @@ function PresetCompatibility.CheckStats(presetStats, targetStats)
     -- Check BodyShape
     if presetStats.BodyShape and targetStats.BodyShape and presetStats.BodyShape ~= targetStats.BodyShape then
         table.insert(warnings,
-            string.format("Body Shape mismatch: Preset uses %s, Character uses %s.", tostring(presetStats.BodyShape),
-                tostring(targetStats.BodyShape)))
+            string.format("Body Shape mismatch: Preset uses %s, Character uses %s.",
+                ValueSerializer.Serialize(presetStats.BodyShape, "BodyShape"),
+                ValueSerializer.Serialize(targetStats.BodyShape, "BodyShape")))
     end
 
     -- Check BodyType
     if presetStats.BodyType and targetStats.BodyType and presetStats.BodyType ~= targetStats.BodyType then
         table.insert(warnings,
-            string.format("Body Type mismatch: Preset uses %s, Character uses %s.", tostring(presetStats.BodyType),
-                tostring(targetStats.BodyType)))
+            string.format("Body Type mismatch: Preset uses %s, Character uses %s.",
+                ValueSerializer.Serialize(presetStats.BodyType, "BodyType"),
+                ValueSerializer.Serialize(targetStats.BodyType, "BodyType")))
     end
 
     -- Check Race
     if presetStats.Race and targetStats.Race and presetStats.Race ~= targetStats.Race then
         table.insert(warnings,
-            string.format("Race mismatch: Preset uses %s, Character uses %s.", tostring(presetStats.Race),
-                tostring(targetStats.Race)))
+            string.format("Race mismatch: Preset uses %s, Character uses %s.",
+                ValueSerializer.Serialize(presetStats.Race, "Race"),
+                ValueSerializer.Serialize(targetStats.Race, "Race")))
     end
 
     -- Check SubRace
     if presetStats.SubRace and targetStats.SubRace and presetStats.SubRace ~= targetStats.SubRace then
         table.insert(warnings,
-            string.format("Subrace mismatch: Preset uses %s, Character uses %s.", tostring(presetStats.SubRace),
-                tostring(targetStats.SubRace)))
+            string.format("Subrace mismatch: Preset uses %s, Character uses %s.",
+                ValueSerializer.Serialize(presetStats.SubRace, "Subrace"),
+                ValueSerializer.Serialize(targetStats.SubRace, "Subrace")))
     end
 
     return warnings
