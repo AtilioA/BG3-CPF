@@ -122,11 +122,11 @@ function ViewMode:Render(parent)
             local appearanceData = preset.Data and preset.Data.CCAppearance
 
             if appearanceData then
-                -- TODO: simple recursive dumper or specific fields for now
+                -- TODO: come up with some logic to deal with this. some are shared visuals, some are appearance visuals. Index matters but not sure how to handle it
                 if appearanceData.Visuals then
                     attrChild:AddText("Visuals:")
                     for _, v in ipairs(appearanceData.Visuals) do
-                        attrChild:AddText("  - " .. tostring(v))
+                        attrChild:AddText(ValueSerializer.Serialize(v, 'CharacterCreationSharedVisual'))
                     end
                 end
             else
