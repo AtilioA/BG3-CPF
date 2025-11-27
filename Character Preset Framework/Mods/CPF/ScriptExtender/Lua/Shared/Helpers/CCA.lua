@@ -19,6 +19,11 @@ function CCA.CopyCharacterCreationAppearance(entity)
     local CCA = entity.CharacterCreationAppearance
     if CCA then
         return Table.deepcopy(CCA)
+    else
+        local CCDummy = Ext.Entity.GetAllEntitiesWithComponent('ClientCCDummyDefinition')[2]
+        if CCDummy and CCDummy.ClientCCDummyDefinition and CCDummy.ClientCCDummyDefinition.Visual then
+            return Table.deepcopy(CCDummy.ClientCCDummyDefinition.Visual)
+        end
     end
     return nil
 end
