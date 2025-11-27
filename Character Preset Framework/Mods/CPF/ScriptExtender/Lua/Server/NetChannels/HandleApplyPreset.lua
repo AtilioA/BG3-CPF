@@ -50,9 +50,8 @@ local function handleApplyPreset(data, userId)
         return response
     end
 
-    -- Convert preset to CCA table and apply
-    local ccaTable = Preset.ToCCATable(data.Preset)
-    CCA.ApplyCCATable(entity, ccaTable)
+    -- Apply preset data to character
+    CCA.ApplyPresetData(entity, data.Preset.Data)
 
     -- Update character's appearance
     entity:Replicate("CharacterCreationAppearance")
@@ -61,8 +60,10 @@ local function handleApplyPreset(data, userId)
     -- entity:Replicate("Voice")
 
     -- Track which attributes were applied
-    for key, _ in pairs(ccaTable) do
-        table.insert(response.AppliedAttributes, key)
+    if data.Preset.Data and data.Preset.Data.CCAppearance then
+        for key, _ in pairs(data.Preset.Data.CCAppearance) do
+            table.insert(response.AppliedAttributes, key)
+        end
     end
 
     local charName = Ext.Loca.GetTranslatedString(entity.DisplayName.NameKey.Handle.Handle)

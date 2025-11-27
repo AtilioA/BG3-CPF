@@ -60,15 +60,21 @@ function CCA.CopyDummyAppearance(entity)
     return nil
 end
 
---- Applies all values from CCATable to the CCA component of charEntity (NOTE: not replicated; must coordinate with server)
+--- Applies preset data (appearance + stats) to a character entity and broadcasts to client
 --- @param charEntity EntityHandle
---- @param CCATable CharacterCreationAppearance
+--- @param presetData PresetData - Contains CCStats and CCAppearance
 --- @return nil
-function CCA.ApplyCCATable(charEntity, CCATable)
-    CPFPrint(2, "Applying CCA table to character " .. VCLoca:GetDisplayName(charEntity))
+function CCA.ApplyPresetData(charEntity, presetData)
+    CPFPrint(2, "Applying preset data to character " .. VCLoca:GetDisplayName(charEntity))
+
+    if not presetData or not presetData.CCAppearance then
+        CPFWarn(0, "CCA.ApplyPresetData: PresetData is missing CCAppearance")
+        return
+    end
+
     local CCA = charEntity.CharacterCreationAppearance
     if CCA then
-        local copy = Table.deepcopy(CCATable)
+        local copy = Table.deepcopy(presetData.CCAppearance)
         for k, v in pairs(copy) do
             local success, err = pcall(function() CCA[k] = v end)
             -- TODO: Add missing fields to CCA somehow?
@@ -78,11 +84,11 @@ function CCA.ApplyCCATable(charEntity, CCATable)
         end
     end
 
-    -- Send CCA table to client to apply to dummy (only on server)
+    -- Send preset data to client to apply to dummy (only on server)
     if Ext.IsServer() then
         NetChannels.ApplyCCAToClientDummy:Broadcast({
-            CCATable = CCATable
+            PresetData = presetData
         })
-        CPFPrint(2, "Sent CCA table to client for dummy application")
+        CPFPrint(2, "Sent preset data to client for dummy application")
     end
 end
