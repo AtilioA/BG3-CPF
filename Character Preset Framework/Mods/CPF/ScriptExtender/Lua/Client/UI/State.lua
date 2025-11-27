@@ -109,17 +109,17 @@ function State:CaptureCharacterData()
             self.TargetCharacterUUID = player.Uuid.EntityUuid
         end
 
-        -- Get the CharacterCreationAppearance component for PREVIEW purposes
-        local ccaData = CCA.CopyCCAOrDummy(player)
+        -- Get the unified data (Stats + Appearance)
+        local unifiedData = Preset.ExtractData(player)
 
-        if not ccaData then
+        if not unifiedData or not unifiedData.CCAppearance then
             CPFWarn(0, "Player entity does not have CharacterCreationAppearance component")
             self:SetStatus("Error: Could not capture character appearance data")
             return
         end
 
-        -- Store the captured data
-        self.CapturedData:OnNext(ccaData)
+        self.CapturedData:OnNext(unifiedData)
+
 
         -- Get character name for display
         local displayName = ""
@@ -160,7 +160,7 @@ function State:CaptureCharacterData()
 end
 
 --- Refreshes CapturedData with TargetCharacterUUID info
---- @return CharacterCreationAppearance|nil
+--- @return PresetData|nil
 function State:RefreshTargetCharacterData()
     local data = nil
     if not self.TargetCharacterUUID then
@@ -170,7 +170,7 @@ function State:RefreshTargetCharacterData()
     if self.TargetCharacterUUID then
         local character = Ext.Entity.Get(self.TargetCharacterUUID)
         if character then
-            data = CCA.CopyCCAOrDummy(character)
+            data = Preset.ExtractData(character)
             -- Update the preview as well (?)
             self.CapturedData:OnNext(data)
         end

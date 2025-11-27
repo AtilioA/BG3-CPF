@@ -74,12 +74,24 @@ function PresetValidator.ValidateTopLevel(preset, requiredFields)
 end
 
 --- Validates the Data section of a preset using registered validators
----@param data table
+---@param data PresetData
 ---@return boolean isValid
 ---@return string? errorMessage
 function PresetValidator.ValidateData(data)
-    if not data then
+    if not data or not data.CCAppearance or not data.CCStats then
         return false, "Preset.Data cannot be nil"
+    end
+
+    ---@type CCAData
+    local appearanceData = data.CCAppearance
+    local statsData = data.CCStats
+
+    -- Validate CCStats if present
+    if statsData then
+        if type(statsData) ~= "table" then
+            return false, "Data.CCStats must be a table"
+        end
+        -- TODO: validate CCStats: BodyShape, BodyType, Race, Subrace
     end
 
     -- Validate UUID fields
@@ -94,7 +106,7 @@ function PresetValidator.ValidateData(data)
     }
 
     for _, field in ipairs(uuidFields) do
-        local value = data[field.name]
+        local value = appearanceData[field.name]
         if value ~= nil then
             local isValid, err = UuidValidator.ValidateUuidField(value, "Data." .. field.name, true)
             if not isValid then
@@ -107,8 +119,8 @@ function PresetValidator.ValidateData(data)
 
     -- Use registered validators for other fields
     for fieldName, validator in pairs(ValidatorRegistry.GetAllValidators()) do
-        if data[fieldName] ~= nil then
-            local isValid, err = validator(data[fieldName], "Data." .. fieldName)
+        if appearanceData[fieldName] ~= nil then
+            local isValid, err = validator(appearanceData[fieldName], "Data." .. fieldName)
             if not isValid then
                 return false, err
             end

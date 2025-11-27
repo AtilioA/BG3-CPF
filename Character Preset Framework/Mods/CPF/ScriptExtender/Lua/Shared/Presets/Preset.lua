@@ -1,12 +1,18 @@
 -- TODO: missing info:
--- BodyShape = CharacterCreationStats.BodyShape,
--- BodyType = CharacterCreationStats.BodyType,
--- Race = CharacterCreationStats.Race,
--- Subrace = CharacterCreationStats.SubRace,
 -- Voice? CCCharacterDefinition
 -- TODO: apply to dummy during character creation
 
 ---@alias CCAData CharacterCreationAppearance
+
+---@class CCStats
+---@field BodyShape integer
+---@field BodyType integer
+---@field Race string
+---@field SubRace string
+
+---@class PresetData
+---@field CCStats CCStats
+---@field CCAppearance CCAData
 
 ---@class Preset
 ---@field _id string
@@ -14,7 +20,7 @@
 ---@field Name string
 ---@field Author string
 ---@field Version string
----@field Data CCAData
+---@field Data PresetData
 ---@field Dependencies ModDependency[]
 
 Preset = {}
@@ -25,13 +31,42 @@ local function generatePresetId()
     return VCFormat:CreateUUID()
 end
 
---- Creates a new preset from character creation appearance data
+--- Extracts unified preset data (Stats + Appearance) from an entity
+---@param entity EntityHandle
+---@return PresetData|nil
+function Preset.ExtractData(entity)
+    if not entity then return nil end
+
+    local ccaData = CCA.CopyCCAOrDummy(entity)
+    if not ccaData then return nil end
+
+    local stats = entity.CharacterCreationStats
+    local ccStats = nil
+    if stats then
+        ccStats = {
+            BodyShape = stats.BodyShape,
+            BodyType = stats.BodyType,
+            Race = stats.Race,
+            SubRace = stats.SubRace
+        }
+    end
+
+    if not ccStats then return nil end
+
+    ---@type PresetData
+    return {
+        CCStats = ccStats,
+        CCAppearance = ccaData
+    }
+end
+
+--- Creates a new preset from unified character data
 ---@param name string
 ---@param author string
 ---@param version string
----@param ccaData CCAData
+---@param unifiedData PresetData
 ---@return Preset
-function Preset.Create(name, author, version, ccaData)
+function Preset.Create(name, author, version, unifiedData)
     ---@type Preset
     local preset = {
         _id = generatePresetId(),
@@ -40,46 +75,63 @@ function Preset.Create(name, author, version, ccaData)
         Version = version,
         SchemaVersion = Constants.PRESET_SCHEMA,
         Data = {
-            AccessorySet = "",
-            Icon = "",
-            field_98 = "",
-            AdditionalChoices = {},
-            Elements = {},
-            EyeColor = "",
-            HairColor = "",
-            SecondEyeColor = "",
-            SkinColor = "",
-            Visuals = {}
+            CCStats = {
+                BodyShape = 0,
+                BodyType = 0,
+                Race = "",
+                SubRace = ""
+            },
+            CCAppearance = {
+                AccessorySet = "",
+                Icon = "",
+                field_98 = "",
+                AdditionalChoices = {},
+                Elements = {},
+                EyeColor = "",
+                HairColor = "",
+                SecondEyeColor = "",
+                SkinColor = "",
+                Visuals = {}
+            }
         },
         Dependencies = {}
     }
 
-    -- Populate Data from CCA component
-    if ccaData then
-        if ccaData.AdditionalChoices then
-            preset.Data.AdditionalChoices = Table.deepcopy(ccaData.AdditionalChoices)
-        end
-        if ccaData.Elements then
-            preset.Data.Elements = Table.deepcopy(ccaData.Elements)
-        end
-        if ccaData.EyeColor then
-            preset.Data.EyeColor = ccaData.EyeColor
-        end
-        if ccaData.HairColor then
-            preset.Data.HairColor = ccaData.HairColor
-        end
-        if ccaData.SecondEyeColor then
-            preset.Data.SecondEyeColor = ccaData.SecondEyeColor
-        end
-        if ccaData.SkinColor then
-            preset.Data.SkinColor = ccaData.SkinColor
-        end
-        if ccaData.Visuals then
-            preset.Data.Visuals = Table.deepcopy(ccaData.Visuals)
+    -- Populate Data from UnifiedData
+    if unifiedData then
+        -- Stats
+        if unifiedData.CCStats then
+            preset.Data.CCStats = Table.deepcopy(unifiedData.CCStats)
         end
 
-        -- Calculate dependencies
-        preset.Dependencies = DependencyScanner:GetDependencies(ccaData)
+        -- Appearance
+        local ccaData = unifiedData.CCAppearance
+        if ccaData then
+            if ccaData.AdditionalChoices then
+                preset.Data.CCAppearance.AdditionalChoices = Table.deepcopy(ccaData.AdditionalChoices)
+            end
+            if ccaData.Elements then
+                preset.Data.CCAppearance.Elements = Table.deepcopy(ccaData.Elements)
+            end
+            if ccaData.EyeColor then
+                preset.Data.CCAppearance.EyeColor = ccaData.EyeColor
+            end
+            if ccaData.HairColor then
+                preset.Data.CCAppearance.HairColor = ccaData.HairColor
+            end
+            if ccaData.SecondEyeColor then
+                preset.Data.CCAppearance.SecondEyeColor = ccaData.SecondEyeColor
+            end
+            if ccaData.SkinColor then
+                preset.Data.CCAppearance.SkinColor = ccaData.SkinColor
+            end
+            if ccaData.Visuals then
+                preset.Data.CCAppearance.Visuals = Table.deepcopy(ccaData.Visuals)
+            end
+
+            -- Calculate dependencies based on appearance data
+            preset.Dependencies = DependencyScanner:GetDependencies(ccaData)
+        end
     end
 
     return preset
@@ -157,21 +209,28 @@ end
 
 --- Converts a preset's Data to a CCA-compatible table
 ---@param preset Preset
----@return CharacterCreationAppearance ccaTable
+---@return CharacterCreationAppearance|nil ccaTable
 function Preset.ToCCATable(preset)
     CPFPrint(2, "Converting preset to CCA table")
-    -- REVIEW: maybe needs deepcopy?
+    ---@type CCAData
+    if not preset or not preset.Data or not preset.Data.CCAppearance then
+        CPFWarn(0, "Invalid preset data")
+        return nil
+    end
+
+    local sourceData = preset.Data.CCAppearance
+
     local ccaTable = {
         AccessorySet = "",
         Icon = "",
         field_98 = "",
-        AdditionalChoices = preset.Data.AdditionalChoices or {},
-        Elements = preset.Data.Elements or {},
-        EyeColor = preset.Data.EyeColor or "",
-        HairColor = preset.Data.HairColor or "",
-        SecondEyeColor = preset.Data.SecondEyeColor or "",
-        SkinColor = preset.Data.SkinColor or "",
-        Visuals = preset.Data.Visuals or {}
+        AdditionalChoices = sourceData.AdditionalChoices or {},
+        Elements = sourceData.Elements or {},
+        EyeColor = sourceData.EyeColor or "",
+        HairColor = sourceData.HairColor or "",
+        SecondEyeColor = sourceData.SecondEyeColor or "",
+        SkinColor = sourceData.SkinColor or "",
+        Visuals = sourceData.Visuals or {}
     }
 
     return ccaTable
@@ -183,31 +242,46 @@ end
 function Preset.GetWarnings(preset)
     local warnings = {}
 
-    if not preset.Data then
-        table.insert(warnings, "Missing Data field")
+    if not preset or not preset.Data or not preset.Data.CCAppearance or not preset.Data.CCStats then
+        table.insert(warnings, "Missing Data field or CCAppearance or CCStats")
         return warnings
     end
 
-    local data = preset.Data
+    ---@type CCAData
+    local appearanceData = preset.Data.CCAppearance
+    local statsData = preset.Data.CCStats
 
-    -- Check for empty or missing critical fields
-    if not data.EyeColor or data.EyeColor == "" then
+    -- Check Stats
+    if statsData then
+        if not statsData.Race or statsData.Race == "" then
+            table.insert(warnings, "Missing or empty Race")
+        end
+        if not statsData.BodyType then
+            table.insert(warnings, "Missing BodyType")
+        end
+        if not statsData.BodyShape then
+            table.insert(warnings, "Missing BodyShape")
+        end
+    end
+
+    -- Check Appearance
+    if not appearanceData.EyeColor or appearanceData.EyeColor == "" then
         table.insert(warnings, "Missing or empty EyeColor")
     end
 
-    if not data.HairColor or data.HairColor == "" then
+    if not appearanceData.HairColor or appearanceData.HairColor == "" then
         table.insert(warnings, "Missing or empty HairColor")
     end
 
-    if not data.SkinColor or data.SkinColor == "" then
+    if not appearanceData.SkinColor or appearanceData.SkinColor == "" then
         table.insert(warnings, "Missing or empty SkinColor")
     end
 
-    if not data.Visuals or #data.Visuals == 0 then
+    if not appearanceData.Visuals or #appearanceData.Visuals == 0 then
         table.insert(warnings, "Missing or empty Visuals array")
     end
 
-    if not data.Elements or #data.Elements == 0 then
+    if not appearanceData.Elements or #appearanceData.Elements == 0 then
         table.insert(warnings, "Missing or empty Elements array")
     end
 
