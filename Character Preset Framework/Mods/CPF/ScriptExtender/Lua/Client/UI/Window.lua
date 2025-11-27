@@ -14,7 +14,7 @@ local Window = {
 
 function Window:DrawSidebar(parent)
     -- Toolbar
-    if tonumber(MCM.Get("debug_level")) >= 2 then
+    if tonumber(MCM.Get("debug_level")) >= 3 then
         local btnRefresh = parent:AddButton("Refresh")
         btnRefresh.OnClick = function() State:RefreshPresets() end
         btnRefresh.SameLine = true
