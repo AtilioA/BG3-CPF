@@ -185,7 +185,20 @@ end
 ---@param uuid string
 ---@return string
 local function serializeSharedVisual(uuid)
-    -- TODO: Implement when proper serialization strategy is determined
+    if not uuid or uuid == "" or uuid == Constants.NULL_UUID then
+        return "None"
+    end
+
+    local success, sharedVisual = pcall(function()
+        return Ext.StaticData.Get(uuid, "CharacterCreationSharedVisual")
+    end)
+
+    if success and sharedVisual and sharedVisual.DisplayName then
+        local displayName = sharedVisual.DisplayName:Get()
+        if displayName and displayName ~= "" then
+            return displayName
+        end
+    end
     return tostring(uuid)
 end
 
@@ -193,7 +206,20 @@ end
 ---@param uuid string
 ---@return string
 local function serializeAppearanceVisual(uuid)
-    -- TODO: Implement when proper serialization strategy is determined
+    if not uuid or uuid == "" or uuid == Constants.NULL_UUID then
+        return "None"
+    end
+
+    local success, appearanceVisual = pcall(function()
+        return Ext.StaticData.Get(uuid, "CharacterCreationAppearanceVisual")
+    end)
+
+    if success and appearanceVisual and appearanceVisual.DisplayName then
+        local displayName = appearanceVisual.DisplayName:Get()
+        if displayName and displayName ~= "" then
+            return displayName
+        end
+    end
     return tostring(uuid)
 end
 
