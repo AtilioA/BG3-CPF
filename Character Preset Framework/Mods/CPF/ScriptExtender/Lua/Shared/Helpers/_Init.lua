@@ -9,4 +9,5 @@ RequireFiles("Shared/Helpers/", {
     "CCA",
     "JsonLayer",
     "UserID",
+    "ValueSerializer",
 })
