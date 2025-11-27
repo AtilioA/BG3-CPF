@@ -330,14 +330,20 @@ function Preset.ImportFromFile(filePath)
     return Preset.Deserialize(content)
 end
 
----@class ModInfo
+---@class ModDepInfo
 ---@field Name string
 ---@field UUID string
 ---@field IsLoaded boolean
+---@field Resources ModResource[]
+
+---@class ModResource
+---@field DisplayName string
+---@field ResourceUUID string
+---@field SlotName string
 
 --- Gets all mods used by a preset with their availability status
 ---@param preset Preset
----@return ModInfo[] mods
+---@return ModDepInfo[] mods
 function Preset.GetMods(preset)
     local mods = {}
 
@@ -348,9 +354,10 @@ function Preset.GetMods(preset)
     for _, depEntry in ipairs(preset.Dependencies) do
         for modUUID, modInfo in pairs(depEntry) do
             table.insert(mods, {
-                Name = modInfo.Name or "Unknown Mod",
+                Name = modInfo.ModName or "Unknown Mod",
                 UUID = modUUID,
-                IsLoaded = Ext.Mod.IsModLoaded(modUUID)
+                IsLoaded = Ext.Mod.IsModLoaded(modUUID),
+                Resources = modInfo.Resources
             })
         end
     end

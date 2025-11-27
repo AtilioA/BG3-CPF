@@ -28,6 +28,7 @@ function ViewMode:Render(parent)
 
             -- Compatibility Checks
             local warnings = {}
+            local allMods = {}
             local missingMods = {}
             local player = _C()
 
@@ -35,27 +36,58 @@ function ViewMode:Render(parent)
                 if player then
                     warnings = PresetCompatibility.Check(preset, player)
                 end
+                allMods = Preset.GetMods(preset)
                 missingMods = PresetCompatibility.CheckMods(preset)
             end
 
-            if #missingMods > 0 then
-                local missingModsWarning = group:AddBulletText("Missing mods:\n" .. table.concat(missingMods, "\n"))
-                missingModsWarning:SetColor("Text", UIColors.COLOR_RED)
-                missingModsWarning.TextWrapPos = -1
+            -- Display all mods used by the preset
+            if #allMods > 0 then
+                local modLines = {}
+                for _, mod in ipairs(allMods) do
+                    local modResources = ""
+                    if mod.Resources then
+                        for _, resource in ipairs(mod.Resources) do
+                            modResources = table.concat(
+                                { modResources, string.format("%s (%s)", resource.DisplayName, resource.SlotName) },
+                                "\n\t")
+                        end
+                    end
+                    if mod.IsLoaded == true then
+                        table.insert(modLines, string.format("%s: %s", mod.Name, modResources))
+                    else
+                        table.insert(modLines, string.format("(MISSING) %s: %s", mod.Name, modResources))
+                    end
+                end
+
+                group:AddSeparator()
+                local modsText = group:AddBulletText("Mods used by this preset:\n" .. table.concat(modLines, "\n"))
+                modsText.TextWrapPos = -1
+
+                -- Apply warning color only if there are missing mods
+                if #missingMods > 0 then
+                    modsText:SetColor("Text", UIColors.COLOR_RED)
+                end
             end
 
             if #warnings > 0 then
-                local compatibilityWarning = group:AddBulletText("Compatibility warnings:\n" .. table.concat(warnings, "\n"))
+                local compatibilityWarning = group:AddBulletText("Compatibility warnings:\n" ..
+                    table.concat(warnings, "\n"))
                 compatibilityWarning:SetColor("Text", UIColors.COLOR_ORANGE)
                 compatibilityWarning.TextWrapPos = -1
             end
+
+            group:AddSeparator()
 
             -- Actions
             local btnApply = group:AddButton("Apply preset")
             btnApply:SetColor("Button", UIColors.COLOR_GREEN)
             btnApply.OnClick = function()
                 local allWarnings = {}
-                for _, w in ipairs(missingMods) do table.insert(allWarnings, "Missing Mod: " .. w) end
+                for _, mod in ipairs(allMods) do
+                    if not mod.IsLoaded then
+                        table.insert(allWarnings, string.format("Missing Mod: %s (%s)", mod.Name, mod.UUID))
+                    end
+                end
                 for _, w in ipairs(warnings) do table.insert(allWarnings, w) end
 
                 if #allWarnings > 0 then
