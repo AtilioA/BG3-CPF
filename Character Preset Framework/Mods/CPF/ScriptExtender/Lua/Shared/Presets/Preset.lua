@@ -35,29 +35,7 @@ end
 ---@param entity EntityHandle
 ---@return PresetData|nil
 function Preset.ExtractData(entity)
-    if not entity then return nil end
-
-    local ccaData = CCA.CopyCCAOrDummy(entity)
-    if not ccaData then return nil end
-
-    local stats = entity.CharacterCreationStats
-    local ccStats = nil
-    if stats then
-        ccStats = {
-            BodyShape = stats.BodyShape,
-            BodyType = stats.BodyType,
-            Race = stats.Race,
-            SubRace = stats.SubRace
-        }
-    end
-
-    -- if not ccStats then return nil end
-
-    ---@type PresetData
-    return {
-        CCStats = ccStats,
-        CCAppearance = ccaData
-    }
+    return CCA.ExtractData(entity)
 end
 
 --- Creates a new preset from unified character data

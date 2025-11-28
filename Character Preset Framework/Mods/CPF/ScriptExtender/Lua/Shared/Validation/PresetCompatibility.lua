@@ -59,6 +59,7 @@ function PresetCompatibility.Check(preset, targetEntity)
         return warnings
     end
 
+    -- REFACTOR: allow comparing to CC dummy (does not have CharacterCreationStats)
     if not targetEntity or not targetEntity.CharacterCreationStats then
         CPFWarn(0, "PresetCompatibility.Check: Target entity is missing CharacterCreationStats")
         return warnings
