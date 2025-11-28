@@ -25,6 +25,8 @@ function ViewMode:Render(parent)
             group:AddText("Name: " .. (preset.Name or "Unknown"))
             group:AddText("Author: " .. (preset.Author or "Unknown"))
             group:AddText("Version: " .. (preset.Version or "Unknown"))
+            local IDText = group:AddText("ID: " .. (preset._id or "Unknown"))
+            IDText:SetColor("Text", UIColors.COLOR_GRAY)
 
             -- Compatibility Checks
             local warnings = {}
@@ -85,14 +87,15 @@ function ViewMode:Render(parent)
                 local allWarnings = {}
                 for _, mod in ipairs(allMods) do
                     if not mod.IsLoaded then
-                        table.insert(allWarnings, string.format("Missing Mod: %s (%s)", mod.Name, mod.UUID))
+                        table.insert(allWarnings, string.format("Missing mod: %s (%s)", mod.Name, mod.UUID))
                     end
                 end
                 for _, w in ipairs(warnings) do table.insert(allWarnings, w) end
 
                 if #allWarnings > 0 then
                     local msg = "The following issues were found:\n\n" ..
-                        table.concat(allWarnings, "\n") .. "\n\nThis will cause issues with your character's appearance. Find a compatible preset or change your character with AEE instead.\nAre you sure you want to proceed?"
+                        table.concat(allWarnings, "\n") ..
+                        "\n\nThis will cause issues with your character's appearance. Find a compatible preset or change your character with AEE instead.\nAre you sure you want to proceed?"
                     MessageBox:Create("Compatibility warning", msg, MessageBoxMode.YesNo)
                         :SetYesCallback(function() State:ApplyPreset(record) end)
                         :Show(group)
