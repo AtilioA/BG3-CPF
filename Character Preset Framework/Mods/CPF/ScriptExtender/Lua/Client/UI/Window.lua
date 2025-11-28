@@ -29,6 +29,7 @@ function Window:DrawSidebar(parent)
     vSeparator.SameLine = true
 
     local btnCreate = parent:AddButton("Preset creation")
+
     btnCreate.OnClick = function()
         -- TODO: Get actual character name
         State:CaptureCharacterData()
@@ -41,11 +42,12 @@ function Window:DrawSidebar(parent)
     -- Preset List - reactive group that updates when Presets changes
     local listChild = parent:AddChildWindow("PresetList")
 
+    local table = nil
     RenderHelper.CreateReactiveGroup(listChild, "PresetsList", State.Presets,
         ---@param group ExtuiGroup
         ---@param records PresetRecord[]
         function(group, records)
-            local table = group:AddTable("PresetsTable", 1)
+            table = group:AddTable("PresetsTable", 1)
 
             local _colName = table:AddColumn("Name", "WidthStretch")
             -- Add header row
@@ -57,12 +59,45 @@ function Window:DrawSidebar(parent)
 
                 local nameCell = row:AddCell()
                 local label = (record.preset.Name .. "##" .. record.preset._id) or ("Preset " .. i)
+
                 local item = nameCell:AddButton(label)
                 item.Size = { -1, 50 }
                 item.OnClick = function()
                     State:SelectPreset(record)
                 end
             end
+
+            local activeProfileButton = nil
+            -- TODO: Refactor UI styling in general post release, this is gross
+            State.SelectedPreset:Subscribe(function(selected)
+                if not selected then return end
+                -- Iterate children of table; if button, check label, set active/inactive
+                -- REFACTOR: this is brittle smh
+                for _, child in ipairs(table.Children) do
+                    local cellChild = child.Children[1].Children[1]
+                    if Ext.Types.IsA(cellChild, "extui::Button") then
+                        local buttonName, buttonHash = cellChild.Label:match("(.+)##(.+)")
+                        if buttonName == selected.preset.Name then
+                            activeProfileButton = cellChild
+                            cellChild:SetColor("Button", Mods.BG3MCM.UIStyle.Colors.ButtonActive)
+                            -- cellChild.Label = "> " .. buttonName .. "##" .. buttonHash
+                        else
+                            -- Remove '> ' if existent
+                            -- cellChild.Label = cellChild.Label:gsub("^> ", "")
+                            cellChild:SetColor("Button", Mods.BG3MCM.UIStyle.Colors.Button)
+                        end
+                    end
+                end
+            end)
+
+            State.ViewMode:Subscribe(function(mode)
+                btnCreate.Label = (mode == "CREATE" and "> " or "") .. "Preset creation"
+                btnImport.Label = (mode == "IMPORT" and "> " or "") .. "Import"
+
+                if mode ~= "VIEW" and activeProfileButton then
+                    activeProfileButton:SetColor("Button", Mods.BG3MCM.UIStyle.Colors.Button)
+                end
+            end)
         end)
 end
 
