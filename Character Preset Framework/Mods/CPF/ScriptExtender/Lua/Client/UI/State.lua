@@ -16,7 +16,7 @@ local State = {
         Author = "",
         Version = "1.0"
     }),
-    ImportBuffer = "",
+    ImportBuffer = rx.BehaviorSubject.Create(""),
 
     _statusSubscription = nil
 }
@@ -60,7 +60,7 @@ function State:SetMode(mode)
     if mode == "CREATE" then
         -- self.NewPresetData:OnNext({ Name = "", Author = "", Version = "1.0" })
     elseif mode == "IMPORT" then
-        -- self.ImportBuffer = ""
+        -- self.ImportBuffer:OnNext("")
     end
 end
 
@@ -312,7 +312,7 @@ function State:ApplyPreset(record)
 end
 
 function State:ImportFromBuffer()
-    if self.ImportBuffer == "" then
+    if self.ImportBuffer:GetValue() == "" then
         self:SetStatus("Error: Import buffer is empty")
         return
     end
@@ -325,7 +325,7 @@ function State:ImportFromBuffer()
 
     local success, presetOrError, presetDeserializeError = xpcall(
         function()
-            return Preset.Deserialize(self.ImportBuffer)
+            return Preset.Deserialize(self.ImportBuffer:GetValue())
         end,
         function(err)
             return debug.traceback(tostring(err), 2)
@@ -369,6 +369,7 @@ function State:ImportFromBuffer()
 
     -- Unhide preset just in case
     PresetIndex.SetHidden(actualPreset._id, false)
+    self.ImportBuffer:OnNext("")
     self:SetStatus("Imported '" .. actualPreset.Name .. "'")
     self:RefreshPresets()
 

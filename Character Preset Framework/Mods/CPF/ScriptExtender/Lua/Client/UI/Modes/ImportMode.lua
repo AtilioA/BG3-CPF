@@ -3,6 +3,37 @@ local RenderHelper = Ext.Require("Client/UI/RenderHelper.lua")
 
 local ImportMode = {}
 
+--- Attempts to parse preset name from buffer
+--- @param buffer string
+--- @return string|nil presetName
+function ImportMode:ParsePresetName(buffer)
+    if not buffer or buffer == "" then
+        return nil
+    end
+
+    -- Try to parse the JSON and extract the preset name
+    local success, result = xpcall(
+        function()
+            if Preset and Preset.Deserialize then
+                local preset, err = Preset.Deserialize(buffer)
+                if preset and preset.Name then
+                    return preset.Name
+                end
+            end
+            return nil
+        end,
+        function(err)
+            return nil
+        end
+    )
+
+    if success and result then
+        return result
+    end
+
+    return nil
+end
+
 function ImportMode:Render(parent)
     -- Wrap entire content in a managed group
     RenderHelper.CreateManagedGroup(parent, "ImportModeContent", function(group)
@@ -11,27 +42,48 @@ function ImportMode:Render(parent)
             CPFWarn(1, "Import feature is still not available!")
             return false
         end
-        group:AddText("WIP: paste a preset JSON below:")
+        group:AddText("Paste a preset JSON below:")
 
         local input = group:AddInputText("")
         input.Multiline = true
         input.SizeHint = { 450, 400 }
-        input.Text = State.ImportBuffer
-        input.OnChange = function() State.ImportBuffer = input.Text end
-
-        local btnImport = group:AddButton("Import")
-        btnImport.OnClick = function()
-            State:ImportFromBuffer()
+        -- input.Text = State.ImportBuffer:GetValue()
+        input.OnChange = function()
+            State.ImportBuffer:OnNext(input.Text)
         end
 
-        btnImport.SameLine = false
+        -- Create reactive button group that updates when ImportBuffer changes
+        RenderHelper.CreateReactiveGroup(group, "ImportButtonGroup", State.ImportBuffer,
+            function(btnGroup, buffer)
+                local parsedName = ImportMode:ParsePresetName(buffer)
+                -- Determine button label based on parsed preset name
+                local buttonLabel = "Import"
+                if parsedName then
+                    buttonLabel = string.format("Import '%s'", parsedName)
+                end
 
-        local btnCancel = group:AddButton("Cancel")
-        btnCancel.OnClick = function()
-            State:SetMode("VIEW")
-        end
+                local btnImport = btnGroup:AddButton(buttonLabel)
 
-        btnCancel.SameLine = true
+                if parsedName then
+                    btnImport:SetColor("Button", UIColors.COLOR_GREEN)
+                    StyleHelpers.EnableButton(btnImport)
+                else
+                    StyleHelpers.DisableButton(btnImport)
+                end
+                btnImport.OnClick = function()
+                    State:ImportFromBuffer()
+                end
+
+                btnImport.SameLine = false
+
+                local btnCancel = btnGroup:AddButton("Cancel")
+                btnCancel.OnClick = function()
+                    State:SetMode("VIEW")
+                    State.ImportBuffer:OnNext("")
+                end
+
+                btnCancel.SameLine = true
+            end)
     end)
 end
 
