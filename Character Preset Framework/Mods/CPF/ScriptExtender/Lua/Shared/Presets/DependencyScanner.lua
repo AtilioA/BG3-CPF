@@ -10,6 +10,23 @@ DependencyScanner = {}
 ---@field ModName string
 ---@field Resources DependencyResource[]
 
+CCResourceTypes = {
+    "CharacterCreationAccessorySet",
+    "CharacterCreationAppearanceMaterial",
+    "CharacterCreationAppearanceVisual",
+    "CharacterCreationEquipmentIcons",
+    "CharacterCreationEyeColor",
+    "CharacterCreationIconSettings",
+    "CharacterCreationHairColor",
+    "CharacterCreationMaterialOverride",
+    "CharacterCreationPassiveAppearance",
+    "CharacterCreationPreset",
+    "CharacterCreationSharedVisual",
+    "CharacterCreationSkinColor",
+    "CharacterCreationVOLine",
+    "ColorDefinition"
+}
+
 -- Cache for reverse lookup: ResourceUUID -> ModUUID
 local resourceToModMap = {}
 local modUUIDToNameMap = {}
@@ -26,11 +43,14 @@ function DependencyScanner:_BuildReverseLookup()
         if ModValidation:IsModRelevant(mod) then
             local modUUID = mod.Info.ModuleUUID
             modUUIDToNameMap[modUUID] = mod.Info.Name
-            local resources = Ext.StaticData.GetByModId("CharacterCreationSharedVisual", modUUID)
 
-            if resources then
-                for _, resourceUUID in pairs(resources) do
-                    resourceToModMap[resourceUUID] = modUUID
+            -- Scan all resource types for this mod
+            for _, resourceType in ipairs(CCResourceTypes) do
+                local resources = Ext.StaticData.GetByModId(resourceType, modUUID)
+                if resources then
+                    for _, resourceUUID in pairs(resources) do
+                        resourceToModMap[resourceUUID] = modUUID
+                    end
                 end
             end
         end
@@ -41,7 +61,13 @@ end
 ---@param resourceUUID string
 ---@return string displayName, string slotName
 function DependencyScanner:GetResourceDetails(resourceUUID)
-    local resource = Ext.StaticData.Get(resourceUUID, "CharacterCreationSharedVisual")
+    -- Try all resource types to find the resource
+    local resource = nil
+    for _, resourceType in ipairs(CCResourceTypes) do
+        resource = Ext.StaticData.Get(resourceUUID, resourceType)
+        if resource then break end
+    end
+
     if not resource then return "Unknown", "Unknown" end
 
     local displayName = ""
