@@ -93,9 +93,12 @@ function Window:DrawSidebar(parent)
                 btnCreate.Label = (mode == "CREATE" and "> " or "") .. "Preset creation"
                 btnImport.Label = (mode == "IMPORT" and "> " or "") .. "Import"
 
-                if mode ~= "VIEW" and activeProfileButton then
-                    activeProfileButton:SetColor("Button", Mods.BG3MCM.UIStyle.Colors.Button)
-                end
+                -- Dumb button might not exist anymore
+                pcall(function ()
+                    if mode ~= "VIEW" and activeProfileButton then
+                        activeProfileButton:SetColor("Button", Mods.BG3MCM.UIStyle.Colors.Button)
+                    end
+                end)
             end)
         end)
 end
