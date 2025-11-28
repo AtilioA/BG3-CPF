@@ -22,12 +22,13 @@ export default function Home() {
         try {
             const parsed: PresetJson = JSON.parse(jsonContent);
 
-            const modName = parsed.Name || "Unnamed Preset";
+            const presetName = parsed.Name || "Unnamed Preset";
+            const modName = `${presetName} - CPF Preset`;
             const author = parsed.Author || "Unknown";
 
             // Defaults logic based on requirements
-            const folderName = sanitizeFolderName(modName.replace(/\s+/g, '')) || "MyPreset";
-            const description = `CPF Preset '${modName}'`;
+            const folderName = sanitizeFolderName(presetName.replace(/\s+/g, '')) || "MyPreset";
+            const description = `CPF Preset '${presetName}'`;
             const uuid = generateUUID();
 
             // Parse dependencies from the preset
