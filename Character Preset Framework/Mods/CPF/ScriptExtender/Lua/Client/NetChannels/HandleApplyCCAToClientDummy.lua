@@ -1,9 +1,13 @@
 ---Client-side handler for applying preset data to client dummies
 
 -- Thanks rakor and Skiz for this!
-local function refreshCCDummy()
-    pcall(function()
-        Ext.UI.GetRoot():Child(1):Child(1):Child(24):Child(1).StartCharacterCreation:Execute()
+local function refreshMirrorDummy()
+    -- Doesn't seem to work in CC!
+    VCTimer:OnTicks(10, function()
+        pcall(function()
+            CPFPrint(2, "Refreshing CC dummy")
+            Ext.UI.GetRoot():Child(1):Child(1):Child(24):Child(1).StartCharacterCreation:Execute()
+        end)
     end)
 end
 
@@ -223,7 +227,7 @@ local function handleApplyCCAToClientDummy(data, userId)
 
     CPFPrint(2, string.format("Applied preset data to %d dummy entities: %d total succeeded, %d total failed",
         entitiesProcessed, totalSuccessCount, totalFailCount))
-    refreshCCDummy()
+    refreshMirrorDummy()
 end
 
 local function initClientHandlers()
