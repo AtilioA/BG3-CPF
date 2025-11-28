@@ -1,3 +1,4 @@
 RequireFiles("Client/UI/Styles/", {
-    "Colors"
+    "Colors",
+    "Helpers"
 })
