@@ -76,8 +76,7 @@ function Window:DrawSidebar(parent)
                 for _, child in ipairs(table.Children) do
                     local cellChild = child.Children[1].Children[1]
                     if Ext.Types.IsA(cellChild, "extui::Button") then
-                        local buttonName, buttonHash = cellChild.Label:match("(.+)##(.+)")
-                        if buttonName == selected.preset.Name then
+                        if cellChild.Label == selected.preset.Name .. "##" .. selected.preset._id then
                             activeProfileButton = cellChild
                             cellChild:SetColor("Button", Mods.BG3MCM.UIStyle.Colors.ButtonActive)
                             -- cellChild.Label = "> " .. buttonName .. "##" .. buttonHash
