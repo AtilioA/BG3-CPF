@@ -94,7 +94,7 @@ export const ModForm: React.FC<ModFormProps> = ({ config, setConfig, onGenerate,
                         </div>
                         <div>
                             <h2 className="text-xl font-bold text-white">Configure mod details</h2>
-                            <p className="text-xs text-slate-400">These details are used to generate the meta.lsx configuration file for your mod.</p>
+                            <p className="text-xs text-slate-400">These details are used to generate the metadata file for your mod.</p>
                             <p className="text-xs text-slate-300">Default values work perfectly.</p>
                         </div>
                     </div>
@@ -132,7 +132,7 @@ export const ModForm: React.FC<ModFormProps> = ({ config, setConfig, onGenerate,
                             rows={2}
                         />
 
-                        <div className="space-y-2">
+                        {/* <div className="space-y-2">
                             <div className="flex justify-between items-center">
                                 <label className="flex items-center gap-2 text-sm font-medium text-slate-300">
                                     <Hash className="w-4 h-4 text-primary" /> Generated UUID</label>
@@ -146,7 +146,7 @@ export const ModForm: React.FC<ModFormProps> = ({ config, setConfig, onGenerate,
                             <div className="w-full bg-slate-950/50 border border-slate-800 border-dashed rounded-lg px-4 py-3 text-slate-400 font-mono text-xs truncate cursor-default">
                                 {config.uuid}
                             </div>
-                        </div>
+                        </div> */}
 
                         {/* Dependency List */}
                         <DependencyList

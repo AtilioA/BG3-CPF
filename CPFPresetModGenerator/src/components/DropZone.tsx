@@ -56,7 +56,7 @@ export const DropZone: React.FC<DropZoneProps> = ({ onFileLoaded }) => {
     const processFile = (file: File) => {
         if (file.type !== "application/json" && !file.name.endsWith('.json')) {
             if (isMountedRef.current) {
-                setError("Please upload a valid JSON file.");
+                setError("Please select a valid JSON file.");
             }
             return;
         }
