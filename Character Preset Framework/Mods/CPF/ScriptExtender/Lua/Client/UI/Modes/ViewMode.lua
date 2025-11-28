@@ -92,8 +92,8 @@ function ViewMode:Render(parent)
 
                 if #allWarnings > 0 then
                     local msg = "The following issues were found:\n\n" ..
-                        table.concat(allWarnings, "\n") .. "\n\nDo you want to proceed?"
-                    MessageBox:Create("Compatibility Warning", msg, MessageBoxMode.YesNo)
+                        table.concat(allWarnings, "\n") .. "\n\nThis will cause issues with your character's appearance. Find a compatible preset or change your character with AEE instead.\nAre you sure you want to proceed?"
+                    MessageBox:Create("Compatibility warning", msg, MessageBoxMode.YesNo)
                         :SetYesCallback(function() State:ApplyPreset(record) end)
                         :Show(group)
                 else
