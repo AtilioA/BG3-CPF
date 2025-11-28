@@ -71,7 +71,7 @@ function CreateMode:Render(parent)
         RenderHelper.CreateReactiveGroup(detailsCH, "CapturedDataPreview", State.CapturedData,
             function(previewGroup, capturedData)
                 local previewChild = previewGroup:AddChildWindow("CreatePreview")
-                previewChild.Size = { 0, 250 }
+                previewChild.Size = { 0, 500 }
 
                 if capturedData then
                     -- Show captured data
