@@ -40,7 +40,13 @@
                     "Type": "checkbox",
                     "Default": true,
                     "Description": "Automatically enter the mirror/appearance change mode after applying a preset"
-                }
+                },
+                {
+                    "Id": "unhide_presets",
+                    "Name": "Unhide all presets",
+                    "Type": "event_button",
+                    "Description": "Click this button to unhide all presets."
+                },
                 // {
                 //     "Id": "mod_enabled",
                 //     "Name": "Enabled",
@@ -76,12 +82,6 @@
                                 "DescriptionHandle": "h89ed68a2aeb9443ca63f6df114118fa5b4e1",
                                 "NameHandle": "h24baadea05924a84b1cc3c30b34e0fc7a208"
                             }
-                        },
-                        {
-                            "Id": "unhide_presets",
-                            "Name": "Unhide all presets",
-                            "Type": "event_button",
-                            "Description": "Click this button to unhide all presets."
                         },
                         {
                             "Id": "reset_presets_index",
