@@ -83,26 +83,36 @@ function ViewMode:Render(parent)
             group:AddSeparator()
 
             -- Actions
-            local btnApply = group:AddButton("Apply preset")
-            btnApply:SetColor("Button", UIColors.COLOR_GREEN)
-            btnApply.OnClick = function()
-                local allWarnings = {}
-                for _, mod in ipairs(allMods) do
-                    if not mod.IsLoaded then
-                        table.insert(allWarnings, string.format("Missing mod: %s (%s)", mod.Name, mod.UUID))
+            -- Disable button in CC
+            local btnApply
+            if CCA.IsInCC() then
+                local ccWarning = group:AddText("Presets cannot be applied during Character Creation.")
+                ccWarning:SetColor("Text", UIColors.COLOR_RED)
+                btnApply = group:AddButton("Cannot apply preset")
+                StyleHelpers.DisableButton(btnApply)
+                btnApply.Disabled = true
+            else
+                btnApply = group:AddButton("Apply preset")
+                btnApply:SetColor("Button", UIColors.COLOR_GREEN)
+                btnApply.OnClick = function()
+                    local allWarnings = {}
+                    for _, mod in ipairs(allMods) do
+                        if not mod.IsLoaded then
+                            table.insert(allWarnings, string.format("Missing mod: %s (%s)", mod.Name, mod.UUID))
+                        end
                     end
-                end
-                for _, w in ipairs(warnings) do table.insert(allWarnings, w) end
+                    for _, w in ipairs(warnings) do table.insert(allWarnings, w) end
 
-                if #allWarnings > 0 then
-                    local msg = "The following issues were found:\n\n" ..
-                        table.concat(allWarnings, "\n") ..
-                        "\n\nThis will cause issues with your character's appearance. Find a compatible preset or change your character with AEE instead.\nAre you sure you want to proceed?"
-                    MessageBox:Create("Compatibility warning", msg, MessageBoxMode.YesNo)
-                        :SetYesCallback(function() State:ApplyPreset(record) end)
-                        :Show(group)
-                else
-                    State:ApplyPreset(record)
+                    if #allWarnings > 0 then
+                        local msg = "The following issues were found:\n\n" ..
+                            table.concat(allWarnings, "\n") ..
+                            "\n\nThis will cause issues with your character's appearance. Find a compatible preset or change your character with AEE instead.\nAre you sure you want to proceed?"
+                        MessageBox:Create("Compatibility warning", msg, MessageBoxMode.YesNo)
+                            :SetYesCallback(function() State:ApplyPreset(record) end)
+                            :Show(group)
+                    else
+                        State:ApplyPreset(record)
+                    end
                 end
             end
 
