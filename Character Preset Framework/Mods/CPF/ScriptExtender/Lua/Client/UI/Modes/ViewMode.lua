@@ -33,8 +33,6 @@ function ViewMode:Render(parent)
             local allMods = {}
             local missingMods = {}
             local player = _C()
-            -- TODO: refactor
-            -- if player and player.Level and player.Level.LevelName == ""
 
             if PresetCompatibility then
                 if player then
@@ -104,8 +102,8 @@ function ViewMode:Render(parent)
                     for _, w in ipairs(warnings) do table.insert(allWarnings, w) end
 
                     if #allWarnings > 0 then
-                        local msg = "The following issues were found:\n\n" ..
-                            table.concat(allWarnings, "\n") ..
+                        local msg = "This preset is not fully compatible with your character:\n\n- " ..
+                            table.concat(allWarnings, "\n- ") ..
                             "\n\nThis will cause issues with your character's appearance. Find a compatible preset or change your character with AEE instead.\nAre you sure you want to proceed?"
                         MessageBox:Create("Compatibility warning", msg, MessageBoxMode.YesNo)
                             :SetYesCallback(function() State:ApplyPreset(record) end)
