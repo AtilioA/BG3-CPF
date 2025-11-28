@@ -1,4 +1,5 @@
 -- FIXME: remove client-side code from here (dummy-related)
+-- Also decouple unrelated things
 
 CCA = {}
 
@@ -15,6 +16,7 @@ end
 function CCA.GetCCDummy()
     if not CCA.IsInCC() then return nil end
     -- In CC, the dummy is usually the second entity with ClientCCDummyDefinition (?)
+    -- This may not be correct but seems to work; might not work for multiplayer.
     local entities = Ext.Entity.GetAllEntitiesWithComponent('ClientCCDummyDefinition')
     return entities and entities[2]
 end
@@ -40,6 +42,11 @@ function CCA.ExtractFromCC()
     end
 
     local def = dummy.ClientCCDummyDefinition
+    if not def then
+        CPFWarn(1, "Dummy has no ClientCCDummyDef")
+        return nil
+    end
+
     local stats = {
         BodyShape = def.BodyShape,
         BodyType = def.BodyType,
@@ -75,6 +82,11 @@ function CCA.ExtractFromMirror(entity)
     end
 
     local def = dummy.ClientCCDummyDefinition
+    if not def then
+        CPFWarn(1, "Dummy has no ClientCCDummyDef")
+        return nil
+    end
+
     local stats = {
         BodyShape = def.BodyShape,
         BodyType = def.BodyType,
@@ -100,6 +112,10 @@ function CCA.ExtractFromEntity(entity)
     if not entity then return nil end
 
     local stats = entity.CharacterCreationStats
+    if not stats then
+        CPFWarn(0, "Entity has no CharacterCreationStats")
+    end
+
     local ccStats = nil
     if stats then
         ccStats = {
