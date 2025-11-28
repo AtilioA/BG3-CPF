@@ -33,6 +33,8 @@ function ViewMode:Render(parent)
             local allMods = {}
             local missingMods = {}
             local player = _C()
+            -- TODO: refactor
+            -- if player and player.Level and player.Level.LevelName == ""
 
             if PresetCompatibility then
                 if player then
