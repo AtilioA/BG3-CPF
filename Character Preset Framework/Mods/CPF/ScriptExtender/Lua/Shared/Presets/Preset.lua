@@ -51,7 +51,7 @@ function Preset.ExtractData(entity)
         }
     end
 
-    if not ccStats then return nil end
+    -- if not ccStats then return nil end
 
     ---@type PresetData
     return {

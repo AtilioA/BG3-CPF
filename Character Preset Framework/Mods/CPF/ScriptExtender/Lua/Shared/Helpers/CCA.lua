@@ -32,8 +32,10 @@ function CCA.CopyCCAOrDummy(entity)
     --- Copy from dummy instead if dummy has been found
     if CCA.HasDummy(entity) then
         CPFDebug(1, "Entity has dummy, copying from it instead")
-        _D(entity)
         return CCA.CopyDummyAppearance(entity)
+    elseif entity and entity.Level and entity.Level.LevelName == "SYS_CC_I" then
+        CPFDebug(1, "In character creation, copying from ClientCCDummyDefinition")
+        return CCA.CopyCharacterCreationAppearance(entity)
     end
 
     CPFDebug(1, "Entity has no dummy, copying from CCA")
