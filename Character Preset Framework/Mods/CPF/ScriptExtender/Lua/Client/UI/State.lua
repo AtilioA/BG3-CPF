@@ -223,7 +223,7 @@ function State:SaveNewPreset()
 
     local success, err = PresetDiscovery:RegisterUserPreset(newPreset)
     if not success then
-        CPFWarn(0, "Failed to register preset: " .. tostring(err))
+        CPFWarn(1, "Warning when registering preset: " .. tostring(err))
         self:SetStatus("Error: " .. tostring(err))
         return
     end

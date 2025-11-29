@@ -34,7 +34,7 @@ end
 function PresetDiscovery:RegisterPreset(preset, modName, context)
     local success, regErr = PresetRegistry.Register(preset)
     if not success then
-        CPFWarn(0, string.format("Failed to register preset %s from mod '%s': %s", context, modName, regErr))
+        CPFWarn(0, string.format("Failed to register preset %s from source '%s': %s", context, modName, regErr))
         return false
     end
 
@@ -163,8 +163,8 @@ function PresetDiscovery:RegisterUserPreset(preset)
     -- Register in memory immediately
     local regSuccess, regErr = PresetRegistry.Register(preset)
     if not regSuccess then
-        CPFWarn(0, string.format("Failed to register user preset in registry: %s", regErr))
-        return false, "Failed to register preset in registry: " .. tostring(regErr)
+        CPFWarn(0, string.format("Warning when registering user preset in registry: %s", regErr))
+        return false, "Warning when registering preset in registry: " .. tostring(regErr)
     end
 
     CPFPrint(1, string.format("User preset '%s' registered successfully", preset.Name))
