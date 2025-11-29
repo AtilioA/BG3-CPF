@@ -57,27 +57,91 @@ function DependencyScanner:_BuildReverseLookup()
     end
 end
 
+--- Helper to safely get display name
+---@param resource any
+---@return string
+local function GetDisplayName(resource)
+    if resource.DisplayName and resource.DisplayName.Get then
+        return resource.DisplayName:Get()
+    end
+    return ""
+end
+
+--- Strategy table for extracting resource details
+---@type table<string, fun(resource: any): string, string>
+local ResourceStrategies = {
+    -- Types that have a SlotName
+    CharacterCreationAppearanceVisual = function(resource)
+        return GetDisplayName(resource), resource.SlotName or "Unknown"
+    end,
+    CharacterCreationSharedVisual = function(resource)
+        return GetDisplayName(resource), resource.SlotName or "Unknown"
+    end,
+    CharacterCreationAccessorySet = function(resource)
+        return GetDisplayName(resource), resource.SlotName or "Unknown"
+    end,
+
+    -- Types that need a static slot name
+    CharacterCreationSkinColor = function(resource)
+        return GetDisplayName(resource), "Skin Color"
+    end,
+    CharacterCreationEyeColor = function(resource)
+        return GetDisplayName(resource), "Eye Color"
+    end,
+    CharacterCreationHairColor = function(resource)
+        return GetDisplayName(resource), "Hair Color"
+    end,
+    CharacterCreationAppearanceMaterial = function(resource)
+        return GetDisplayName(resource), "Material"
+    end,
+    CharacterCreationMaterialOverride = function(resource)
+        return GetDisplayName(resource), "Material Override"
+    end,
+    CharacterCreationPassiveAppearance = function(resource)
+        return GetDisplayName(resource), "Passive Feature"
+    end,
+    CharacterCreationPreset = function(resource)
+        return GetDisplayName(resource), "Preset"
+    end,
+    CharacterCreationVOLine = function(resource)
+        return GetDisplayName(resource), "Voice Line"
+    end,
+    ColorDefinition = function(resource)
+        return GetDisplayName(resource), "Color Definition"
+    end,
+    CharacterCreationEquipmentIcons = function(resource)
+        return GetDisplayName(resource), "Equipment Icon"
+    end,
+    CharacterCreationIconSettings = function(resource)
+        return GetDisplayName(resource), "Icon Settings"
+    end,
+}
+
 --- Gets details for a specific resource
 ---@param resourceUUID string
 ---@return string displayName, string slotName
 function DependencyScanner:GetResourceDetails(resourceUUID)
     -- Try all resource types to find the resource
     local resource = nil
+    local foundType = nil
+
     for _, resourceType in ipairs(CCResourceTypes) do
         resource = Ext.StaticData.Get(resourceUUID, resourceType)
-        if resource then break end
+        if resource then
+            foundType = resourceType
+            break
+        end
     end
 
     if not resource then return "Unknown", "Unknown" end
 
-    local displayName = ""
-    if resource.DisplayName and resource.DisplayName.Get then
-        displayName = resource.DisplayName:Get()
+    local strategy = ResourceStrategies[foundType]
+    if strategy then
+        return strategy(resource)
+    else
+        -- Fallback strategy
+        return GetDisplayName(resource), resource.SlotName or "Unknown"
     end
-
-    local slotName = resource.SlotName or "Unknown"
-
-    return displayName, slotName
 end
 
 --- Scans a character's appearance data for mod dependencies
