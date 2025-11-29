@@ -83,7 +83,7 @@ function ViewMode:Render(parent)
             -- Actions
             -- Disable button in CC
             local btnApply
-            if CCA.IsInCC() then
+            if CCA.IsInCC() and not Ext.Debug.IsDeveloperMode() then
                 local ccWarning = group:AddText("Presets cannot be applied during Character Creation.")
                 ccWarning:SetColor("Text", UIColors.COLOR_RED)
                 btnApply = group:AddButton("Cannot apply preset")
