@@ -117,6 +117,19 @@ local ResourceStrategies = {
     end,
 }
 
+--- Safely executes a strategy function
+---@param strategy fun(resource: any): string, string
+---@param resource any
+---@return string displayName, string slotName
+function DependencyScanner:_SafeExecute(strategy, resource)
+    local success, name, slot = pcall(strategy, resource)
+    if success then
+        return name, slot
+    end
+    CPFWarn(0, "Failed to get resource details.")
+    return "Unknown", "Unknown"
+end
+
 --- Gets details for a specific resource
 ---@param resourceUUID string
 ---@return string displayName, string slotName
@@ -137,11 +150,13 @@ function DependencyScanner:GetResourceDetails(resourceUUID)
 
     local strategy = ResourceStrategies[foundType]
     if strategy then
-        return strategy(resource)
-    else
-        -- Fallback strategy
-        return GetDisplayName(resource), resource.SlotName or "Unknown"
+        return self:_SafeExecute(strategy, resource)
     end
+
+    -- Fallback strategy
+    return self:_SafeExecute(function(res)
+        return GetDisplayName(res), res.SlotName or "Unknown"
+    end, resource)
 end
 
 --- Scans a character's appearance data for mod dependencies
