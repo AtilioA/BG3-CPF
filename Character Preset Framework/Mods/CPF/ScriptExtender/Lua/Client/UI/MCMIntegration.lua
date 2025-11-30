@@ -5,7 +5,7 @@ function MCMIntegration.Initialize()
     -- Create CPF window and render presets
     MCM.InsertModMenuTab({
         tabCallback = function(window) Window:RenderCPF(window) end,
-        tabName = Loca.Get(Loca.Keys.MCM_TAB_PRESET_MANAGER)
+        tabName = "Preset manager"
     })
 
     MCM.EventButton.RegisterCallback({
