@@ -154,7 +154,7 @@ function PresetValidator.ValidateDependencies(dependencies)
     end
 
     if #missingMods > 0 then
-        return false, string.format("Missing required mod dependencies: %s", table.concat(missingMods, ", "))
+        CPFWarn(1, string.format("Preset has missing mod dependencies: %s", table.concat(missingMods, ", ")))
     end
 
     return true
