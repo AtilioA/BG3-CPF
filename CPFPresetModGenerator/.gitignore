@@ -23,3 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 .next
+
+# Sentry Config File
+.env.sentry-build-plugin
