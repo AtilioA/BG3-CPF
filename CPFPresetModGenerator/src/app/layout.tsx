@@ -18,6 +18,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
+            <head>
+                <title>CPF preset mod generator</title>
+            </head>
             <body className={inter.className}>
                 {children}
                 <Analytics />
