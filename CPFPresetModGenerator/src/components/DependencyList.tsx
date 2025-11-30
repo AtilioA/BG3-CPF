@@ -64,7 +64,7 @@ export const DependencyList: React.FC<DependencyListProps> = ({
                                     <div className="flex-1">
                                         <span
                                             className="text-indigo-300 hover:text-indigo-200 cursor-help transition-colors text-sm font-medium"
-                                            title={`Resources: ${dep.resources.map(r => `${r.DisplayName} (${r.SlotName})`).join(', ')}`}
+                                            title={`Resources: ${dep.resources.map(r => `${r.DisplayName ?? 'Unknown'} (${r.SlotName})`).join(', ')}`}
                                         >
                                             {dep.modName}
                                         </span>
@@ -78,7 +78,7 @@ export const DependencyList: React.FC<DependencyListProps> = ({
                                         <div className="absolute left-8 top-full mt-1 hidden group-hover:block z-10 bg-slate-800 border border-slate-700 rounded-lg p-3 shadow-xl min-w-[250px] max-w-[400px]">
                                             <p className="text-xs font-semibold text-indigo-300 mb-2">Resources from this mod:</p>
                                             <ul className="space-y-1 text-xs text-slate-300">
-                                                {dep.resources.map((resource, idx) => (
+                                                {dep.resources.filter(r => r.DisplayName).map((resource, idx) => (
                                                     <li key={idx} className="flex items-start gap-2">
                                                         <span className="text-slate-500 flex-shrink-0">→</span>
                                                         <div>

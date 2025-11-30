@@ -1,5 +1,5 @@
 export interface ModResource {
-    DisplayName: string;
+    DisplayName?: string;
     ResourceUUID: string;
     SlotName: string;
 }

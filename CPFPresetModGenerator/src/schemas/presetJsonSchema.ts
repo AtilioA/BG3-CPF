@@ -33,7 +33,7 @@ const ccAppearanceSchema = z.object({
 
 // ModResource schema
 const modResourceSchema = z.object({
-    DisplayName: z.string(),
+    DisplayName: z.string().optional(),
     ResourceUUID: z.string().regex(uuidPattern, 'Invalid UUID format for ResourceUUID'),
     SlotName: z.string(),
 });
