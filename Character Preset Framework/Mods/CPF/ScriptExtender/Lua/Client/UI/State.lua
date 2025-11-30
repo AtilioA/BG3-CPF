@@ -66,6 +66,27 @@ function State:SetMode(mode)
     end
 end
 
+function State.OnCharacterChanged(entity)
+    if not entity or not entity.Uuid then return end
+
+    State.TargetCharacterUUID = entity.Uuid.EntityUuid
+
+    VCTimer:OnTicks(5, function()
+        -- Refresh the data derived from the target character
+        State:CaptureCharacterData()
+        State:RefreshTargetCharacterData()
+
+        -- Force UI refresh by re-emitting current mode
+        -- local currentMode = State.ViewMode:GetValue()
+        -- State.ViewMode:OnNext(currentMode)
+        -- _D(State.ViewMode:GetValue())
+
+        CPFPrint(1,
+            "State.OnCharacterChanged: Refreshed data for " ..
+            (entity.DisplayName and entity.DisplayName.NameKey:Get() or "Unknown"))
+    end)
+end
+
 function State:RefreshPresets()
     -- Get presets from registry
     if PresetRegistry then

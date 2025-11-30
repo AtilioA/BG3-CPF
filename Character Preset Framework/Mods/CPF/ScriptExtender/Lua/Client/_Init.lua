@@ -26,3 +26,7 @@ RequireFiles("Client/UI/", {
 RequireFiles("Client/Helpers/", {
     "_Init",
 })
+
+RequireFiles("Client/", {
+    "SubscribedEvents",
+})
