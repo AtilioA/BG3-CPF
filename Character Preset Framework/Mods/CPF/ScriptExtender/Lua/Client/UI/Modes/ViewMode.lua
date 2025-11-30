@@ -12,9 +12,9 @@ function ViewMode:Render(parent)
         function(group, record)
             if not record or not record.preset then
                 if State.Presets:GetValue() and #State.Presets:GetValue() == 0 then
-                    group:AddText("No presets available.\nStart by importing or creating a new preset.")
+                    group:AddText(Loca.Get(Loca.Keys.UI_MSG_NO_PRESETS))
                 else
-                    group:AddText("Click a preset on the left to view details.")
+                    group:AddText(Loca.Get(Loca.Keys.UI_MSG_SELECT_PRESET))
                 end
                 return
             end
@@ -22,10 +22,10 @@ function ViewMode:Render(parent)
             local preset = record.preset
 
             -- Header
-            group:AddText("Name: " .. (preset.Name or "Unknown"))
-            group:AddText("Author: " .. (preset.Author or "Unknown"))
-            group:AddText("Version: " .. (preset.Version or "Unknown"))
-            local IDText = group:AddText("ID: " .. (preset._id or "Unknown"))
+            group:AddText(Loca.Format(Loca.Keys.UI_LABEL_NAME_VALUE, preset.Name or "Unknown"))
+            group:AddText(Loca.Format(Loca.Keys.UI_LABEL_AUTHOR_VALUE, preset.Author or "Unknown"))
+            group:AddText(Loca.Format(Loca.Keys.UI_LABEL_VERSION_VALUE, preset.Version or "Unknown"))
+            local IDText = group:AddText(Loca.Format(Loca.Keys.UI_LABEL_ID_VALUE, preset._id or "Unknown"))
             IDText:SetColor("Text", UIColors.COLOR_GRAY)
 
             -- Compatibility Checks
@@ -62,7 +62,8 @@ function ViewMode:Render(parent)
                 end
 
                 group:AddSeparator()
-                local modsText = group:AddBulletText("Mods used by this preset:\n" .. table.concat(modLines, "\n"))
+                local modsText = group:AddBulletText(Loca.Format(Loca.Keys.UI_HEADER_MODS_USED,
+                    table.concat(modLines, "\n")))
                 modsText.TextWrapPos = -1
 
                 -- Apply warning color only if there are missing mods
@@ -72,8 +73,8 @@ function ViewMode:Render(parent)
             end
 
             if #warnings > 0 then
-                local compatibilityWarning = group:AddBulletText("Compatibility warnings:\n" ..
-                    table.concat(warnings, "\n"))
+                local compatibilityWarning = group:AddBulletText(Loca.Format(Loca.Keys.UI_HEADER_COMPATIBILITY_WARNINGS,
+                    table.concat(warnings, "\n")))
                 compatibilityWarning:SetColor("Text", UIColors.COLOR_ORANGE)
                 compatibilityWarning.TextWrapPos = -1
             end
@@ -84,28 +85,26 @@ function ViewMode:Render(parent)
             -- Disable button in CC
             local btnApply
             if CCA.IsInCC() and not Ext.Debug.IsDeveloperMode() then
-                local ccWarning = group:AddText("Presets cannot be applied during Character Creation.")
+                local ccWarning = group:AddText(Loca.Get(Loca.Keys.UI_WARN_CC_RESTRICTION))
                 ccWarning:SetColor("Text", UIColors.COLOR_RED)
-                btnApply = group:AddButton("Cannot apply preset")
+                btnApply = group:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_CANNOT_APPLY))
                 StyleHelpers.DisableButton(btnApply)
                 btnApply.Disabled = true
             else
-                btnApply = group:AddButton("Apply preset")
+                btnApply = group:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_APPLY))
                 btnApply:SetColor("Button", UIColors.COLOR_GREEN)
                 btnApply.OnClick = function()
                     local allWarnings = {}
                     for _, mod in ipairs(allMods) do
                         if not mod.IsLoaded then
-                            table.insert(allWarnings, string.format("Missing mod: %s (%s)", mod.Name, mod.UUID))
+                            table.insert(allWarnings, Loca.Format(Loca.Keys.UI_WARN_MISSING_MOD, mod.Name, mod.UUID))
                         end
                     end
                     for _, w in ipairs(warnings) do table.insert(allWarnings, w) end
 
                     if #allWarnings > 0 then
-                        local msg = "This preset is not fully compatible with your character:\n\n- " ..
-                            table.concat(allWarnings, "\n- ") ..
-                            "\n\nThis will cause issues with your character's appearance. Find a compatible preset or change your character with AEE instead.\nAre you sure you want to proceed?"
-                        MessageBox:Create("Compatibility warning", msg, MessageBoxMode.YesNo)
+                        local msg = Loca.Format(Loca.Keys.UI_MSG_COMPATIBILITY_WARNING, table.concat(allWarnings, "\n- "))
+                        MessageBox:Create(Loca.Get(Loca.Keys.UI_TITLE_COMPATIBILITY_WARNING), msg, MessageBoxMode.YesNo)
                             :SetYesCallback(function() State:ApplyPreset(record) end)
                             :Show(group)
                     else
@@ -120,7 +119,7 @@ function ViewMode:Render(parent)
 
             buttonSpacing.SameLine = true
 
-            local btnDelete = group:AddButton("Hide preset")
+            local btnDelete = group:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_HIDE_PRESET))
             btnDelete:SetColor("Button", UIColors.COLOR_RED)
             btnDelete.OnClick = function()
                 State:HidePreset(record)
@@ -137,13 +136,13 @@ function ViewMode:Render(parent)
             if appearanceData then
                 -- TODO: come up with some logic to deal with this. some are shared visuals, some are appearance visuals. Index matters but not sure how to handle it
                 if appearanceData.Visuals then
-                    attrChild:AddText("Visuals:")
+                    attrChild:AddText(Loca.Get(Loca.Keys.UI_HEADER_VISUALS))
                     for _, v in ipairs(appearanceData.Visuals) do
                         attrChild:AddText(ValueSerializer.Serialize(v, 'CharacterCreationSharedVisual'))
                     end
                 end
             else
-                attrChild:AddText("No data available.")
+                attrChild:AddText(Loca.Get(Loca.Keys.UI_MSG_NO_DATA_AVAILABLE))
             end
         end)
 end

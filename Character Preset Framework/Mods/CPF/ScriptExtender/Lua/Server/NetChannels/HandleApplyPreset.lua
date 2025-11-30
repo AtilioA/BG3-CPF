@@ -17,7 +17,7 @@ local function handleApplyPreset(data, userId)
     -- Validate input
     if not data.CharacterUuid or not data.Preset then
         response.Status = "error"
-        table.insert(response.Warnings, "Missing CharacterUuid or Preset data")
+        table.insert(response.Warnings, Loca.Get(Loca.Keys.WARN_MISSING_DATA))
         return response
     end
 
@@ -25,7 +25,7 @@ local function handleApplyPreset(data, userId)
     local valid, validationErr = Preset.Validate(data.Preset)
     if not valid then
         response.Status = "error"
-        table.insert(response.Warnings, "Invalid preset: " .. tostring(validationErr))
+        table.insert(response.Warnings, Loca.Format(Loca.Keys.WARN_INVALID_PRESET, validationErr))
         return response
     end
 
@@ -46,7 +46,7 @@ local function handleApplyPreset(data, userId)
     local entity = Ext.Entity.Get(data.CharacterUuid)
     if not entity then
         response.Status = "error"
-        table.insert(response.Warnings, "Character entity not found")
+        table.insert(response.Warnings, Loca.Get(Loca.Keys.WARN_ENTITY_NOT_FOUND))
         return response
     end
 

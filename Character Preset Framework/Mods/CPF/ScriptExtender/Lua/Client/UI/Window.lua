@@ -15,12 +15,12 @@ local Window = {
 function Window:DrawSidebar(parent)
     -- Toolbar
     if tonumber(MCM.Get("debug_level")) >= 3 then
-        local btnRefresh = parent:AddButton("Refresh")
+        local btnRefresh = parent:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_REFRESH))
         btnRefresh.OnClick = function() State:RefreshPresets() end
         btnRefresh.SameLine = true
     end
 
-    local btnImport = parent:AddButton("Import")
+    local btnImport = parent:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_IMPORT))
     btnImport.OnClick = function() State:SetMode("IMPORT") end
 
     btnImport.SameLine = true
@@ -28,7 +28,7 @@ function Window:DrawSidebar(parent)
     local vSeparator = parent:AddText("|")
     vSeparator.SameLine = true
 
-    local btnCreate = parent:AddButton("Preset creation")
+    local btnCreate = parent:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_PRESET_CREATION))
 
     btnCreate.OnClick = function()
         -- TODO: Get actual character name
@@ -52,7 +52,7 @@ function Window:DrawSidebar(parent)
             local _colName = table:AddColumn("Name", "WidthStretch")
             -- Add header row
             local headerRow = table:AddRow()
-            headerRow:AddCell():AddSeparatorText("Preset list")
+            headerRow:AddCell():AddSeparatorText(Loca.Get(Loca.Keys.UI_HEADER_PRESET_LIST))
             -- Add preset rows
             for i, record in ipairs(records) do
                 local row = table:AddRow()
@@ -90,11 +90,11 @@ function Window:DrawSidebar(parent)
             end)
 
             State.ViewMode:Subscribe(function(mode)
-                btnCreate.Label = (mode == "CREATE" and "> " or "") .. "Preset creation"
-                btnImport.Label = (mode == "IMPORT" and "> " or "") .. "Import"
+                btnCreate.Label = (mode == "CREATE" and "> " or "") .. Loca.Get(Loca.Keys.UI_BUTTON_PRESET_CREATION)
+                btnImport.Label = (mode == "IMPORT" and "> " or "") .. Loca.Get(Loca.Keys.UI_BUTTON_IMPORT)
 
                 -- Dumb button might not exist anymore
-                pcall(function ()
+                pcall(function()
                     if mode ~= "VIEW" and activeProfileButton then
                         activeProfileButton:SetColor("Button", Mods.BG3MCM.UIStyle.Colors.Button)
                     end
@@ -137,7 +137,7 @@ function Window:RenderCPF(window)
         if modeRenderer and modeRenderer.Render then
             modeRenderer:Render(group)
         else
-            group:AddText("Unknown mode: " .. tostring(currentMode))
+            group:AddText(Loca.Format(Loca.Keys.UI_ERROR_UNKNOWN_MODE, currentMode))
         end
     end)
 end

@@ -5,7 +5,7 @@ function MCMIntegration.Initialize()
     -- Create CPF window and render presets
     MCM.InsertModMenuTab({
         tabCallback = function(window) Window:RenderCPF(window) end,
-        tabName = "Preset manager"
+        tabName = Loca.Get(Loca.Keys.MCM_TAB_PRESET_MANAGER)
     })
 
     MCM.EventButton.RegisterCallback({
@@ -20,13 +20,13 @@ function MCMIntegration.Initialize()
             if unhid then
                 MCM.EventButton.ShowFeedback({
                     buttonId = "unhide_presets",
-                    message = "All presets unhidden.",
+                    message = Loca.Get(Loca.Keys.MCM_MSG_UNHIDDEN_SUCCESS),
                     feedbackType = "success"
                 })
             else
                 MCM.EventButton.ShowFeedback({
                     buttonId = "unhide_presets",
-                    message = "Failed to unhide presets.",
+                    message = Loca.Get(Loca.Keys.MCM_MSG_UNHIDDEN_FAILURE),
                     feedbackType = "error"
                 })
             end
@@ -41,13 +41,13 @@ function MCMIntegration.Initialize()
             if cleared and loaded >= 0 then
                 MCM.EventButton.ShowFeedback({
                     buttonId = "reset_presets_index",
-                    message = string.format("Preset index correctly reset.\n%d presets loaded.", loaded),
+                    message = Loca.Format(Loca.Keys.MCM_MSG_RESET_SUCCESS, loaded),
                     feedbackType = "success"
                 })
             else
                 MCM.EventButton.ShowFeedback({
                     buttonId = "reset_presets_index",
-                    message = "Failed to reset presets index.",
+                    message = Loca.Get(Loca.Keys.MCM_MSG_RESET_FAILURE),
                     feedbackType = "error"
                 })
             end
@@ -58,7 +58,7 @@ function MCMIntegration.Initialize()
         settingId = 'open_cpf',
         callback = function()
             MCM.OpenModPage({
-                tabName = 'Preset manager',
+                tabName = Loca.Get(Loca.Keys.MCM_TAB_PRESET_MANAGER),
                 modUUID = ModuleUUID,
                 shouldEmitEvent = true
             })

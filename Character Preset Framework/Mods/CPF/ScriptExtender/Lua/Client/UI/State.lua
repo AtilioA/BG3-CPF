@@ -21,6 +21,8 @@ local State = {
     _statusSubscription = nil
 }
 
+local L = LocalizationManager
+
 function State:GetStatusMessageDuration(msg)
     local increase = #msg / 20 * 1000
     return STATUS_MESSAGE_TIMEOUT + increase
@@ -79,7 +81,7 @@ function State:RefreshPresets()
 
         self.Presets:OnNext(visibleRecords)
         local count = #visibleRecords
-        self:SetStatus(string.format("Found %d preset(s)", count))
+        self:SetStatus(Loca.Format(Loca.Keys.STATUS_FOUND_PRESETS, count))
         CPFPrint(1, string.format("Refreshed UI with %d preset(s)", count))
     else
         CPFWarn(0, "PresetRegistry not available")
@@ -114,7 +116,7 @@ function State:CaptureCharacterData()
 
         if not unifiedData or not unifiedData.CCAppearance then
             CPFWarn(0, "Player entity does not have CharacterCreationAppearance component")
-            self:SetStatus("Error: Could not capture character appearance data")
+            self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_CAPTURE_FAILED))
             return
         end
 
@@ -128,7 +130,7 @@ function State:CaptureCharacterData()
         end
 
         self:SetMode("CREATE")
-        self:SetStatus("Captured appearance data from " .. tostring(displayName))
+        self:SetStatus(Loca.Format(Loca.Keys.STATUS_CAPTURED_DATA, displayName))
         CPFPrint(1, "Successfully captured CCA data from player")
     end
 
@@ -189,28 +191,28 @@ function State:SaveNewPreset()
     local data = self:RefreshTargetCharacterData()
 
     if not data then
-        self:SetStatus("Error: No captured data to save")
+        self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_NO_DATA_TO_SAVE))
         return
     end
 
     local presetData = self.NewPresetData:GetValue()
     local name = presetData.Name
     if name == "" then
-        self:SetStatus("Error: Name is required")
+        self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_NAME_REQUIRED))
         return
     end
 
     -- Use global Preset module
     if not (Preset and Preset.Create) then
         CPFWarn(0, "Preset module not loaded")
-        self:SetStatus("Error: Preset module not loaded")
+        self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_PRESET_MODULE_NOT_LOADED))
         return
     end
 
     local newPreset = Preset.Create(name, presetData.Author, presetData.Version, data)
     if not newPreset then
         CPFWarn(0, "Failed to create preset object")
-        self:SetStatus("Error creating preset object")
+        self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_CREATING_PRESET))
         return
     end
 
@@ -228,7 +230,7 @@ function State:SaveNewPreset()
         return
     end
 
-    self:SetStatus("Preset '" .. name .. "' saved")
+    self:SetStatus(Loca.Format(Loca.Keys.STATUS_PRESET_SAVED, name))
     self:RefreshPresets()
 
     -- Select the new preset (need to fetch the record)
@@ -247,7 +249,7 @@ function State:HidePreset(record)
     -- Use PresetDiscovery to remove (handles both registry and index)
     if not (PresetDiscovery and PresetDiscovery.HideUserPreset) then
         CPFWarn(0, "PresetDiscovery not available")
-        self:SetStatus("Error: PresetDiscovery not available")
+        self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_DISCOVERY_NOT_AVAILABLE))
         return
     end
 
@@ -258,7 +260,7 @@ function State:HidePreset(record)
         return
     end
 
-    self:SetStatus("Preset '" .. record.preset.Name .. "' deleted")
+    self:SetStatus(Loca.Format(Loca.Keys.STATUS_PRESET_DELETED, record.preset.Name))
     self:RefreshPresets()
     self.SelectedPreset:OnNext(nil)
 end
@@ -269,7 +271,7 @@ function State:ApplyPreset(record)
 
     if not RequestApplyPreset then
         CPFWarn(0, "RequestApplyPreset not available")
-        self:SetStatus("Error: RequestApplyPreset not available")
+        self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_APPLY_NOT_AVAILABLE))
         return
     end
 
@@ -278,7 +280,7 @@ function State:ApplyPreset(record)
 
     if not player then
         CPFWarn(0, "Could not find player entity")
-        self:SetStatus("Error: Could not find player character")
+        self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_PLAYER_NOT_FOUND))
         return
     end
 
@@ -286,26 +288,28 @@ function State:ApplyPreset(record)
     local playerUuid = player.Uuid.EntityUuid
     if not playerUuid then
         CPFWarn(0, "Could not get player UUID")
-        self:SetStatus("Error: Could not get player UUID")
+        self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_PLAYER_UUID_NOT_FOUND))
         return
     end
 
     -- Send request to server to apply preset
     RequestApplyPreset(playerUuid, preset, {
         OnSuccess = function(response)
-            local msg = "Applied preset '" .. preset.Name .. "'"
             if response.Warnings and #response.Warnings > 0 then
-                msg = msg .. " (Warnings: " .. table.concat(response.Warnings, "; ") .. ")"
+                self:SetStatus(Loca.Format(Loca.Keys.STATUS_APPLIED_PRESET_WITH_WARNINGS, preset.Name,
+                    table.concat(response.Warnings, "; ")))
+            else
+                self:SetStatus(Loca.Format(Loca.Keys.STATUS_APPLIED_PRESET, preset.Name))
             end
-            self:SetStatus(msg)
             CPFPrint(1, "Successfully applied preset: " .. preset.Name)
         end,
         OnFailure = function(warnings, response)
-            local msg = "Failed to apply preset"
             if warnings and #warnings > 0 then
-                msg = msg .. ": " .. table.concat(warnings, "; ")
+                self:SetStatus(Loca.Format(Loca.Keys.STATUS_FAILED_APPLY_PRESET_WITH_WARNINGS,
+                    table.concat(warnings, "; ")))
+            else
+                self:SetStatus(Loca.Get(Loca.Keys.STATUS_FAILED_APPLY_PRESET))
             end
-            self:SetStatus(msg)
             CPFWarn(0, "Failed to apply preset: " .. preset.Name)
         end
     })
@@ -313,13 +317,13 @@ end
 
 function State:ImportFromBuffer()
     if self.ImportBuffer:GetValue() == "" then
-        self:SetStatus("Error: Import buffer is empty")
+        self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_IMPORT_EMPTY))
         return
     end
 
     if not Preset or not Preset.Deserialize then
         CPFWarn(0, "Preset module not loaded")
-        self:SetStatus("Error: Preset module not loaded")
+        self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_PRESET_MODULE_NOT_LOADED))
         return
     end
 
@@ -334,14 +338,14 @@ function State:ImportFromBuffer()
 
     if not success then
         CPFWarn(0, "Import failed: " .. tostring(presetOrError))
-        self:SetStatus("Import error: " .. tostring(presetOrError))
+        self:SetStatus(Loca.Format(Loca.Keys.STATUS_IMPORT_ERROR, presetOrError))
         return
     end
 
     -- Handle xpcall result (first return is success boolean)
     if not presetOrError then
         CPFWarn(0, "Failed to parse/validate import buffer: " .. tostring(presetDeserializeError))
-        self:SetStatus("Import error: " .. tostring(presetDeserializeError))
+        self:SetStatus(Loca.Format(Loca.Keys.STATUS_IMPORT_ERROR, presetDeserializeError))
         return
     end
 
@@ -349,7 +353,7 @@ function State:ImportFromBuffer()
     local actualPreset, validationErr = presetOrError, presetDeserializeError
     if not actualPreset then
         CPFWarn(0, "Failed to deserialize import buffer: " .. tostring(validationErr))
-        self:SetStatus("Import error: " .. tostring(validationErr))
+        self:SetStatus(Loca.Format(Loca.Keys.STATUS_IMPORT_ERROR, validationErr))
         return
     end
 
@@ -363,14 +367,14 @@ function State:ImportFromBuffer()
     local registrationSuccess, err = PresetDiscovery:RegisterUserPreset(actualPreset)
     if not registrationSuccess then
         CPFWarn(0, "Failed to register imported preset: " .. tostring(err))
-        self:SetStatus("Import error: " .. tostring(err))
+        self:SetStatus(Loca.Format(Loca.Keys.STATUS_IMPORT_ERROR, err))
         return
     end
 
     -- Unhide preset just in case
     PresetIndex.SetHidden(actualPreset._id, false)
     self.ImportBuffer:OnNext("")
-    self:SetStatus("Imported '" .. actualPreset.Name .. "'")
+    self:SetStatus(Loca.Format(Loca.Keys.STATUS_IMPORTED_PRESET, actualPreset.Name))
     self:RefreshPresets()
 
     local record = PresetRegistry.Get(actualPreset._id)

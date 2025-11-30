@@ -6,13 +6,13 @@ local CreateMode = {}
 function CreateMode:Render(parent)
     -- Wrap entire content in a managed group
     local group = RenderHelper.CreateManagedGroup(parent, "CreateModeContent", function(g)
-        g:AddText("Create new preset from selected character")
+        g:AddText(Loca.Get(Loca.Keys.UI_CREATE_HEADER))
         g:AddSeparator()
 
         -- Create reactive group for input fields that updates when NewPresetData changes
         RenderHelper.CreateReactiveGroup(g, "PresetInputFields", State.NewPresetData,
             function(inputGroup, presetData)
-                inputGroup:AddText("Name")
+                inputGroup:AddText(Loca.Get(Loca.Keys.UI_LABEL_NAME))
                 local inputName = inputGroup:AddInputText("")
                 inputName.SameLine = true
                 inputName.Text = presetData.Name
@@ -24,7 +24,7 @@ function CreateMode:Render(parent)
                     State.NewPresetData:OnNext(data)
                 end
 
-                inputGroup:AddText("Author")
+                inputGroup:AddText(Loca.Get(Loca.Keys.UI_LABEL_AUTHOR))
                 local inputAuthor = inputGroup:AddInputText("")
                 inputAuthor.SameLine = true
                 inputAuthor.Text = presetData.Author
@@ -36,7 +36,7 @@ function CreateMode:Render(parent)
                     State.NewPresetData:OnNext(data)
                 end
 
-                inputGroup:AddText("Version")
+                inputGroup:AddText(Loca.Get(Loca.Keys.UI_LABEL_VERSION))
                 local inputVer = inputGroup:AddInputText("")
                 inputVer.SameLine = true
                 inputVer.Text = presetData.Version
@@ -49,7 +49,7 @@ function CreateMode:Render(parent)
                 end
             end)
 
-        local btnSave = g:AddButton("Save")
+        local btnSave = g:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_SAVE))
         btnSave:SetColor("Button", UIColors.COLOR_GREEN)
         btnSave.OnClick = function()
             State:SaveNewPreset()
@@ -57,7 +57,7 @@ function CreateMode:Render(parent)
 
         btnSave.SameLine = false
 
-        local btnCancel = g:AddButton("Cancel")
+        local btnCancel = g:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_CANCEL))
         btnCancel.OnClick = function()
             State:SetMode("VIEW")
         end
@@ -65,7 +65,7 @@ function CreateMode:Render(parent)
         btnCancel.SameLine = true
 
         g:AddSeparator()
-        local detailsCH = g:AddCollapsingHeader("Captured attributes (preview; for dev purposes):")
+        local detailsCH = g:AddCollapsingHeader(Loca.Get(Loca.Keys.UI_HEADER_CAPTURED_ATTRIBUTES))
         detailsCH.DefaultOpen = false
         -- Create reactive preview that updates when CapturedData changes
         RenderHelper.CreateReactiveGroup(detailsCH, "CapturedDataPreview", State.CapturedData,
@@ -77,7 +77,7 @@ function CreateMode:Render(parent)
                     -- Show captured data
                     previewChild:AddText(Ext.Json.Stringify(capturedData))
                 else
-                    previewChild:AddText("No data captured.")
+                    previewChild:AddText(Loca.Get(Loca.Keys.UI_MSG_NO_DATA_CAPTURED))
                 end
             end)
     end)

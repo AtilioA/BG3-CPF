@@ -38,11 +38,11 @@ function ImportMode:Render(parent)
     -- Wrap entire content in a managed group
     RenderHelper.CreateManagedGroup(parent, "ImportModeContent", function(group)
         if (not Ext.Debug.IsDeveloperMode()) and (Ext.Utils.Version() <= 30) then
-            group:AddText("You need SE v30 or Devel to use this feature.")
+            group:AddText(Loca.Get(Loca.Keys.UI_ERROR_SE_VERSION))
             CPFWarn(1, "Import feature is still not available!")
             return false
         end
-        group:AddText("Paste a preset JSON below:")
+        group:AddText(Loca.Get(Loca.Keys.UI_MSG_PASTE_JSON))
 
         local input = group:AddInputText("")
         input.Multiline = true
@@ -57,9 +57,9 @@ function ImportMode:Render(parent)
             function(btnGroup, buffer)
                 local parsedName = ImportMode:ParsePresetName(buffer)
                 -- Determine button label based on parsed preset name
-                local buttonLabel = "Import"
+                local buttonLabel = Loca.Get(Loca.Keys.UI_BUTTON_IMPORT)
                 if parsedName then
-                    buttonLabel = string.format("Import '%s'", parsedName)
+                    buttonLabel = Loca.Format(Loca.Keys.UI_BUTTON_IMPORT_NAMED, parsedName)
                 end
 
                 local btnImport = btnGroup:AddButton(buttonLabel)
@@ -76,7 +76,7 @@ function ImportMode:Render(parent)
 
                 btnImport.SameLine = false
 
-                local btnCancel = btnGroup:AddButton("Cancel")
+                local btnCancel = btnGroup:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_CANCEL))
                 btnCancel.OnClick = function()
                     State:SetMode("VIEW")
                     State.ImportBuffer:OnNext("")

@@ -23,8 +23,6 @@ MessageBoxMode = {
 ---@field ContextId string|nil A custom context ID for this message box
 MessageBox = {}
 
-local L = LocalizationManager
-
 ---Creates a new MessageBox instance
 ---@param title string The title of the message box
 ---@param message string The message to display
@@ -179,7 +177,7 @@ end
 ---Adds an OK button to the popup
 ---@return any The button object
 function MessageBox:AddOkButton()
-    local buttonText = self.OkLabel or L.Get(L.Keys.UI_BUTTON_OK) or "OK"
+    local buttonText = self.OkLabel or Loca.Get(Loca.Keys.UI_BUTTON_OK) or "OK"
     local button = self.PopupDialog:AddButton(buttonText)
     button.IDContext = self.ModUUID .. "_" .. self.ContextId .. "_OkButton"
     button:SetColor("Button", Color.NormalizedRGBA(117, 140, 74, 0.33))
@@ -196,7 +194,7 @@ end
 ---@param sameLine boolean|nil Whether the button should be on the same line as the previous element
 ---@return any The button object
 function MessageBox:AddCancelButton(sameLine)
-    local buttonText = self.CancelLabel or L.Get(L.Keys.UI_BUTTON_CANCEL) or
+    local buttonText = self.CancelLabel or Loca.Get(Loca.Keys.UI_BUTTON_CANCEL) or
         "Cancel"
     local button = self.PopupDialog:AddButton(buttonText)
     button.IDContext = self.ModUUID .. "_" .. self.ContextId .. "_CancelButton"
@@ -215,7 +213,7 @@ end
 ---Adds a Yes button to the popup
 ---@return any The button object
 function MessageBox:AddYesButton()
-    local buttonText = self.YesLabel or L.Get(L.Keys.UI_BUTTON_YES) or "Yes"
+    local buttonText = self.YesLabel or Loca.Get(Loca.Keys.UI_BUTTON_YES) or "Yes"
     local button = self.PopupDialog:AddButton(buttonText)
     button.IDContext = self.ModUUID .. "_" .. self.ContextId .. "_YesButton"
     button.OnClick = function()
@@ -231,7 +229,7 @@ end
 ---@param sameLine boolean|nil Whether the button should be on the same line as the previous element
 ---@return any The button object
 function MessageBox:AddNoButton(sameLine)
-    local buttonText = self.NoLabel or L.Get(L.Keys.UI_BUTTON_NO) or "No"
+    local buttonText = self.NoLabel or Loca.Get(Loca.Keys.UI_BUTTON_NO) or "No"
     local button = self.PopupDialog:AddButton(buttonText)
     button.IDContext = self.ModUUID .. "_" .. self.ContextId .. "_NoButton"
     if sameLine then
