@@ -39,6 +39,8 @@ LocalizationManager.Keys = {
     STATUS_ERROR_IMPORT_EMPTY = "h08f455b31e964a2c83e804ed9aae1aa0eee5",
     STATUS_IMPORT_ERROR = "h7b9091979433406ea3859d7d9d9569eadb1b",
     STATUS_IMPORTED_PRESET = "hb863571eb8cb4db68615e3a82e673f774171",
+    STATUS_ERROR_REGISTER_PRESET = "h0a78cf3d6c604445b6be5a19a4795506gc07",
+    STATUS_ERROR_HIDE_PRESET = "h06c4579a68f84fe5a28a4504aad8cc1d1cb1",
 
     -- HandleApplyPreset.lua Warnings
     WARN_MISSING_DATA = "h2db4b2e15b2443409523abd9d1e0a07f9aeg",
@@ -105,6 +107,21 @@ LocalizationManager.Keys = {
     RESOURCE_COLOUR_DEFINITION = "hf97df5b78bab40b39c7764d5dc8a84e77a5e",
     RESOURCE_EQUIPMENT_ICON = "hefc36cdda0a84b8590d2ad967c206cac657b",
     RESOURCE_ICON_SETTINGS = "hd95b57162db648b099f1113aa2dce3cf2d7a",
+
+    -- PresetCompatibility.lua Warnings
+    COMPAT_WARN_BODY_SHAPE = "hb068d9f9741b4a4ba72211c599bccf5671b8",
+    COMPAT_WARN_BODY_TYPE = "h5939b98d351d421bbc40fa1c2663778c6a80",
+    COMPAT_WARN_RACE = "h5ef070cb861841f8b1e3fb40bf9b0d40c915",
+    COMPAT_WARN_SUBRACE = "h644622bd0418440b9a5d5efb4a5f68221bfe",
+
+    -- Vanilla game localization handles
+    VANILLA_FEMALE = "h4d28f1b3g3fb8g48d6ga015g7f6ef4a6ba7f",
+    VANILLA_MALE = "h76bd1643g7510g40a2g923bgd4150ceadbb2",
+    VANILLA_STRONG = "h9703189eg7d5dg4376gb2f5gbd362b8728db",
+
+    -- ValueSerializer.lua
+    VALUE_NONE = "h30640f00f0584cf8a5062646bb57d5807cgd",
+    VALUE_MEDIUM = "h12fc8ad09fc44da381f05bf59ae1f1f4fffb",
 }
 
 -- ============================================================================
@@ -116,7 +133,6 @@ LocalizationManager.Keys = {
 --- @return string - The new string
 function LocalizationManager.ProcessLocalizedString(locaStr)
     local replacedBr = VCString:ReplaceBrWithNewlines(locaStr)
-    _D(replacedBr)
     return replacedBr
 end
 
@@ -129,7 +145,7 @@ function LocalizationManager.Get(key)
     -- Error handling: detect missing translations
     if not result or result == "" or result == key then
         Ext.Utils.PrintWarning("[LocalizationManager] Missing translation for key: " .. tostring(key))
-        return "[MISSING: " .. tostring(key) .. "]"
+        return "[NO LOCA: " .. tostring(key) .. "]"
     end
 
     local processedLocaStr = LocalizationManager.ProcessLocalizedString(result)
@@ -149,7 +165,7 @@ function LocalizationManager.Format(key, ...)
     -- Error handling: detect missing translations
     if not template or template == "" or template == key then
         Ext.Utils.PrintWarning("[LocalizationManager] Missing translation for key: " .. tostring(key))
-        return "[MISSING: " .. tostring(key) .. "]"
+        return "[NO LOCA " .. tostring(key) .. "]"
     end
 
     -- Check if we have enough arguments for placeholders

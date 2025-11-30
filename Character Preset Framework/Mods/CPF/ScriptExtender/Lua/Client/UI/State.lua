@@ -86,14 +86,14 @@ function State:RefreshPresets()
     else
         CPFWarn(0, "PresetRegistry not available")
         self.Presets:OnNext({})
-        self:SetStatus("Error: PresetRegistry not available")
+        self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_REGISTRY_NOT_AVAILABLE))
     end
 end
 
 function State:SelectPreset(record)
     self.SelectedPreset:OnNext(record)
     if record and record.preset then
-        self:SetStatus("Selected preset: " .. tostring(record.preset.Name))
+        self:SetStatus(Loca.Format(Loca.Keys.STATUS_SELECTED_PRESET, record.preset.Name))
     end
     self:SetMode("VIEW")
 end
@@ -102,7 +102,7 @@ function State:CaptureCharacterData()
     local function captureData(player)
         if not player then
             CPFWarn(0, "Could not find player entity")
-            self:SetStatus("Error: Could not find player character")
+            self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_PLAYER_NOT_FOUND))
             return
         end
 
@@ -219,14 +219,14 @@ function State:SaveNewPreset()
     -- Use PresetDiscovery to save and register (handles both file and index)
     if not (PresetDiscovery and PresetDiscovery.RegisterUserPreset) then
         CPFWarn(0, "PresetDiscovery not available")
-        self:SetStatus("Error: PresetDiscovery not available")
+        self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_DISCOVERY_NOT_AVAILABLE))
         return
     end
 
     local success, err = PresetDiscovery:RegisterUserPreset(newPreset)
     if not success then
         CPFWarn(1, "Warning when registering preset: " .. tostring(err))
-        self:SetStatus("Error: " .. tostring(err))
+        self:SetStatus(Loca.Format(Loca.Keys.STATUS_ERROR_REGISTER_PRESET, tostring(err)))
         return
     end
 
@@ -256,7 +256,7 @@ function State:HidePreset(record)
     local success, err = PresetDiscovery:HideUserPreset(record.preset._id)
     if not success then
         CPFWarn(0, "Failed to remove preset: " .. tostring(err))
-        self:SetStatus("Error: " .. tostring(err))
+        self:SetStatus(Loca.Format(Loca.Keys.STATUS_ERROR_HIDE_PRESET, tostring(err)))
         return
     end
 
@@ -360,7 +360,7 @@ function State:ImportFromBuffer()
     -- Use PresetDiscovery to register (handles both registry and index, will refactor later :gladge:)
     if not (PresetDiscovery and PresetDiscovery.RegisterUserPreset) then
         CPFWarn(0, "PresetDiscovery not available")
-        self:SetStatus("Error: PresetDiscovery not available")
+        self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_DISCOVERY_NOT_AVAILABLE))
         return
     end
 

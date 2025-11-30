@@ -15,7 +15,7 @@ function PresetCompatibility.CheckStats(presetStats, targetStats)
     -- Check BodyShape
     if presetStats.BodyShape and targetStats.BodyShape and presetStats.BodyShape ~= targetStats.BodyShape then
         table.insert(warnings,
-            string.format("Body Shape mismatch: Preset uses %s, Character uses %s.",
+            Loca.Format(Loca.Keys.COMPAT_WARN_BODY_SHAPE,
                 ValueSerializer.Serialize(presetStats.BodyShape, "BodyShape"),
                 ValueSerializer.Serialize(targetStats.BodyShape, "BodyShape")))
     end
@@ -23,7 +23,7 @@ function PresetCompatibility.CheckStats(presetStats, targetStats)
     -- Check BodyType
     if presetStats.BodyType and targetStats.BodyType and presetStats.BodyType ~= targetStats.BodyType then
         table.insert(warnings,
-            string.format("Body Type mismatch: Preset uses %s, Character uses %s.",
+            Loca.Format(Loca.Keys.COMPAT_WARN_BODY_TYPE,
                 ValueSerializer.Serialize(presetStats.BodyType, "BodyType"),
                 ValueSerializer.Serialize(targetStats.BodyType, "BodyType")))
     end
@@ -31,7 +31,7 @@ function PresetCompatibility.CheckStats(presetStats, targetStats)
     -- Check Race
     if presetStats.Race and targetStats.Race and presetStats.Race ~= targetStats.Race then
         table.insert(warnings,
-            string.format("Race mismatch: Preset uses %s, Character uses %s.",
+            Loca.Format(Loca.Keys.COMPAT_WARN_RACE,
                 ValueSerializer.Serialize(presetStats.Race, "Race"),
                 ValueSerializer.Serialize(targetStats.Race, "Race")))
     end
@@ -39,7 +39,7 @@ function PresetCompatibility.CheckStats(presetStats, targetStats)
     -- Check SubRace
     if presetStats.SubRace and targetStats.SubRace and presetStats.SubRace ~= targetStats.SubRace then
         table.insert(warnings,
-            string.format("Subrace mismatch: Preset uses %s, Character uses %s.",
+            Loca.Format(Loca.Keys.COMPAT_WARN_SUBRACE,
                 ValueSerializer.Serialize(presetStats.SubRace, "Subrace"),
                 ValueSerializer.Serialize(targetStats.SubRace, "Subrace")))
     end

@@ -10,11 +10,11 @@ local serializers = {}
 ---@return string
 local function serializeRace(uuid)
     if not uuid or uuid == "" then
-        return "None"
+        return Loca.Get(Loca.Keys.VALUE_NONE)
     end
 
     if uuid == Constants.NULL_UUID then
-        return "None"
+        return Loca.Get(Loca.Keys.VALUE_NONE)
     end
 
     local success, race = pcall(function()
@@ -44,8 +44,8 @@ end
 ---@return string
 local function serializeBodyShape(value)
     local bodyShapes = {
-        [0] = "Medium",
-        [1] = "Strong"
+        [0] = Loca.Get(Loca.Keys.VALUE_MEDIUM),
+        [1] = Loca.Get(Loca.Keys.VANILLA_STRONG)
     }
 
     return bodyShapes[value] or tostring(value)
@@ -56,8 +56,8 @@ end
 ---@return string
 local function serializeBodyType(value)
     local bodyTypes = {
-        [0] = "Male",
-        [1] = "Female"
+        [0] = Loca.Get(Loca.Keys.VANILLA_MALE),
+        [1] = Loca.Get(Loca.Keys.VANILLA_FEMALE)
     }
 
     return bodyTypes[value] or tostring(value)
@@ -68,7 +68,7 @@ end
 ---@return string
 local function serializeAccessorySet(uuid)
     if not uuid or uuid == "" then
-        return "None"
+        return Loca.Get(Loca.Keys.VALUE_NONE)
     end
 
     local success, accessorySet = pcall(function()
@@ -90,7 +90,7 @@ end
 ---@return string
 local function serializeAppearanceMaterial(uuid)
     if not uuid or uuid == "" then
-        return "None"
+        return Loca.Get(Loca.Keys.VALUE_NONE)
     end
 
     local success, material = pcall(function()
@@ -120,7 +120,7 @@ end
 ---@return string
 local function serializeEyeColor(uuid)
     if not uuid or uuid == "" then
-        return "None"
+        return Loca.Get(Loca.Keys.VALUE_NONE)
     end
 
     local success, eyeColor = pcall(function()
@@ -142,7 +142,7 @@ end
 ---@return string
 local function serializeHairColor(uuid)
     if not uuid or uuid == "" then
-        return "None"
+        return Loca.Get(Loca.Keys.VALUE_NONE)
     end
 
     local success, hairColor = pcall(function()
@@ -164,7 +164,7 @@ end
 ---@return string
 local function serializeSkinColor(uuid)
     if not uuid or uuid == "" then
-        return "None"
+        return Loca.Get(Loca.Keys.VALUE_NONE)
     end
 
     local success, skinColor = pcall(function()
@@ -186,7 +186,7 @@ end
 ---@return string
 local function serializeSharedVisual(uuid)
     if not uuid or uuid == "" or uuid == Constants.NULL_UUID then
-        return "None"
+        return Loca.Get(Loca.Keys.VALUE_NONE)
     end
 
     local success, sharedVisual = pcall(function()
@@ -207,7 +207,7 @@ end
 ---@return string
 local function serializeAppearanceVisual(uuid)
     if not uuid or uuid == "" or uuid == Constants.NULL_UUID then
-        return "None"
+        return Loca.Get(Loca.Keys.VALUE_NONE)
     end
 
     local success, appearanceVisual = pcall(function()
@@ -249,7 +249,7 @@ serializers["CharacterCreationAppearanceVisual"] = serializeAppearanceVisual
 ---@return string Human-readable string representation
 function ValueSerializer.Serialize(value, dataType)
     if not value then
-        return "None"
+        return Loca.Get(Loca.Keys.VALUE_NONE)
     end
 
     local serializer = serializers[dataType]
