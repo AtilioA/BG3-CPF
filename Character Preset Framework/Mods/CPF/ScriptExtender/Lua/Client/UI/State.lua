@@ -66,24 +66,17 @@ function State:SetMode(mode)
     end
 end
 
-function State.OnCharacterChanged(entity)
+function State:OnCharacterChanged(entity)
     if not entity or not entity.Uuid then return end
 
-    State.TargetCharacterUUID = entity.Uuid.EntityUuid
+    -- Avoid issues when switching characters back and forth
+    VCTimer:OnTicks(15, function()
+        self.TargetCharacterUUID = entity.Uuid.EntityUuid
 
-    VCTimer:OnTicks(5, function()
-        -- Refresh the data derived from the target character
-        State:CaptureCharacterData()
-        State:RefreshTargetCharacterData()
-
-        -- Force UI refresh by re-emitting current mode
-        -- local currentMode = State.ViewMode:GetValue()
-        -- State.ViewMode:OnNext(currentMode)
-        -- _D(State.ViewMode:GetValue())
-
-        CPFPrint(1,
-            "State.OnCharacterChanged: Refreshed data for " ..
-            (entity.DisplayName and entity.DisplayName.NameKey:Get() or "Unknown"))
+        self:UpdateCapturedData()
+        self:UpdateFormDefaults()
+        self:UpdatePresetCompatibility()
+        self:RefreshUI()
     end)
 end
 
@@ -104,6 +97,9 @@ function State:RefreshPresets()
         local count = #visibleRecords
         self:SetStatus(Loca.Format(Loca.Keys.STATUS_FOUND_PRESETS, count))
         CPFPrint(1, string.format("Refreshed UI with %d preset(s)", count))
+
+        -- Also update compatibility when refreshing presets
+        self:UpdatePresetCompatibility()
     else
         CPFWarn(0, "PresetRegistry not available")
         self.Presets:OnNext({})
@@ -117,6 +113,63 @@ function State:SelectPreset(record)
         self:SetStatus(Loca.Format(Loca.Keys.STATUS_SELECTED_PRESET, record.preset.Name))
     end
     self:SetMode("VIEW")
+end
+
+function State:UpdateCapturedData()
+    if not self.TargetCharacterUUID then
+        self.TargetCharacterUUID = _C().Uuid.EntityUuid
+    end
+
+    local data = nil
+    if self.TargetCharacterUUID then
+        local character = Ext.Entity.Get(self.TargetCharacterUUID)
+        if character then
+            data = Preset.ExtractData(character)
+            self.CapturedData:OnNext(data)
+        end
+    end
+
+    -- Fallback to existing captured data if re-capture failed
+    if not data then
+        data = self.CapturedData:GetValue()
+    end
+
+    return data
+end
+
+function State:UpdateFormDefaults()
+    -- Get the client player entity
+    if RequestUserInfo then
+        RequestUserInfo({
+            OnSuccess = function(response)
+                local data = self.NewPresetData:GetValue()
+                if response.UserName and response.UserName ~= "" then
+                    data.Author = response.UserName
+                end
+                if response.CharacterName and response.CharacterName ~= "" then
+                    data.Name = response.CharacterName
+                end
+
+                -- Trigger reactive update
+                self.NewPresetData:OnNext(data)
+                CPFPrint(1, string.format("Populated preset defaults: Author=%s, Name=%s",
+                    data.Author, data.Name))
+            end,
+            OnFailure = function(response)
+                CPFWarn(1, "Failed to retrieve user info from server")
+            end
+        })
+    end
+end
+
+function State:UpdatePresetCompatibility()
+    -- Placeholder for compatibility checks
+    -- This would check if the current target character matches the requirements of the presets
+end
+
+function State:RefreshUI()
+    local currentMode = self.ViewMode:GetValue()
+    self.ViewMode:OnNext(currentMode)
 end
 
 function State:CaptureCharacterData()
@@ -182,34 +235,9 @@ function State:CaptureCharacterData()
     end
 end
 
---- Refreshes CapturedData with TargetCharacterUUID info
---- @return PresetData|nil
-function State:RefreshTargetCharacterData()
-    local data = nil
-    if not self.TargetCharacterUUID then
-        self.TargetCharacterUUID = _C().Uuid.EntityUuid
-    end
-
-    if self.TargetCharacterUUID then
-        local character = Ext.Entity.Get(self.TargetCharacterUUID)
-        if character then
-            data = Preset.ExtractData(character)
-            -- Update the preview as well (?)
-            self.CapturedData:OnNext(data)
-        end
-    end
-
-    -- Fallback to existing captured data if re-capture failed (e.g. entity gone)
-    if not data then
-        data = self.CapturedData:GetValue()
-    end
-
-    return data
-end
-
 function State:SaveNewPreset()
     -- Re-capture data on save to ensure it's up-to-date
-    local data = self:RefreshTargetCharacterData()
+    local data = self:UpdateCapturedData()
 
     if not data then
         self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_NO_DATA_TO_SAVE))
