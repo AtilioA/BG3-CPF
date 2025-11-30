@@ -4,6 +4,8 @@ import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { Upload, AlertCircle, FileJson } from 'lucide-react';
 import { presetJsonSchema } from '../schemas/presetJsonSchema';
 
+import * as Sentry from '@sentry/nextjs';
+
 interface DropZoneProps {
     onFileLoaded: (jsonContent: string) => void;
 }
@@ -80,7 +82,13 @@ export const DropZone: React.FC<DropZoneProps> = ({ onFileLoaded }) => {
 
                 if (!validation.success) {
                     const firstError = validation.error.issues[0];
-                    setError(`Invalid preset: ${firstError.path.join('.')} - ${firstError.message}`);
+                    const errorMessage = `Invalid preset: ${firstError.path.join('.')} - ${firstError.message}`;
+                    setError(errorMessage);
+                    Sentry.captureException(new Error(errorMessage), {
+                        extra: {
+                            validationError: validation.error,
+                        }
+                    });
                     return;
                 }
 
@@ -88,6 +96,7 @@ export const DropZone: React.FC<DropZoneProps> = ({ onFileLoaded }) => {
                 setError(null);
             } catch (err) {
                 setError("Invalid JSON format.");
+                Sentry.captureException(err);
             } finally {
                 // Clear the ref when done
                 if (fileReaderRef.current === reader) {
@@ -129,7 +138,13 @@ export const DropZone: React.FC<DropZoneProps> = ({ onFileLoaded }) => {
 
                 if (!validation.success) {
                     const firstError = validation.error.issues[0];
-                    setError(`Invalid preset: ${firstError.path.join('.')} - ${firstError.message}`);
+                    const errorMessage = `Invalid preset: ${firstError.path.join('.')} - ${firstError.message}`;
+                    setError(errorMessage);
+                    Sentry.captureException(new Error(errorMessage), {
+                        extra: {
+                            validationError: validation.error,
+                        }
+                    });
                     return;
                 }
 
@@ -137,6 +152,7 @@ export const DropZone: React.FC<DropZoneProps> = ({ onFileLoaded }) => {
                 setError(null);
             } catch (err) {
                 setError("Pasted text is not valid JSON.");
+                Sentry.captureException(err);
             }
         }
     }, [onFileLoaded]);
