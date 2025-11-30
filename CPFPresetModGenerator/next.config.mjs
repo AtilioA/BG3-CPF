@@ -8,7 +8,7 @@ export default withSentryConfig(nextConfig, {
 
   org: "volitio",
 
-  project: "javascript-nextjs",
+  project: "bg3-cpf-mod-generator",
 
   // Only print logs for uploading source maps in CI
   silent: !process.env.CI,
