@@ -162,7 +162,7 @@ export default function Home() {
                 <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-col items-center justify-center gap-1 text-slate-500 text-sm">
                     <p>Nothing is uploaded, processing is done locally.</p>
                     <div className="flex flex-row items-center gap-2">
-                        <p>&copy; {currentYear} Volitio.</p>
+                        <p>Created by Volitio.</p>
                         <a
                             href="https://www.patreon.com/volitio/"
                             target="_blank"
