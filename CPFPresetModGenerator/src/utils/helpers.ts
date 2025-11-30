@@ -60,7 +60,8 @@ export const parseDependencies = (dependencies?: PresetDependencies[]): ModDepen
             result.push({
                 modUUID,
                 modName: modData.ModName,
-                resources: modData.Resources || []
+                resources: modData.Resources || [],
+                checked: true
             });
         }
     }
@@ -70,13 +71,16 @@ export const parseDependencies = (dependencies?: PresetDependencies[]): ModDepen
 
 /**
  * Generates XML nodes for dependencies in meta.lsx format.
+ * Only includes dependencies that are checked.
  */
 export const generateDependenciesXml = (dependencies: ModDependency[]): string => {
-    if (dependencies.length === 0) {
+    const checkedDependencies = dependencies.filter(dep => dep.checked);
+
+    if (checkedDependencies.length === 0) {
         return '';
     }
 
-    return dependencies.map(dep => `
+    return checkedDependencies.map(dep => `
                         <node id="ModuleShortDesc">
                             <attribute id="Folder" type="LSString" value=""/>
                             <attribute id="MD5" type="LSString" value=""/>

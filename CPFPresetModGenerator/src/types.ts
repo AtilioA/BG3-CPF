@@ -8,6 +8,7 @@ export interface ModDependency {
     modUUID: string;
     modName: string;
     resources: ModResource[];
+    checked: boolean;
 }
 
 export interface PresetDependencies {

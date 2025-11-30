@@ -7,12 +7,14 @@ interface DependencyListProps {
     dependencies: ModDependency[];
     includeDependencies: boolean;
     onToggleInclude: (include: boolean) => void;
+    onToggleDependency: (modUUID: string, checked: boolean) => void;
 }
 
 export const DependencyList: React.FC<DependencyListProps> = ({
     dependencies,
     includeDependencies,
-    onToggleInclude
+    onToggleInclude,
+    onToggleDependency
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
@@ -48,9 +50,6 @@ export const DependencyList: React.FC<DependencyListProps> = ({
                     )}
                     {isExpanded ? 'Hide' : 'Show'} resources from {dependencies.length} mod{dependencies.length !== 1 ? 's' : ''}
                 </span>
-                {/* <span className="text-xs text-slate-500">
-                    {dependencies.length} mod{dependencies.length !== 1 ? 's' : ''}
-                </span> */}
             </button>
 
             {/* Collapsible dependency list */}
@@ -60,11 +59,16 @@ export const DependencyList: React.FC<DependencyListProps> = ({
                         {dependencies.map((dep) => (
                             <li key={dep.modUUID} className="group relative">
                                 <div className="flex items-start gap-3">
-                                    <span className="flex-shrink-0 text-slate-500 text-sm">•</span>
+                                    <Checkbox
+                                        checked={dep.checked}
+                                        onChange={(checked) => onToggleDependency(dep.modUUID, checked)}
+                                        className="mt-0.5"
+                                    />
                                     <div className="flex-1">
                                         <span
-                                            className="text-indigo-300 hover:text-indigo-200 cursor-help transition-colors text-sm font-medium"
+                                            className="text-indigo-300 hover:text-indigo-200 cursor-pointer transition-colors text-sm font-medium"
                                             title={`Resources: ${dep.resources.map(r => `${r.DisplayName ?? 'Unknown'} (${r.SlotName})`).join(', ')}`}
+                                            onClick={() => onToggleDependency(dep.modUUID, !dep.checked)}
                                         >
                                             {dep.modName}
                                         </span>

@@ -53,6 +53,18 @@ export const ModForm: React.FC<ModFormProps> = ({ config, setConfig, onGenerate,
         setConfig(prev => prev ? ({ ...prev, includeDependencies: include }) : null);
     };
 
+    const handleToggleDependency = (modUUID: string, checked: boolean) => {
+        setConfig(prev => {
+            if (!prev) return null;
+            return {
+                ...prev,
+                dependencies: prev.dependencies.map(dep =>
+                    dep.modUUID === modUUID ? { ...dep, checked } : dep
+                )
+            };
+        });
+    };
+
     const handleDownloadClick = async () => {
         // Validate before generating
         const result = modConfigSchema.safeParse(config);
@@ -153,6 +165,7 @@ export const ModForm: React.FC<ModFormProps> = ({ config, setConfig, onGenerate,
                             dependencies={config.dependencies}
                             includeDependencies={config.includeDependencies}
                             onToggleInclude={handleToggleIncludeDependencies}
+                            onToggleDependency={handleToggleDependency}
                         />
 
                         <div className="pt-4">
