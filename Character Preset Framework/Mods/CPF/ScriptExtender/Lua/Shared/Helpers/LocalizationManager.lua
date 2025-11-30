@@ -92,6 +92,19 @@ LocalizationManager.Keys = {
     UI_BUTTON_HIDE_PRESET = "h56e4c13b0e464c6094a2fb7d312f814bgc11",
     UI_HEADER_VISUALS = "hef5c19de8f3c4301aa68ac124e119b279c13",
     UI_MSG_NO_DATA_AVAILABLE = "h88848f5c497a493195cd9450325909db6cc1",
+
+    -- DependencyScanner.lua Resource Types
+    RESOURCE_SKIN_COLOR = "hc81ba7bcgb2ccg4423ga050g253fd53ce2c9",
+    RESOURCE_EYE_COLOUR = "h1203122ag1146g4759ga531g57ccd5ef36da",
+    RESOURCE_HAIR_COLOUR = "h6ed36c54g1a3dg4c46g9987gd5882613ae05",
+    RESOURCE_MATERIAL = "h959b01c5g0a34g4d08gbf99g854ac742a452",
+    RESOURCE_MATERIAL_OVERRIDE = "Material Override",
+    RESOURCE_PASSIVE_FEATURE = "Passive Feature",
+    RESOURCE_PRESET = "Preset",
+    RESOURCE_VOICE_LINE = "h81102ec7gef4dg42edg85b5g60d7fb1d13f9",
+    RESOURCE_COLOUR_DEFINITION = "Colour Definition",
+    RESOURCE_EQUIPMENT_ICON = "Equipment Icon",
+    RESOURCE_ICON_SETTINGS = "Icon Settings",
 }
 
 -- ============================================================================

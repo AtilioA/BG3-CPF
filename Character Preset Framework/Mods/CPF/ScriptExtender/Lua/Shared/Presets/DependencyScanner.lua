@@ -83,37 +83,37 @@ local ResourceStrategies = {
 
     -- Types that need a static slot name
     CharacterCreationSkinColor = function(resource)
-        return GetDisplayName(resource), "Skin Color"
+        return GetDisplayName(resource), Loca.Get(Loca.Keys.RESOURCE_SKIN_COLOR)
     end,
     CharacterCreationEyeColor = function(resource)
-        return GetDisplayName(resource), "Eye Color"
+        return GetDisplayName(resource), Loca.Get(Loca.Keys.RESOURCE_EYE_COLOUR)
     end,
     CharacterCreationHairColor = function(resource)
-        return GetDisplayName(resource), "Hair Color"
+        return GetDisplayName(resource), Loca.Get(Loca.Keys.RESOURCE_HAIR_COLOUR)
     end,
     CharacterCreationAppearanceMaterial = function(resource)
-        return GetDisplayName(resource), "Material"
+        return GetDisplayName(resource), Loca.Get(Loca.Keys.RESOURCE_MATERIAL)
     end,
     CharacterCreationMaterialOverride = function(resource)
-        return GetDisplayName(resource), "Material Override"
+        return GetDisplayName(resource), Loca.Get(Loca.Keys.RESOURCE_MATERIAL_OVERRIDE)
     end,
     CharacterCreationPassiveAppearance = function(resource)
-        return GetDisplayName(resource), "Passive Feature"
+        return GetDisplayName(resource), Loca.Get(Loca.Keys.RESOURCE_PASSIVE_FEATURE)
     end,
     CharacterCreationPreset = function(resource)
-        return GetDisplayName(resource), "Preset"
+        return GetDisplayName(resource), Loca.Get(Loca.Keys.RESOURCE_PRESET)
     end,
     CharacterCreationVOLine = function(resource)
-        return GetDisplayName(resource), "Voice Line"
+        return GetDisplayName(resource), Loca.Get(Loca.Keys.RESOURCE_VOICE_LINE)
     end,
     ColorDefinition = function(resource)
-        return GetDisplayName(resource), "Color Definition"
+        return GetDisplayName(resource), Loca.Get(Loca.Keys.RESOURCE_COLOUR_DEFINITION)
     end,
     CharacterCreationEquipmentIcons = function(resource)
-        return GetDisplayName(resource), "Equipment Icon"
+        return GetDisplayName(resource), Loca.Get(Loca.Keys.RESOURCE_EQUIPMENT_ICON)
     end,
     CharacterCreationIconSettings = function(resource)
-        return GetDisplayName(resource), "Icon Settings"
+        return GetDisplayName(resource), Loca.Get(Loca.Keys.RESOURCE_ICON_SETTINGS)
     end,
 }
 
