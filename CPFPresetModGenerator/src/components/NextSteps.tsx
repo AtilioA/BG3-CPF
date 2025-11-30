@@ -21,18 +21,18 @@ export const NextSteps: React.FC = () => {
             <h3 className="text-indigo-400 font-semibold mb-4 text-base">Next steps</h3>
             <ul className="space-y-4">
                 <Step number={1}>
-                    Extract the downloaded zip file.
+                    Extract the main folder from the zip file.
                 </Step>
 
                 <Step number={2}>
-                    <p className="mb-2">Create a .pak file using one of these tools:</p>
+                    <p className="mb-2">Turn it into a mod using one of these tools:</p>
                     <div className="flex flex-wrap gap-3 items-center">
                         <ExternalLink href="https://github.com/ShinyHobo/BG3-Modders-Multitool/releases/latest">
-                            BG3 Modders Multitool
+                            <span className="font-semibold text-md">BG3 Modders Multitool</span>
                         </ExternalLink>
                         <span className="text-slate-600">or</span>
                         <ExternalLink href="https://github.com/Norbyte/lslib">
-                            LSLib (ConverterApp)
+                            <span className="text-xs">LSLib (ConverterApp)</span>
                         </ExternalLink>
                     </div>
                 </Step>
@@ -40,7 +40,7 @@ export const NextSteps: React.FC = () => {
                 <Step number={3}>
                     <div className="flex flex-wrap gap-3 items-center">
                         Your mod is ready to be shared on
-                        <ExternalLink href="https://www.nexusmods.com/baldursgate3">Nexus Mods</ExternalLink>
+                        <ExternalLink href="https://www.nexusmods.com/baldursgate3/mods/add">Nexus Mods</ExternalLink>
                     </div>
                 </Step>
             </ul>
