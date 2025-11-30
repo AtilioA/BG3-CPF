@@ -111,6 +111,15 @@ LocalizationManager.Keys = {
 -- CORE FUNCTIONS
 -- ============================================================================
 
+--- Runs important string operations on localized strings
+--- @param locaStr string The localized string
+--- @return string - The new string
+function LocalizationManager.ProcessLocalizedString(locaStr)
+    local replacedBr = VCString:ReplaceBrWithNewlines(locaStr)
+    _D(replacedBr)
+    return replacedBr
+end
+
 --- Get a simple (non-interpolated) localized string
 --- @param key string The UUID key from LocalizationManager.Keys
 --- @return string The localized string
@@ -123,7 +132,9 @@ function LocalizationManager.Get(key)
         return "[MISSING: " .. tostring(key) .. "]"
     end
 
-    return result
+    local processedLocaStr = LocalizationManager.ProcessLocalizedString(result)
+
+    return processedLocaStr
 end
 
 --- Get a localized string with positional interpolation
@@ -165,7 +176,13 @@ function LocalizationManager.Format(key, ...)
         return value ~= nil and tostring(value) or "[" .. n .. "]"
     end)
 
-    return result
+    if not result then
+        CPFWarn(0, "Couldn't format localized string" .. tostring(key))
+    end
+
+    local processedLocaStr = LocalizationManager.ProcessLocalizedString(result)
+
+    return processedLocaStr
 end
 
 --- Get a localized string with plural support
