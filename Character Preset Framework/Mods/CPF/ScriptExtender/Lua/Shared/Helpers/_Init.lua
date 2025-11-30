@@ -10,4 +10,5 @@ RequireFiles("Shared/Helpers/", {
     "JsonLayer",
     "UserID",
     "ValueSerializer",
+    "LocalizationManager",
 })
