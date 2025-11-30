@@ -28,7 +28,7 @@ export default function Home() {
 
             // Defaults logic based on requirements
             const folderName = sanitizeFolderName(presetName.replace(/\s+/g, '')) || "MyPreset";
-            const description = `CPF Preset '${presetName}'`;
+            const description = `Includes a Character Preset Framework preset ('${presetName}') for easy import`;
             const uuid = generateUUID();
 
             // Parse dependencies from the preset
