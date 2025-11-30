@@ -16,6 +16,10 @@ function ImportMode:ParsePresetName(buffer)
         function()
             if Preset and Preset.Deserialize then
                 local preset, err = Preset.Deserialize(buffer)
+                if err then
+                    CPFWarn(0, err)
+                    State:SetStatus(err)
+                end
                 if preset and preset.Name then
                     return preset.Name
                 end
@@ -23,6 +27,7 @@ function ImportMode:ParsePresetName(buffer)
             return nil
         end,
         function(err)
+            CPFWarn(0, err)
             return nil
         end
     )
