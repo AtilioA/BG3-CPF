@@ -160,7 +160,7 @@ export default function Home() {
             {/* Footer */}
             <footer className="border-t border-slate-800 py-4 mt-auto bg-slate-950">
                 <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-col items-center justify-center gap-1 text-slate-500 text-sm">
-                    <p>Nothing is uploaded, processing is done locally.</p>
+                    <p>Processing is done locally.</p>
                     <div className="flex flex-row items-center gap-2">
                         <p>Created by Volitio.</p>
                         <a
