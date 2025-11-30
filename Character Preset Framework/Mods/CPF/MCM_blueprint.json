@@ -16,7 +16,7 @@
                     "Default": {
                         "Keyboard": {
                             "ModifierKeys": [
-                                "LShift",
+                                "LShift"
                             ],
                             "Key": "P"
                         }
@@ -26,9 +26,16 @@
                         "ShouldTriggerOnKeyDown": true,
                         "ShouldTriggerOnKeyUp": false,
                         "ShouldTriggerOnRepeat": false
+                    },
+                    "Handles": {
+                        "NameHandle": "h27da329536f040db97fc9619652bedd971b5",
+                        "DescriptionHandle": "ha140ff4e59204e2396b1b5e0cbb1be15854a"
                     }
                 }
-            ]
+            ],
+            "Handles": {
+                "NameHandle": "h89d42e98322d4268b2b76dcc0b18ceaae5c6"
+            }
         },
         {
             "TabId": "General",
@@ -39,13 +46,21 @@
                     "Name": "Auto-enter mirror after applying preset",
                     "Type": "checkbox",
                     "Default": true,
-                    "Description": "Automatically enter the mirror/appearance change mode after applying a preset"
+                    "Description": "Automatically enter the mirror/appearance change mode after applying a preset",
+                    "Handles": {
+                        "DescriptionHandle": "hc2c599f4eb0241b79dfed8019a5e6697f79b",
+                        "NameHandle": "h14d9850417844dd2ad53e1952438e0d8dd61"
+                    }
                 },
                 {
                     "Id": "unhide_presets",
                     "Name": "Unhide all presets",
                     "Type": "event_button",
-                    "Description": "Click this button to unhide all presets."
+                    "Description": "Click this button to unhide all presets.",
+                    "Handles": {
+                        "DescriptionHandle": "hc52a8c48f4d641028cf4caefefc613184e9g",
+                        "NameHandle": "h05f31edd0b5442d9af969de18f1d5bf8df76"
+                    }
                 },
                 // {
                 //     "Id": "mod_enabled",
@@ -58,7 +73,10 @@
                 //         "NameHandle": "hc116181043c04c168e06ff11fce144e24136"
                 //     }
                 // }
-            ]
+            ],
+            "Handles": {
+                "NameHandle": "hfdc622c20e1b4b3aa1b1a9a6b0ea59ca46c2"
+            }
         },
         {
             "TabId": "debug",
@@ -77,10 +95,10 @@
                                 "Min": 0,
                                 "Max": 2
                             },
-                            "Description": "0 = no debug, 1 = basic debug, 2 = verbose debug.",
+                            "Description": "0 = no debug logs, 1 = basic debug, 2 = verbose.",
                             "Handles": {
-                                "DescriptionHandle": "h89ed68a2aeb9443ca63f6df114118fa5b4e1",
-                                "NameHandle": "h24baadea05924a84b1cc3c30b34e0fc7a208"
+                                "DescriptionHandle": "hc554eadccbe946c5bd3227be1ac5c5291acf",
+                                "NameHandle": "h3384e2c2309a48b59c80f0647e4b46a05g89"
                             }
                         },
                         {
@@ -96,11 +114,21 @@
                                         "Operator": ">="
                                     }
                                 ]
+                            },
+                            "Handles": {
+                                "NameHandle": "h0eda70dd22d24a36a778149046cd54ca3c5g",
+                                "DescriptionHandle": "h0b14631390894319870f2c45bab59a4f527d"
                             }
                         }
-                    ]
+                    ],
+                    "Handles": {
+                        "NameHandle": "h85586b55ac894f9ba411a964dac75263d00b"
+                    }
                 }
-            ]
+            ],
+            "Handles": {
+                "NameHandle": "hdbc141d3a9c44e08aa63fee84e5ccff761f8"
+            }
         }
     ]
 }

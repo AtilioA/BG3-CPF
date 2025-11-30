@@ -75,4 +75,17 @@
     <content contentuid="hefc36cdda0a84b8590d2ad967c206cac657b" version="1">Equipment Icon</content>
     <content contentuid="hd95b57162db648b099f1113aa2dce3cf2d7a" version="1">Icon Settings</content>
     <content contentuid="h6bf62ca9ded54abb86e73cb6643bb381fb1c" version="1">Preset</content>
+    <content contentuid="hfdc622c20e1b4b3aa1b1a9a6b0ea59ca46c2" version="1">General</content>
+    <content contentuid="h27da329536f040db97fc9619652bedd971b5" version="1">Open CPF preset manager</content>
+    <content contentuid="ha140ff4e59204e2396b1b5e0cbb1be15854a" version="1">Opens the preset manager.</content>
+    <content contentuid="h0eda70dd22d24a36a778149046cd54ca3c5g" version="1">Reset presets index</content>
+    <content contentuid="h0b14631390894319870f2c45bab59a4f527d" version="1">Click this button to reset the presets index.&lt;br&gt;This will unhide presets, but you will lose presets that you have created.</content>
+    <content contentuid="h14d9850417844dd2ad53e1952438e0d8dd61" version="1">Auto-enter mirror after applying preset</content>
+    <content contentuid="h05f31edd0b5442d9af969de18f1d5bf8df76" version="1">Unhide all presets</content>
+    <content contentuid="hc2c599f4eb0241b79dfed8019a5e6697f79b" version="1">Automatically enter the mirror/appearance change mode after applying a preset</content>
+    <content contentuid="hc52a8c48f4d641028cf4caefefc613184e9g" version="1">Click this button to unhide all presets.</content>
+    <content contentuid="hc554eadccbe946c5bd3227be1ac5c5291acf" version="1">0 = no debug logs, 1 = basic debug, 2 = verbose.</content>
+    <content contentuid="h3384e2c2309a48b59c80f0647e4b46a05g89" version="1">Debug level</content>
+    <content contentuid="h85586b55ac894f9ba411a964dac75263d00b" version="1">Debug</content>
+    <content contentuid="hdbc141d3a9c44e08aa63fee84e5ccff761f8" version="1">Debug</content>
 </contentList>
