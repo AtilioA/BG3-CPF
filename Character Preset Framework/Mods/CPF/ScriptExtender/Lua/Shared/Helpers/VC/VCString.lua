@@ -1,0 +1,318 @@
+--[[
+  This file contains a set of helper functions for working with strings, such as checking if a string contains a substring, calculating the Levenshtein distance between two strings, and finding the closest match from a list of valid options to an input string, which can be used to validate user config files.
+]]
+
+---@class HelperString: nil
+VCString = _Class:Create("HelperString", nil)
+
+---Check if string contains a substring (Courtesy of Fararagi although fr I was just lazy)
+---@param str string the string to check
+---@param substr string the substring
+---@param caseSensitive? boolean
+---@return boolean
+function VCString:StringContains(str, substr, caseSensitive)
+    caseSensitive = caseSensitive or false
+    if caseSensitive then
+        return string.find(str, substr, 1, true) ~= nil
+    else
+        str = string.lower(str)
+        substr = string.lower(substr)
+        return string.find(str, substr, 1, true) ~= nil
+    end
+end
+
+--- Calculate the Levenshtein distance between two strings.
+--- Useful for fuzzy string matching to find the closest match, when for example a user has to input a string and you want to find the closest match from a list of valid options (e.g. config values).
+function VCString:LevenshteinDistance(str1, str2, case_sensitive)
+    if not case_sensitive then
+        str1 = string.lower(str1)
+        str2 = string.lower(str2)
+    end
+
+    local len1 = string.len(str1)
+    local len2 = string.len(str2)
+    local matrix = {}
+    local cost = 0
+
+    -- Initialize the matrix
+    for i = 0, len1, 1 do
+        matrix[i] = { [0] = i }
+    end
+    for j = 0, len2, 1 do
+        matrix[0][j] = j
+    end
+
+    -- Calculate distances
+    for i = 1, len1, 1 do
+        for j = 1, len2, 1 do
+            if string.byte(str1, i) == string.byte(str2, j) then
+                cost = 0
+            else
+                cost = 1
+            end
+
+            matrix[i][j] = math.min(matrix[i - 1][j] + 1, matrix[i][j - 1] + 1, matrix[i - 1][j - 1] + cost)
+        end
+    end
+
+    return matrix[len1][len2]
+end
+
+--- Find the closest match and distance given a list of valid options to an input string, using the Levenshtein distance.
+---@param input string The user input string
+---@param valid_options string[] A table of valid options to compare against
+---@param case_sensitive? boolean Whether to consider case sensitivity when comparing strings
+--- @return string|nil closest_match The closest matching string from the valid options.
+--- @return number min_distance The Levenshtein distance between the user input and the closest match.
+function VCString:FindClosestMatch(input, valid_options, case_sensitive)
+    local min_distance = math.huge -- Represents infinity, just to initialize the variable
+    local closest_match = nil
+    for _, option in ipairs(valid_options) do
+        local distance = self:LevenshteinDistance(input, option, case_sensitive)
+        if distance < min_distance then
+            min_distance = distance
+            closest_match = option
+        end
+    end
+    return closest_match, min_distance
+end
+
+--- Capitalize the first letter of a string
+---@param str string The string to capitalize
+function VCString:Capitalize(str)
+    return str:gsub("^%l", string.upper)
+end
+
+--- Lowercase the first letter of a string
+---@param str string The string to lowercase
+function VCString:Lowercase(str)
+    return str:gsub("^%u", string.lower)
+end
+
+--- Update a localized message with dynamic content
+---@param handle string The handle of the localized message to update
+---@param dynamicContent string The dynamic content to replace the placeholder with
+function VCString:UpdateLocalizedMessage(handle, dynamicContent)
+    -- Store original message in a cache if not already stored
+    if not self._originalMessages then
+        self._originalMessages = {}
+    end
+
+    -- Get or cache the original message
+    if not self._originalMessages[handle] then
+        self._originalMessages[handle] = Ext.Loca.GetTranslatedString(handle)
+    end
+
+    -- Use the original message as base
+    local originalMessage = self._originalMessages[handle]
+
+    -- Escape '%' for safe gsub replacement
+    local safeContent = VCString:EscapeReplacement(tostring(dynamicContent))
+    -- Replace placeholder '[1]' with the dynamic content
+    local updatedMessage = string.gsub(originalMessage, "%[1%]", safeContent)
+
+    -- Update the translated string with the new content during runtime
+    Ext.Loca.UpdateTranslatedString(handle, updatedMessage)
+
+    return VCString:ReplaceBrWithNewlines(updatedMessage)
+end
+
+--- Escapes '%' in a string for safe use as a replacement in string.gsub
+---@param str string
+---@return string
+function VCString:EscapeReplacement(str)
+    if str == nil then return "" end
+    return str:gsub("%%", "%%%%")
+end
+
+-- Adds full stop to the end of the string if it doesn't already have one
+function VCString:AddFullStop(str)
+    if str == nil then
+        return ""
+    end
+
+    if str == "" then
+        return str
+    end
+
+    if string.sub(str, -1) ~= "." then
+        return str .. "."
+    end
+    return str
+end
+
+function VCString:Wrap(text, width)
+    -- Ensure width is a positive integer
+    if type(width) ~= "number" or width <= 0 then
+        error("Width must be a positive integer")
+    end
+
+    -- Function to split a string into words
+    local function splitIntoWords(str)
+        local words = {}
+        for word in str:gmatch("%S+") do
+            table.insert(words, word)
+        end
+        return words
+    end
+
+    -- Function to join words into lines of specified width
+    local function joinWordsIntoLines(words, width)
+        local lines, currentLine = {}, ""
+        for _, word in ipairs(words) do
+            if #currentLine + #word + 1 > width then
+                table.insert(lines, currentLine)
+                currentLine = word
+            else
+                if #currentLine > 0 then
+                    currentLine = currentLine .. " " .. word
+                else
+                    currentLine = word
+                end
+            end
+        end
+        if #currentLine > 0 then
+            table.insert(lines, currentLine)
+        end
+        return lines
+    end
+
+
+    -- Split the text into words
+    local words = splitIntoWords(text)
+
+    -- Join the words into lines of the specified width
+    local lines = joinWordsIntoLines(words, width)
+
+    -- Concatenate the lines into a single string with newline characters
+    return table.concat(lines, "\n")
+end
+
+---Checks if the search text fuzzy matches the target string
+---@param target string The string to search within
+---@param pattern string The fuzzy pattern to match
+---@return boolean True if the pattern matches the target fuzzily, false otherwise
+function VCString:FuzzyMatch(target, pattern)
+    local patternLen = #pattern
+    local targetLen = #target
+
+    if patternLen == 0 then
+        return true
+    end
+
+    local patternIndex = 1
+    for i = 1, targetLen do
+        local targetChar = target:sub(i, i)
+        local patternChar = pattern:sub(patternIndex, patternIndex)
+
+        if targetChar == patternChar then
+            patternIndex = patternIndex + 1
+
+            if patternIndex > patternLen then
+                return true
+            end
+        end
+    end
+
+    return false
+end
+
+--- Add newlines after each period in a string
+function VCString:AddNewlinesAfterPeriods(description)
+    if not description or description == "" then
+        MCMWarn(3, "Description is nil or empty.")
+        return nil
+    end
+
+    return string.gsub(description, "%. ", ".\n")
+end
+
+--- Replace <br> tags with newlines in a string
+function VCString:ReplaceBrWithNewlines(description)
+    if not description or description == "" then return "" end
+
+    return string.gsub(description, "<br>", "\n")
+end
+
+--- Update a localized message with dynamic content.
+---@param handle string The handle of the localized message to update
+---@vararg string|table Dynamic content values to replace placeholders [1], [2], [3], etc., and optional settings table {updateHandle = false}
+function VCString:InterpolateLocalizedMessage(handle, ...)
+    local currentMessage = Ext.Loca.GetTranslatedString(handle)
+    local updatedMessage = currentMessage
+
+    -- Gather all dynamic content values passed as varargs.
+    local args = { ... }
+    -- Extract optional settings from the last argument if it's a table.
+    local settings = type(args[#args]) == "table" and table.remove(args) or {}
+
+    for i, value in ipairs(args) do
+        local safeValue = VCString:EscapeReplacement(tostring(value))
+        updatedMessage = updatedMessage:gsub("%[" .. i .. "%]", safeValue)
+    end
+
+    if settings.updateHandle then
+        Ext.Loca.UpdateTranslatedString(handle, updatedMessage)
+    end
+
+    return self:ReplaceBrWithNewlines(updatedMessage)
+end
+
+local string_find = string.find
+local table_insert = table.insert
+local tonumber_func = tonumber
+local tostring_func = tostring
+local math_max = math.max
+
+--- Compares two strings using natural order (e.g., "2" < "11").
+---@param strA string
+---@param strB string
+---@return boolean
+function VCString.NaturalOrderCompare(strA, strB)
+    if strA == strB then return false end
+    if strA == nil then return true end
+    if strB == nil then return false end
+
+    --- Splits a string into a sequence of text and number parts.
+    ---@param inputString string
+    ---@return table
+    local function splitParts(inputString)
+        local parts = {}
+        local index = 1
+        while index <= #inputString do
+            local startNum, endNum, numberPart = string_find(inputString, '^(%d+)', index)
+            if startNum then
+                table_insert(parts, tonumber_func(numberPart))
+                index = endNum + 1
+            else
+                local startTxt, endTxt, textPart = string_find(inputString, '^([^%d]+)', index)
+                if startTxt then
+                    table_insert(parts, textPart)
+                    index = endTxt + 1
+                else
+                    break
+                end
+            end
+        end
+        return parts
+    end
+
+    local partsA, partsB = splitParts(strA), splitParts(strB)
+    for partIndex = 1, math_max(#partsA, #partsB) do
+        local valueA, valueB = partsA[partIndex], partsB[partIndex]
+        if valueA == nil then return true end
+        if valueB == nil then return false end
+        if type(valueA) == 'number' and type(valueB) == 'number' then
+            if valueA ~= valueB then return valueA < valueB end
+        else
+            local stringA, stringB = tostring_func(valueA), tostring_func(valueB)
+            if stringA ~= stringB then return stringA < stringB end
+        end
+    end
+    return false
+end
+
+function VCString.ToTitleCase(str)
+    if str == nil or str == "" then return str end
+    return string.upper(string.sub(str, 1, 1)) .. string.sub(str, 2)
+end

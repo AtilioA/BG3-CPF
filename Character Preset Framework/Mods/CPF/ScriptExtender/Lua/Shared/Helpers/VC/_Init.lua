@@ -3,5 +3,6 @@ RequireFiles("Shared/Helpers/VC/", {
     "VCTimer",
     "VCPrinter",
     "VCFormat",
+    "VCString",
     "VCLoca",
 })
