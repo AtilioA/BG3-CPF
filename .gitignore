@@ -71,4 +71,4 @@ node_modules/
 .task*
 tasks.json
 tasks/
-.windsurf/
+*.zip
