@@ -98,13 +98,13 @@ LocalizationManager.Keys = {
     RESOURCE_EYE_COLOUR = "h1203122ag1146g4759ga531g57ccd5ef36da",
     RESOURCE_HAIR_COLOUR = "h6ed36c54g1a3dg4c46g9987gd5882613ae05",
     RESOURCE_MATERIAL = "h959b01c5g0a34g4d08gbf99g854ac742a452",
-    RESOURCE_MATERIAL_OVERRIDE = "Material Override",
-    RESOURCE_PASSIVE_FEATURE = "Passive Feature",
-    RESOURCE_PRESET = "Preset",
+    RESOURCE_MATERIAL_OVERRIDE = "h18016894a1b44ba9b36f6d4a7aa64e11ee1d",
+    RESOURCE_PASSIVE_FEATURE = "h186cae7a51a14c85aebbb6c6dd11671af8ef",
+    RESOURCE_PRESET = "h6bf62ca9ded54abb86e73cb6643bb381fb1c",
     RESOURCE_VOICE_LINE = "h81102ec7gef4dg42edg85b5g60d7fb1d13f9",
-    RESOURCE_COLOUR_DEFINITION = "Colour Definition",
-    RESOURCE_EQUIPMENT_ICON = "Equipment Icon",
-    RESOURCE_ICON_SETTINGS = "Icon Settings",
+    RESOURCE_COLOUR_DEFINITION = "hf97df5b78bab40b39c7764d5dc8a84e77a5e",
+    RESOURCE_EQUIPMENT_ICON = "hefc36cdda0a84b8590d2ad967c206cac657b",
+    RESOURCE_ICON_SETTINGS = "hd95b57162db648b099f1113aa2dce3cf2d7a",
 }
 
 -- ============================================================================
