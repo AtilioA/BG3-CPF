@@ -5,16 +5,138 @@ local PresetCompatibility = Ext.Require("Shared/Validation/PresetCompatibility.l
 
 local ViewModeHelpers = {}
 
+-- Configuration
+local ATTRIBUTE_KEYS = {
+    { key = "Visuals",   locaKey = "UI_HEADER_VISUALS" },
+    { key = "EyeColor",  locaKey = "RESOURCE_EYE_COLOUR" },
+    { key = "HairColor", locaKey = "RESOURCE_HAIR_COLOUR" },
+    { key = "SkinColor", locaKey = "RESOURCE_SKIN_COLOR" },
+    { key = "Elements",  locaKey = "RESOURCE_MATERIAL_OVERRIDE" },
+}
+
+-- Check if a slot should be filtered based on MCM settings
+local function _ShouldFilterPrivateParts(slotName)
+    if not slotName then return false end
+
+    local hidePrivateParts = MCM.Get('list_private_parts')
+    return hidePrivateParts and slotName == "Private Parts"
+end
+
+-- Format mod resources with filtering
+local function _FormatModResources(resources)
+    if not resources then return "" end
+
+    local parts = {}
+    for _, resource in ipairs(resources) do
+        if not _ShouldFilterPrivateParts(resource.SlotName) then
+            table.insert(parts, string.format("%s (%s)", resource.DisplayName, resource.SlotName))
+        end
+    end
+
+    return table.concat(parts, "\n\t")
+end
+
+-- Format single mod line
+local function _FormatModLine(mod)
+    local resourcesText = _FormatModResources(mod.Resources)
+    if resourcesText == "" then return nil end
+
+    local prefix = mod.IsLoaded and "" or "(MISSING) "
+    return string.format("%s%s: %s", prefix, mod.Name, resourcesText)
+end
+
+-- Collect all warnings
+local function _CollectWarnings(compatibilityInfo)
+    local allWarnings = {}
+
+    for _, mod in ipairs(compatibilityInfo.AllMods) do
+        if not mod.IsLoaded then
+            table.insert(allWarnings, Loca.Format(
+                Loca.Keys.UI_WARN_MISSING_MOD,
+                mod.Name,
+                mod.UUID
+            ))
+        end
+    end
+
+    for _, warning in ipairs(compatibilityInfo.Warnings) do
+        table.insert(allWarnings, warning)
+    end
+
+    return allWarnings
+end
+
+-- Show apply confirmation
+local function _ShowApplyConfirmation(group, record, warnings)
+    if #warnings == 0 then
+        State:ApplyPreset(record)
+        return
+    end
+
+    local msg = Loca.Format(
+        Loca.Keys.UI_MSG_COMPATIBILITY_WARNING,
+        table.concat(warnings, "\n- ")
+    )
+
+    MessageBox:Create(
+        Loca.Get(Loca.Keys.UI_TITLE_COMPATIBILITY_WARNING),
+        msg,
+        MessageBoxMode.YesNo
+    )
+        :SetYesCallback(function() State:ApplyPreset(record) end)
+        :Show(group)
+end
+
+-- Create disabled apply button for CC
+local function _CreateDisabledApplyButton(group)
+    local ccWarning = group:AddText(Loca.Get(Loca.Keys.UI_WARN_CC_RESTRICTION))
+    ccWarning:SetColor("Text", UIColors.COLOR_RED)
+
+    local btnApply = group:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_CANNOT_APPLY))
+    if StyleHelpers and StyleHelpers.DisableButton then
+        StyleHelpers.DisableButton(btnApply)
+    else
+        btnApply.Disabled = true
+    end
+
+    return btnApply
+end
+
+-- Create active apply button
+local function _CreateApplyButton(group, record, compatibilityInfo)
+    local btnApply = group:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_APPLY))
+    btnApply:SetColor("Button", UIColors.COLOR_GREEN)
+    btnApply.OnClick = function()
+        local warnings = _CollectWarnings(compatibilityInfo)
+        _ShowApplyConfirmation(group, record, warnings)
+    end
+    return btnApply
+end
+
+-- Render inspected value
+local function _RenderInspectedValue(attrChild, label, inspected)
+    if type(inspected) == "table" then
+        if #inspected > 0 then
+            attrChild:AddText(label .. ":")
+            for _, line in ipairs(inspected) do
+                attrChild:AddText("  - " .. line)
+            end
+        end
+    else
+        if inspected ~= "" and not string.find(inspected, "Unknown") then
+            attrChild:AddText(string.format("%s: %s", label, inspected))
+        end
+    end
+end
+
 function ViewModeHelpers.GetCompatibilityInfo(preset)
     local warnings = {}
     local allMods = {}
     local missingMods = {}
     local player = _C()
 
-    if PresetCompatibility then
-        if player then
-            warnings = PresetCompatibility.Check(preset, player)
-        end
+    if PresetCompatibility and player then
+        warnings = PresetCompatibility.Check(preset, player)
         allMods = Preset.GetMods(preset)
         missingMods = PresetCompatibility.CheckMods(preset)
     end
@@ -22,7 +144,7 @@ function ViewModeHelpers.GetCompatibilityInfo(preset)
     return {
         Warnings = warnings,
         AllMods = allMods,
-        MissingMods = missingMods
+        MissingMods = missingMods,
     }
 end
 
@@ -30,47 +152,22 @@ function ViewModeHelpers.RenderHeader(group, preset)
     group:AddText(Loca.Format(Loca.Keys.UI_LABEL_NAME_VALUE, preset.Name or "Unknown"))
     group:AddText(Loca.Format(Loca.Keys.UI_LABEL_AUTHOR_VALUE, preset.Author or "Unknown"))
     group:AddText(Loca.Format(Loca.Keys.UI_LABEL_VERSION_VALUE, preset.Version or "Unknown"))
+
     local IDText = group:AddText(Loca.Format(Loca.Keys.UI_LABEL_ID_VALUE, preset._id or "Unknown"))
     IDText:SetColor("Text", UIColors.COLOR_GRAY)
+
     group:AddSeparator()
 end
 
 function ViewModeHelpers.RenderActions(group, record, compatibilityInfo)
     -- Disable button in CC
-    local btnApply
-    if CCA.IsInCC() and not Ext.Debug.IsDeveloperMode() then
-        local ccWarning = group:AddText(Loca.Get(Loca.Keys.UI_WARN_CC_RESTRICTION))
-        ccWarning:SetColor("Text", UIColors.COLOR_RED)
-        btnApply = group:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_CANNOT_APPLY))
-        if StyleHelpers and StyleHelpers.DisableButton then
-            StyleHelpers.DisableButton(btnApply)
-        else
-            btnApply.Disabled = true
-        end
-    else
-        btnApply = group:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_APPLY))
-        btnApply:SetColor("Button", UIColors.COLOR_GREEN)
-        btnApply.OnClick = function()
-            local allWarnings = {}
-            for _, mod in ipairs(compatibilityInfo.AllMods) do
-                if not mod.IsLoaded then
-                    table.insert(allWarnings, Loca.Format(Loca.Keys.UI_WARN_MISSING_MOD, mod.Name, mod.UUID))
-                end
-            end
-            for _, w in ipairs(compatibilityInfo.Warnings) do table.insert(allWarnings, w) end
-
-            if #allWarnings > 0 then
-                local msg = Loca.Format(Loca.Keys.UI_MSG_COMPATIBILITY_WARNING, table.concat(allWarnings, "\n- "))
-                MessageBox:Create(Loca.Get(Loca.Keys.UI_TITLE_COMPATIBILITY_WARNING), msg, MessageBoxMode.YesNo)
-                    :SetYesCallback(function() State:ApplyPreset(record) end)
-                    :Show(group)
-            else
-                State:ApplyPreset(record)
-            end
-        end
-    end
+    local isInCC = CCA.IsInCC() and not Ext.Debug.IsDeveloperMode()
+    local btnApply = isInCC
+        and _CreateDisabledApplyButton(group)
+        or _CreateApplyButton(group, record, compatibilityInfo)
 
     btnApply.SameLine = false
+
     local buttonSpacing = group:AddSpacing()
     buttonSpacing.SameLine = true
 
@@ -86,86 +183,62 @@ end
 
 function ViewModeHelpers.RenderModList(group, compatibilityInfo)
     local allMods = compatibilityInfo.AllMods
-    local missingMods = compatibilityInfo.MissingMods
+    if #allMods == 0 then return end
 
-    if #allMods > 0 then
-        local modLines = {}
-        for _, mod in ipairs(allMods) do
-            local modResources = ""
-            if mod.Resources then
-                for _, resource in ipairs(mod.Resources) do
-                    modResources = table.concat(
-                        { modResources, string.format("%s (%s)", resource.DisplayName, resource.SlotName) },
-                        "\n\t")
-                end
-            end
-            if mod.IsLoaded == true then
-                table.insert(modLines, string.format("%s: %s", mod.Name, modResources))
-            else
-                table.insert(modLines, string.format("(MISSING) %s: %s", mod.Name, modResources))
-            end
+    local modLines = {}
+    for _, mod in ipairs(allMods) do
+        local line = _FormatModLine(mod)
+        if line then
+            table.insert(modLines, line)
         end
+    end
 
-        -- group:AddSeparator()
-        local modsText = group:AddBulletText(Loca.Format(Loca.Keys.UI_HEADER_MODS_USED,
-            table.concat(modLines, "\n")))
-        modsText.TextWrapPos = -1
+    if #modLines == 0 then return end
 
-        if #missingMods > 0 then
-            modsText:SetColor("Text", UIColors.COLOR_RED)
-        end
+    local modsText = group:AddBulletText(Loca.Format(
+        Loca.Keys.UI_HEADER_MODS_USED,
+        table.concat(modLines, "\n")
+    ))
+    modsText.TextWrapPos = -1
+
+    if #compatibilityInfo.MissingMods > 0 then
+        modsText:SetColor("Text", UIColors.COLOR_RED)
     end
 end
 
 function ViewModeHelpers.RenderWarnings(group, compatibilityInfo)
     local warnings = compatibilityInfo.Warnings
-    if #warnings > 0 then
-        local compatibilityWarning = group:AddBulletText(Loca.Format(Loca.Keys.UI_HEADER_COMPATIBILITY_WARNINGS,
-            table.concat(warnings, "\n")))
-        compatibilityWarning:SetColor("Text", UIColors.COLOR_ORANGE)
-        compatibilityWarning.TextWrapPos = -1
-    end
+    if #warnings == 0 then return end
+
+    local compatibilityWarning = group:AddBulletText(Loca.Format(
+        Loca.Keys.UI_HEADER_COMPATIBILITY_WARNINGS,
+        table.concat(warnings, "\n")
+    ))
+    compatibilityWarning:SetColor("Text", UIColors.COLOR_ORANGE)
+    compatibilityWarning.TextWrapPos = -1
 end
 
 function ViewModeHelpers.RenderAttributes(group, preset)
     local attrChild = group:AddChildWindow("AttributesView")
     local appearanceData = preset.Data and preset.Data.CCAppearance
 
-    if appearanceData then
-        local keysToDisplay = { "Visuals", "EyeColor", "HairColor", "SkinColor", "Elements" }
-        local labelMap = {
-            Visuals = Loca.Keys.UI_HEADER_VISUALS,
-            EyeColor = Loca.Keys.RESOURCE_EYE_COLOUR,
-            HairColor = Loca.Keys.RESOURCE_HAIR_COLOUR,
-            SkinColor = Loca.Keys.RESOURCE_SKIN_COLOR,
-            Elements = Loca.Keys.RESOURCE_MATERIAL_OVERRIDE
-        }
+    if not appearanceData then
+        attrChild:AddText(Loca.Get(Loca.Keys.UI_MSG_NO_DATA_AVAILABLE))
+        return
+    end
 
-        for _, key in ipairs(keysToDisplay) do
-            local value = appearanceData[key]
-            if value then
-                local inspected = PresetInspector:Inspect(key, value)
-                if inspected then
-                    local label = Loca.Get(labelMap[key])
-                    if label == "[NO LOCA " .. tostring(labelMap[key]) .. "]" then label = key end
-
-                    if type(inspected) == "table" then
-                        if #inspected > 0 then
-                            attrChild:AddText(label .. ":")
-                            for _, line in ipairs(inspected) do
-                                attrChild:AddText("  - " .. line)
-                            end
-                        end
-                    else
-                        if inspected ~= "" and not string.find(inspected, "Unknown") then
-                            attrChild:AddText(string.format("%s: %s", label, inspected))
-                        end
-                    end
+    for _, config in ipairs(ATTRIBUTE_KEYS) do
+        local value = appearanceData[config.key]
+        if value then
+            local inspected = PresetInspector:Inspect(config.key, value)
+            if inspected then
+                local label = Loca.Get(Loca.Keys[config.locaKey])
+                if label == "[NO LOCA " .. tostring(Loca.Keys[config.locaKey]) .. "]" then
+                    label = config.key
                 end
+                _RenderInspectedValue(attrChild, label, inspected)
             end
         end
-    else
-        attrChild:AddText(Loca.Get(Loca.Keys.UI_MSG_NO_DATA_AVAILABLE))
     end
 end
 
