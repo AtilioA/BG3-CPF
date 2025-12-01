@@ -9,7 +9,7 @@
         "lint": "next lint"
     },
     "dependencies": {
-        "@sentry/nextjs": "^10.27.0",
+        "@sentry/nextjs": "10",
         "@vercel/analytics": "^1.5.0",
         "file-saver": "^2.0.5",
         "import-in-the-middle": "^2.0.0",
