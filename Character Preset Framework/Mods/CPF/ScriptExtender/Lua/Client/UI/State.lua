@@ -95,7 +95,8 @@ function State:RefreshPresets()
 
         self.Presets:OnNext(visibleRecords)
         local count = #visibleRecords
-        self:SetStatus(Loca.Format(Loca.Keys.STATUS_FOUND_PRESETS, count))
+        self:SetStatus(Loca.FormatPlural(Loca.Keys.STATUS_FOUND_PRESETS_SINGULAR, Loca.Keys.STATUS_FOUND_PRESETS_PLURAL,
+        count))
         CPFPrint(1, string.format("Refreshed UI with %d preset(s)", count))
 
         -- Also update compatibility when refreshing presets

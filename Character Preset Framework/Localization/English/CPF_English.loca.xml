@@ -7,7 +7,8 @@
     <content contentuid="hee06e0059ca44ccf9b6bb69bf6968d2a3d23" version="1">Yes</content>
     <content contentuid="hd31aa4de029b4685b44e81dcaf8f2b0c1c48" version="1">No</content>
     <content contentuid="he3112f7c5b0f438bae3e1109d81408192c53" version="1">Confirmation</content>
-    <content contentuid="h18474c6f79604d669add8acc02bac4e072ec" version="1">Found [1] preset(s)</content>
+    <content contentuid="h18474c6f79604d669add8acc02bac4e072ec" version="1">Found [1] preset</content>
+    <content contentuid="h398fbf77a6d34acd99c810699f4871ab00ad" version="1">Found [1] presets</content>
     <content contentuid="h4351c6200bc6444694c54fbfb0854297a465" version="1">Error: PresetRegistry not available</content>
     <content contentuid="h17d66385df014e799229d1f512a1eca84dc5" version="1">Selected preset: [1]</content>
     <content contentuid="ha7361001a4d64d779db31dfe08cb911a9dae" version="1">Error: Could not find player character</content>
