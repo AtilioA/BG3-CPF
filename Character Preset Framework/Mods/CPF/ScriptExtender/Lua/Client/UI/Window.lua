@@ -1,5 +1,6 @@
 local State = Ext.Require("Client/UI/State.lua")
 local RenderHelper = Ext.Require("Client/UI/RenderHelper.lua")
+local WindowHelpers = Ext.Require("Client/UI/WindowHelpers.lua")
 
 -- Mode Registry
 local Modes = {
@@ -55,55 +56,7 @@ function Window:DrawSidebar(parent)
             headerRow:AddCell():AddSeparatorText(Loca.Get(Loca.Keys.UI_HEADER_PRESET_LIST))
 
             -- Sort and separate presets
-            local compatible = {}
-            local incompatible = {}
-            local character = nil
-            if State.TargetCharacterUUID then
-                character = Ext.Entity.Get(State.TargetCharacterUUID)
-            end
-            if not character then character = _C() end
-
-            for _, record in ipairs(records) do
-                local isCompatible = true
-                if PresetCompatibility and character and record.preset then
-                    local warnings = PresetCompatibility.Check(record.preset, character)
-                    if #warnings > 0 then isCompatible = false end
-                end
-
-                if isCompatible then
-                    table.insert(compatible, record)
-                else
-                    table.insert(incompatible, record)
-                end
-            end
-
-            local sortFunc = function(a, b)
-                local nameA = (a.preset and a.preset.Name) or ""
-                local nameB = (b.preset and b.preset.Name) or ""
-                return nameA < nameB
-            end
-            table.sort(compatible, sortFunc)
-            table.sort(incompatible, sortFunc)
-
-            local function addPresetRow(record, isCompatible)
-                local row = presetsTable:AddRow()
-                local nameCell = row:AddCell()
-                local label = (record.preset.Name .. "##" .. record.preset._id) or ("Preset " .. record.preset._id)
-
-                local item = nameCell:AddButton(label)
-                item.Size = { -1, 50 }
-                item.UserData = {
-                isCompatible = isCompatible,
-                    record = record
-                }
-                if not isCompatible then
-                    item:SetColor("Button", UIColors.BUTTON_DISABLED)
-                    item:SetColor("Text", Mods.BG3MCM.UIStyle.Colors.TextDisabled)
-                end
-                item.OnClick = function()
-                    State:SelectPreset(record)
-                end
-            end
+            local compatible, incompatible = WindowHelpers.GetSortedPresets(records)
 
             if #compatible == 0 then
                 local sepRow = presetsTable:AddRow()
@@ -111,7 +64,7 @@ function Window:DrawSidebar(parent)
             end
 
             for _, record in ipairs(compatible) do
-                addPresetRow(record, true)
+                WindowHelpers.AddPresetRow(presetsTable, record, true)
             end
 
             if #incompatible > 0 then
@@ -119,34 +72,14 @@ function Window:DrawSidebar(parent)
                 sepRow:AddCell():AddSeparatorText(Loca.Get(Loca.Keys.UI_TEXT_INCOMPATIBLE_PRESETS))
 
                 for _, record in ipairs(incompatible) do
-                    addPresetRow(record, false)
+                    WindowHelpers.AddPresetRow(presetsTable, record, false)
                 end
             end
 
             local activeProfileButton = nil
             -- TODO: Refactor UI styling in general post release, this is gross
             State.SelectedPreset:Subscribe(function(selected)
-                if not selected then return end
-                -- Iterate children of table; if button, check label, set active/inactive
-                -- REFACTOR: this is brittle smh
-                for _, child in ipairs(presetsTable.Children) do
-                    local cellChild = child.Children[1].Children[1]
-                    if Ext.Types.IsA(cellChild, "extui::Button") then
-                        if cellChild.Label == selected.preset.Name .. "##" .. selected.preset._id then
-                            activeProfileButton = cellChild
-                            cellChild:SetColor("Button", Mods.BG3MCM.UIStyle.Colors.ButtonActive)
-                            -- cellChild.Label = "> " .. buttonName .. "##" .. buttonHash
-                        else
-                            if cellChild.UserData.isCompatible then
-                                cellChild:SetColor("Button", Mods.BG3MCM.UIStyle.Colors.Button)
-                            else
-                                cellChild:SetColor("Button", UIColors.BUTTON_DISABLED)
-                            end
-                            -- Remove '> ' if existent
-                            -- cellChild.Label = cellChild.Label:gsub("^> ", "")
-                        end
-                    end
-                end
+                activeProfileButton = WindowHelpers.UpdateActivePresetButton(presetsTable, selected)
             end)
 
             State.ViewMode:Subscribe(function(mode)
