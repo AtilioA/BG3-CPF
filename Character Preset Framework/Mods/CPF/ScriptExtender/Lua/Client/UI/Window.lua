@@ -105,13 +105,18 @@ function Window:DrawSidebar(parent)
                 end
             end
 
+            if #compatible == 0 then
+                local sepRow = presetsTable:AddRow()
+                sepRow:AddCell():AddText(Loca.Get(Loca.Keys.UI_TEXT_NO_COMPATIBLE_PRESETS))
+            end
+
             for _, record in ipairs(compatible) do
                 addPresetRow(record, true)
             end
 
             if #incompatible > 0 then
                 local sepRow = presetsTable:AddRow()
-                sepRow:AddCell():AddSeparatorText("Incompatible presets")
+                sepRow:AddCell():AddSeparatorText(Loca.Get(Loca.Keys.UI_TEXT_INCOMPATIBLE_PRESETS))
 
                 for _, record in ipairs(incompatible) do
                     addPresetRow(record, false)
