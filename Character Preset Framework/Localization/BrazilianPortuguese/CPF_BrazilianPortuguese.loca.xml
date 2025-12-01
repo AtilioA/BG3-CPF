@@ -101,4 +101,6 @@
     <content contentuid="he6de32cf884b45d49a727e0736a18828448d" version="1">Salvar automaticamente imagem de retrato ao criar um preset.&lt;br&gt;Este arquivo será salvo ao lado do arquivo JSON do preset.</content>
     <content contentuid="h009264f133fb4ad283d5df5b0de5d7217ced" version="1">Presets incompatíveis</content>
     <content contentuid="hdbcd62a9150f4a8c9a8fbcc3251d13ca9dec" version="1">Nenhum preset compatível.</content>
+    <content contentuid="h7d1f3c68b8b448489d40d05485c450d64024" version="1">Listar partes íntimas na visualização de presets.</content>
+    <content contentuid="he72f6a19c112408f923fe8427b8580496d48" version="1">Listar partes íntimas</content>
 </contentList>

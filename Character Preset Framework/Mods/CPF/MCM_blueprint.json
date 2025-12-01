@@ -53,6 +53,17 @@
                     }
                 },
                 {
+                    "Id": "list_private_parts",
+                    "Name": "List private parts",
+                    "Type": "checkbox",
+                    "Default": false,
+                    "Description": "List private parts names in the preset view.",
+                    "Handles": {
+                        "NameHandle": "he72f6a19c112408f923fe8427b8580496d48",
+                        "DescriptionHandle": "h7d1f3c68b8b448489d40d05485c450d64024"
+                    }
+                },
+                {
                     "Id": "auto_generate_portrait",
                     "Name": "Auto-save preset portrait",
                     "Type": "checkbox",
