@@ -2,6 +2,7 @@ local State = Ext.Require("Client/UI/State.lua")
 local RenderHelper = Ext.Require("Client/UI/RenderHelper.lua")
 
 local MessageBox = Ext.Require("Client/UI/Components/MessageBox.lua")
+local PresetInspector = Ext.Require("Shared/Presets/PresetInspector.lua")
 local ViewMode = {}
 
 function ViewMode:Render(parent)
@@ -134,11 +135,37 @@ function ViewMode:Render(parent)
             local appearanceData = preset.Data and preset.Data.CCAppearance
 
             if appearanceData then
-                -- TODO: come up with some logic to deal with this. some are shared visuals, some are appearance visuals. Index matters but not sure how to handle it
-                if appearanceData.Visuals then
-                    attrChild:AddText(Loca.Get(Loca.Keys.UI_HEADER_VISUALS))
-                    for _, v in ipairs(appearanceData.Visuals) do
-                        attrChild:AddText(ValueSerializer.Serialize(v, 'CharacterCreationSharedVisual'))
+                local keysToDisplay = { "Visuals", "EyeColor", "HairColor", "SkinColor", "Elements" }
+                local labelMap = {
+                    Visuals = Loca.Keys.UI_HEADER_VISUALS,
+                    EyeColor = Loca.Keys.RESOURCE_EYE_COLOUR,
+                    HairColor = Loca.Keys.RESOURCE_HAIR_COLOUR,
+                    SkinColor = Loca.Keys.RESOURCE_SKIN_COLOR,
+                    Elements = Loca.Keys
+                        .RESOURCE_MATERIAL_OVERRIDE -- Using Material Override as a proxy for Elements/Materials
+                }
+
+                for _, key in ipairs(keysToDisplay) do
+                    local value = appearanceData[key]
+                    if value then
+                        local inspected = PresetInspector:Inspect(key, value)
+                        if inspected then
+                            local label = Loca.Get(labelMap[key])
+                            if label == "[NO LOCA " .. tostring(labelMap[key]) .. "]" then label = key end
+
+                            if type(inspected) == "table" then
+                                if #inspected > 0 then
+                                    attrChild:AddText(label .. ":")
+                                    for _, line in ipairs(inspected) do
+                                        attrChild:AddText("  - " .. line)
+                                    end
+                                end
+                            else
+                                if inspected ~= "" and not string.find(inspected, "Unknown") then
+                                    attrChild:AddText(string.format("%s: %s", label, inspected))
+                                end
+                            end
+                        end
                     end
                 end
             else
@@ -148,22 +175,3 @@ function ViewMode:Render(parent)
 end
 
 return ViewMode
-
-
--- TODO: fetch display names
--- CharacterCreationAccessorySet = 18,
--- CharacterCreationAppearanceMaterial = 19,
--- CharacterCreationAppearanceVisual = 20,
--- CharacterCreationEquipmentIcons = 21,
--- CharacterCreationEyeColor = 22,
--- CharacterCreationIconSettings = 23,
--- CharacterCreationHairColor = 24,
--- CharacterCreationMaterialOverride = 25,
--- CharacterCreationPassiveAppearance = 26,
--- CharacterCreationPreset = 27,
--- CharacterCreationSharedVisual = 28,
--- CharacterCreationSkinColor = 29,
--- for _, v in ipairs(preset.Data.Visuals) do
--- Ext.StaticData.Get("bc372dfb-3a0a-4fc4-a23d-068a12699d78", "CharacterCreationSharedVisual"
--- local visualRecordDisplayName = Ext.StaticData.Get(v, "CharacterCreationAppearanceVisual")
--- attrChild:AddText("  - " .. tostring(visualRecordDisplayName.DisplayName:Get()))

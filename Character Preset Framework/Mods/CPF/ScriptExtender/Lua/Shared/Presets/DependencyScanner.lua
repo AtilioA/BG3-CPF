@@ -1,5 +1,6 @@
 ---@class DependencyScanner
 DependencyScanner = {}
+local ResourceHelper = Ext.Require("Shared/Helpers/ResourceHelper.lua")
 
 ---@class DependencyResource
 ---@field DisplayName string
@@ -9,23 +10,6 @@ DependencyScanner = {}
 ---@class ModDependency
 ---@field ModName string
 ---@field Resources DependencyResource[]
-
-CCResourceTypes = {
-    "CharacterCreationAccessorySet",
-    "CharacterCreationAppearanceMaterial",
-    "CharacterCreationAppearanceVisual",
-    "CharacterCreationEquipmentIcons",
-    "CharacterCreationEyeColor",
-    "CharacterCreationIconSettings",
-    "CharacterCreationHairColor",
-    "CharacterCreationMaterialOverride",
-    "CharacterCreationPassiveAppearance",
-    "CharacterCreationPreset",
-    "CharacterCreationSharedVisual",
-    "CharacterCreationSkinColor",
-    "CharacterCreationVOLine",
-    "ColorDefinition"
-}
 
 -- Cache for reverse lookup: ResourceUUID -> ModUUID
 local resourceToModMap = {}
@@ -45,7 +29,7 @@ function DependencyScanner:_BuildReverseLookup()
             modUUIDToNameMap[modUUID] = mod.Info.Name
 
             -- Scan all resource types for this mod
-            for _, resourceType in ipairs(CCResourceTypes) do
+            for _, resourceType in ipairs(ResourceHelper.ResourceTypes) do
                 local resources = Ext.StaticData.GetByModId(resourceType, modUUID)
                 if resources then
                     for _, resourceUUID in pairs(resources) do
@@ -57,106 +41,11 @@ function DependencyScanner:_BuildReverseLookup()
     end
 end
 
---- Helper to safely get display name
----@param resource any
----@return string
-local function GetDisplayName(resource)
-    if resource.DisplayName and resource.DisplayName.Get then
-        return resource.DisplayName:Get()
-    end
-    return ""
-end
-
---- Strategy table for extracting resource details
----@type table<string, fun(resource: any): string, string>
-local ResourceStrategies = {
-    -- Types that have a SlotName
-    CharacterCreationAppearanceVisual = function(resource)
-        return GetDisplayName(resource), resource.SlotName or "Unknown"
-    end,
-    CharacterCreationSharedVisual = function(resource)
-        return GetDisplayName(resource), resource.SlotName or "Unknown"
-    end,
-    CharacterCreationAccessorySet = function(resource)
-        return GetDisplayName(resource), resource.SlotName or "Unknown"
-    end,
-
-    -- Types that need a static slot name
-    CharacterCreationSkinColor = function(resource)
-        return GetDisplayName(resource), Loca.Get(Loca.Keys.RESOURCE_SKIN_COLOR)
-    end,
-    CharacterCreationEyeColor = function(resource)
-        return GetDisplayName(resource), Loca.Get(Loca.Keys.RESOURCE_EYE_COLOUR)
-    end,
-    CharacterCreationHairColor = function(resource)
-        return GetDisplayName(resource), Loca.Get(Loca.Keys.RESOURCE_HAIR_COLOUR)
-    end,
-    CharacterCreationAppearanceMaterial = function(resource)
-        return GetDisplayName(resource), Loca.Get(Loca.Keys.RESOURCE_MATERIAL)
-    end,
-    CharacterCreationMaterialOverride = function(resource)
-        return GetDisplayName(resource), Loca.Get(Loca.Keys.RESOURCE_MATERIAL_OVERRIDE)
-    end,
-    CharacterCreationPassiveAppearance = function(resource)
-        return GetDisplayName(resource), Loca.Get(Loca.Keys.RESOURCE_PASSIVE_FEATURE)
-    end,
-    CharacterCreationPreset = function(resource)
-        return GetDisplayName(resource), Loca.Get(Loca.Keys.RESOURCE_PRESET)
-    end,
-    CharacterCreationVOLine = function(resource)
-        return GetDisplayName(resource), Loca.Get(Loca.Keys.RESOURCE_VOICE_LINE)
-    end,
-    ColorDefinition = function(resource)
-        return GetDisplayName(resource), Loca.Get(Loca.Keys.RESOURCE_COLOUR_DEFINITION)
-    end,
-    CharacterCreationEquipmentIcons = function(resource)
-        return GetDisplayName(resource), Loca.Get(Loca.Keys.RESOURCE_EQUIPMENT_ICON)
-    end,
-    CharacterCreationIconSettings = function(resource)
-        return GetDisplayName(resource), Loca.Get(Loca.Keys.RESOURCE_ICON_SETTINGS)
-    end,
-}
-
---- Safely executes a strategy function
----@param strategy fun(resource: any): string, string
----@param resource any
----@return string displayName, string slotName
-function DependencyScanner:_SafeExecute(strategy, resource)
-    local success, name, slot = pcall(strategy, resource)
-    if success then
-        return name, slot
-    end
-    CPFWarn(0, "Failed to get resource details.")
-    return "Unknown", "Unknown"
-end
-
 --- Gets details for a specific resource
 ---@param resourceUUID string
 ---@return string displayName, string slotName
 function DependencyScanner:GetResourceDetails(resourceUUID)
-    -- Try all resource types to find the resource
-    local resource = nil
-    local foundType = nil
-
-    for _, resourceType in ipairs(CCResourceTypes) do
-        resource = Ext.StaticData.Get(resourceUUID, resourceType)
-        if resource then
-            foundType = resourceType
-            break
-        end
-    end
-
-    if not resource then return "Unknown", "Unknown" end
-
-    local strategy = ResourceStrategies[foundType]
-    if strategy then
-        return self:_SafeExecute(strategy, resource)
-    end
-
-    -- Fallback strategy
-    return self:_SafeExecute(function(res)
-        return GetDisplayName(res), res.SlotName or "Unknown"
-    end, resource)
+    return ResourceHelper:GetResourceDetails(resourceUUID)
 end
 
 --- Scans a character's appearance data for mod dependencies

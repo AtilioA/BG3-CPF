@@ -4,6 +4,7 @@ RequireFiles("Shared/Presets/", {
     "PresetRegistry",
     "PresetDiscovery",
     "PresetExamples",
+    "PresetInspector",
     "DependencyScanner",
     "PresetFileManager",
 })

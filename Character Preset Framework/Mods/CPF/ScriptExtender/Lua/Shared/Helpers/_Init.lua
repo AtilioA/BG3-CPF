@@ -11,4 +11,5 @@ RequireFiles("Shared/Helpers/", {
     "UserID",
     "ValueSerializer",
     "LocalizationManager",
+    "ResourceHelper",
 })
