@@ -20,7 +20,7 @@ export const generateUUID = (): string => {
  * Sanitizes a string to be safe for folder names (alphanumeric only).
  */
 export const sanitizeFolderName = (name: string): string => {
-    return name.replace(/[^a-zA-Z0-9]/g, '');
+    return name.replace(/[^_a-zA-Z0-9]/g, '');
 };
 
 /**

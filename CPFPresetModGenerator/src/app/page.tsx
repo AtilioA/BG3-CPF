@@ -25,17 +25,18 @@ export default function Home() {
             const firstPreset = presets[0];
             const presetName = firstPreset.Name || "Unnamed Preset";
             const author = firstPreset.Author || "Unknown";
-            const allPresetNames = presets.map(p => p.Name).join(", ");
+            const allPresetNames = presets.map(p => p.Name);
+            const readablePresetNames = allPresetNames.join(", ");
 
             // If multiple presets, append Bundle or similar to mod name
             const modName = presets.length > 1
-                ? `CPF Presets Bundle (${allPresetNames})`
+                ? `CPF Presets Bundle (${readablePresetNames})`
                 : `${presetName} - CPF Preset`;
 
             // Defaults logic based on requirements
-            const folderName = sanitizeFolderName(presetName.replace(/\s+/g, '')) || "MyPreset";
+            const folderName = sanitizeFolderName(allPresetNames.join("_")) || "MyPreset";
             const description = presets.length > 1
-                ? `Includes ${presets.length} Character Preset Framework presets for easy import (${allPresetNames})`
+                ? `Includes ${presets.length} Character Preset Framework presets for easy import (${readablePresetNames})`
                 : `Includes a Character Preset Framework preset ('${presetName}') for easy import`;
 
             const uuid = generateUUID();
