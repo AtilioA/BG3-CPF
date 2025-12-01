@@ -34,7 +34,7 @@ export interface ModConfig {
     author: string;
     description: string;
     uuid: string;
-    originalJson: string; // Keep the string version to save as file
+    presets: PresetJson[]; // Array of presets to include
     dependencies: ModDependency[]; // Parsed dependencies from the preset
     includeDependencies: boolean; // Whether to include dependencies in meta.lsx
 }

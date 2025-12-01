@@ -48,25 +48,42 @@ export const getGeneratedFolderName = (folderName: string, uuid: string): string
 /**
  * Parses dependencies from preset JSON structure into a normalized format.
  */
-export const parseDependencies = (dependencies?: PresetDependencies[]): ModDependency[] => {
-    if (!dependencies || !Array.isArray(dependencies)) {
-        return [];
-    }
+export const parseDependencies = (presets: { Dependencies?: PresetDependencies[] }[]): ModDependency[] => {
+    const dependencyMap = new Map<string, ModDependency>();
 
-    const result: ModDependency[] = [];
+    for (const preset of presets) {
+        if (!preset.Dependencies || !Array.isArray(preset.Dependencies)) {
+            continue;
+        }
 
-    for (const depObj of dependencies) {
-        for (const [modUUID, modData] of Object.entries(depObj)) {
-            result.push({
-                modUUID,
-                modName: modData.ModName,
-                resources: modData.Resources || [],
-                checked: true
-            });
+        for (const depObj of preset.Dependencies) {
+            for (const [modUUID, modData] of Object.entries(depObj)) {
+                if (!dependencyMap.has(modUUID)) {
+                    dependencyMap.set(modUUID, {
+                        modUUID,
+                        modName: modData.ModName,
+                        resources: [],
+                        checked: true
+                    });
+                }
+
+                const existingDep = dependencyMap.get(modUUID)!;
+
+                // Merge resources if needed
+                // REVIEW: We'll add resources if they aren't already there.
+                if (modData.Resources) {
+                    for (const resource of modData.Resources) {
+                        const exists = existingDep.resources.some(r => r.ResourceUUID === resource.ResourceUUID);
+                        if (!exists) {
+                            existingDep.resources.push(resource);
+                        }
+                    }
+                }
+            }
         }
     }
 
-    return result;
+    return Array.from(dependencyMap.values());
 };
 
 /**

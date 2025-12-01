@@ -7,14 +7,13 @@ import { presetJsonSchema } from '../schemas/presetJsonSchema';
 import * as Sentry from '@sentry/nextjs';
 
 interface DropZoneProps {
-    onFileLoaded: (jsonContent: string) => void;
+    onFileLoaded: (presets: any[]) => void;
 }
 
 export const DropZone: React.FC<DropZoneProps> = ({ onFileLoaded }) => {
     const [isDragging, setIsDragging] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const fileReaderRef = useRef<FileReader | null>(null);
     const isMountedRef = useRef(true);
 
     // Cleanup on unmount
@@ -23,11 +22,6 @@ export const DropZone: React.FC<DropZoneProps> = ({ onFileLoaded }) => {
 
         return () => {
             isMountedRef.current = false;
-            // Abort any pending file read operations
-            if (fileReaderRef.current) {
-                fileReaderRef.current.abort();
-                fileReaderRef.current = null;
-            }
         };
     }, []);
 
@@ -55,68 +49,74 @@ export const DropZone: React.FC<DropZoneProps> = ({ onFileLoaded }) => {
         e.stopPropagation();
     }, []);
 
-    const processFile = (file: File) => {
-        if (file.type !== "application/json" && !file.name.endsWith('.json')) {
-            if (isMountedRef.current) {
-                setError("Please select a valid JSON file.");
-            }
+    const processFiles = async (files: FileList | File[]) => {
+        if (files.length === 0) return;
+
+        if (files.length > 20) {
+            setError("You can only upload up to 20 files at once.");
             return;
         }
 
-        // Abort any existing file read operation
-        if (fileReaderRef.current) {
-            fileReaderRef.current.abort();
+        const loadedPresets: any[] = [];
+        let hasError = false;
+
+        // Process each file
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+
+            if (file.type !== "application/json" && !file.name.endsWith('.json')) {
+                setError(`File '${file.name}' is not a valid JSON file.`);
+                hasError = true;
+                break;
+            }
+
+            try {
+                const text = await file.text();
+                const parsed = JSON.parse(text);
+
+                // Check if it's a single preset or array of presets
+                if (Array.isArray(parsed)) {
+                    // Validate each item in array
+                    for (const item of parsed) {
+                        const validation = presetJsonSchema.safeParse(item);
+                        if (!validation.success) {
+                            const firstError = validation.error.issues[0];
+                            setError(`Invalid preset in '${file.name}': ${firstError.path.join('.')} - ${firstError.message}`);
+                            hasError = true;
+                            break;
+                        }
+                        loadedPresets.push(item);
+                    }
+                } else {
+                    // Validate single preset
+                    const validation = presetJsonSchema.safeParse(parsed);
+                    if (!validation.success) {
+                        const firstError = validation.error.issues[0];
+                        setError(`Invalid preset in '${file.name}': ${firstError.path.join('.')} - ${firstError.message}`);
+                        hasError = true;
+                        break;
+                    }
+                    loadedPresets.push(parsed);
+                }
+
+                if (hasError) break;
+
+            } catch (err) {
+                setError(`Failed to parse '${file.name}': Invalid JSON format.`);
+                Sentry.captureException(err);
+                hasError = true;
+                break;
+            }
         }
 
-        const reader = new FileReader();
-        fileReaderRef.current = reader;
-
-        reader.onload = (event) => {
-            // Only update state if component is still mounted
-            if (!isMountedRef.current) return;
-
-            const result = event.target?.result as string;
-            try {
-                const parsed = JSON.parse(result);
-                const validation = presetJsonSchema.safeParse(parsed);
-
-                if (!validation.success) {
-                    const firstError = validation.error.issues[0];
-                    const errorMessage = `Invalid preset: ${firstError.path.join('.')} - ${firstError.message}`;
-                    setError(errorMessage);
-                    Sentry.captureException(new Error(errorMessage), {
-                        extra: {
-                            validationError: validation.error,
-                        }
-                    });
-                    return;
-                }
-
-                onFileLoaded(result);
+        if (!hasError && isMountedRef.current) {
+            if (loadedPresets.length === 0) {
+                setError("No valid presets found in the uploaded files.");
+            } else {
+                onFileLoaded(loadedPresets);
                 setError(null);
-            } catch (err) {
-                setError("Invalid JSON format.");
-                Sentry.captureException(err);
-            } finally {
-                // Clear the ref when done
-                if (fileReaderRef.current === reader) {
-                    fileReaderRef.current = null;
-                }
             }
-        };
-
-        reader.onerror = () => {
-            // Only update state if component is still mounted
-            if (isMountedRef.current) {
-                setError("Failed to read file.");
-            }
-            // Clear the ref on error
-            if (fileReaderRef.current === reader) {
-                fileReaderRef.current = null;
-            }
-        };
-
-        reader.readAsText(file);
+        }
     };
 
     const handleDrop = useCallback((e: React.DragEvent) => {
@@ -125,7 +125,7 @@ export const DropZone: React.FC<DropZoneProps> = ({ onFileLoaded }) => {
         setIsDragging(false);
 
         if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-            processFile(e.dataTransfer.files[0]);
+            processFiles(e.dataTransfer.files);
         }
     }, [onFileLoaded]);
 
@@ -134,21 +134,37 @@ export const DropZone: React.FC<DropZoneProps> = ({ onFileLoaded }) => {
         if (text) {
             try {
                 const parsed = JSON.parse(text);
-                const validation = presetJsonSchema.safeParse(parsed);
-
-                if (!validation.success) {
-                    const firstError = validation.error.issues[0];
-                    const errorMessage = `Invalid preset: ${firstError.path.join('.')} - ${firstError.message}`;
-                    setError(errorMessage);
-                    Sentry.captureException(new Error(errorMessage), {
-                        extra: {
-                            validationError: validation.error,
+                if (Array.isArray(parsed)) {
+                    // Handle array paste
+                    const loadedPresets: any[] = [];
+                    for (const item of parsed) {
+                        const validation = presetJsonSchema.safeParse(item);
+                        if (!validation.success) {
+                            const firstError = validation.error.issues[0];
+                            setError(`Invalid preset in pasted content: ${firstError.path.join('.')} - ${firstError.message}`);
+                            return;
                         }
-                    });
-                    return;
+                        loadedPresets.push(item);
+                    }
+                    onFileLoaded(loadedPresets);
+                } else {
+                    const validation = presetJsonSchema.safeParse(parsed);
+
+                    if (!validation.success) {
+                        const firstError = validation.error.issues[0];
+                        const errorMessage = `Invalid preset: ${firstError.path.join('.')} - ${firstError.message}`;
+                        setError(errorMessage);
+                        Sentry.captureException(new Error(errorMessage), {
+                            extra: {
+                                validationError: validation.error,
+                            }
+                        });
+                        return;
+                    }
+
+                    onFileLoaded([parsed]);
                 }
 
-                onFileLoaded(text);
                 setError(null);
             } catch (err) {
                 setError("Pasted text is not valid JSON.");
@@ -159,7 +175,7 @@ export const DropZone: React.FC<DropZoneProps> = ({ onFileLoaded }) => {
 
     const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
-            processFile(e.target.files[0]);
+            processFiles(e.target.files);
         }
         // Reset input so same file can be selected again if needed
         if (fileInputRef.current) {
@@ -196,6 +212,7 @@ export const DropZone: React.FC<DropZoneProps> = ({ onFileLoaded }) => {
                 <input
                     type="file"
                     accept=".json"
+                    multiple
                     className="hidden"
                     ref={fileInputRef}
                     onChange={handleFileInput}
@@ -206,7 +223,7 @@ export const DropZone: React.FC<DropZoneProps> = ({ onFileLoaded }) => {
                 </div>
 
                 <h3 className="text-xl font-semibold text-white mb-2">
-                    Drop your preset JSON here
+                    Drop 1 or more preset JSONs here
                 </h3>
                 {/* <p className="text-slate-500 mb-6 text-xs">
                     click anywhere to browse

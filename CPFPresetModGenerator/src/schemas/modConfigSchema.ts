@@ -6,7 +6,7 @@ export const modConfigSchema = z.object({
     folderName: z.string(),
     description: z.string(),
     uuid: z.string(),
-    originalJson: z.string(),
+    presets: z.array(z.any()),
 });
 
 export type ModConfigErrors = {

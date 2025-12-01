@@ -18,21 +18,30 @@ export default function Home() {
     const [isSuccess, setIsSuccess] = useState(false);
     const currentYear = useMemo(() => new Date().getFullYear(), []);
 
-    const handleFileLoaded = (jsonContent: string) => {
+    const handleFileLoaded = (presets: PresetJson[]) => {
         try {
-            const parsed: PresetJson = JSON.parse(jsonContent);
+            if (presets.length === 0) return;
 
-            const presetName = parsed.Name || "Unnamed Preset";
-            const modName = `${presetName} - CPF Preset`;
-            const author = parsed.Author || "Unknown";
+            const firstPreset = presets[0];
+            const presetName = firstPreset.Name || "Unnamed Preset";
+            const author = firstPreset.Author || "Unknown";
+            const allPresetNames = presets.map(p => p.Name).join(", ");
+
+            // If multiple presets, append Bundle or similar to mod name
+            const modName = presets.length > 1
+                ? `CPF Presets Bundle (${allPresetNames})`
+                : `${presetName} - CPF Preset`;
 
             // Defaults logic based on requirements
             const folderName = sanitizeFolderName(presetName.replace(/\s+/g, '')) || "MyPreset";
-            const description = `Includes a Character Preset Framework preset ('${presetName}') for easy import`;
+            const description = presets.length > 1
+                ? `Includes ${presets.length} Character Preset Framework presets for easy import (${allPresetNames})`
+                : `Includes a Character Preset Framework preset ('${presetName}') for easy import`;
+
             const uuid = generateUUID();
 
-            // Parse dependencies from the preset
-            const dependencies = parseDependencies(parsed.Dependencies);
+            // Parse dependencies from all presets
+            const dependencies = parseDependencies(presets);
 
             setModConfig({
                 modName,
@@ -40,15 +49,15 @@ export default function Home() {
                 author,
                 description,
                 uuid,
-                originalJson: jsonContent,
+                presets,
                 dependencies,
                 includeDependencies: true
             });
             setIsSuccess(false);
 
         } catch (e) {
-            console.error("Failed to parse JSON", e);
-            alert("Invalid JSON content detected.");
+            console.error("Failed to process presets", e);
+            alert("Error processing presets.");
         }
     };
 
@@ -58,7 +67,6 @@ export default function Home() {
         const zip = new JSZip();
 
         // Structure: <ModName>/Mods/<ModName>/meta.lsx
-        // Also including the preset json for reference as requested
 
         // We use folderName for the directory structure to ensure safety
         const generatedFolderName = getGeneratedFolderName(modConfig.folderName, modConfig.uuid);
@@ -75,16 +83,14 @@ export default function Home() {
 
                     // Add files
                     modSubFolder.file("meta.lsx", metaLsxContent);
-                    // Optional: Include original JSON for reference/backup
-                    modSubFolder.file(`CPF_preset.json`, modConfig.originalJson);
+                    // Always write CPF_presets.json as an array
+                    modSubFolder.file(`CPF_presets.json`, JSON.stringify(modConfig.presets, null, 2));
                 }
             }
         }
 
         try {
             const content = await zip.generateAsync({ type: "blob" });
-            // Handle file-saver export structure differences (Default export vs named)
-            // In many ESM environments for file-saver, the default export is the function.
             const saveFile = (FileSaver as any).saveAs || FileSaver;
             // Exclude UUID from the zip filename
             const zipFileName = `CPF_${modConfig.folderName}_Mod.zip`;

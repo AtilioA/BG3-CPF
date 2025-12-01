@@ -71,6 +71,7 @@ export const ModForm: React.FC<ModFormProps> = ({ config, setConfig, onGenerate,
 
         if (!result.success) {
             const fieldErrors: ModConfigErrors = {};
+            console.log(result.error)
             result.error.issues.forEach((err) => {
                 const field = err.path[0] as keyof ModConfigErrors;
                 if (field === 'modName' || field === 'author') {

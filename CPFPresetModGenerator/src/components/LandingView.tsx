@@ -4,7 +4,7 @@ import { FolderOpen, Copy, Check } from 'lucide-react';
 import { FaWindows } from 'react-icons/fa6';
 
 interface LandingViewProps {
-    onFileLoaded: (jsonContent: string) => void;
+    onFileLoaded: (presets: any[]) => void;
 }
 
 export const LandingView: React.FC<LandingViewProps> = ({ onFileLoaded }) => {
