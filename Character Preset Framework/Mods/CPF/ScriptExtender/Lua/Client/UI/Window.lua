@@ -48,7 +48,8 @@ function Window:DrawSidebar(parent)
         ---@param group ExtuiGroup
         ---@param records PresetRecord[]
         function(group, records)
-            presetsTable = group:AddTable("PresetsTable", 1)
+            local presetsCW = group:AddChildWindow("PresetsCW")
+            presetsTable = presetsCW:AddTable("PresetsTable", 1)
 
             local _colName = presetsTable:AddColumn("Name", "WidthStretch")
             -- Add header row
@@ -125,6 +126,7 @@ function Window:RenderCPF(window)
     local cellRight = row:AddCell()
 
     RenderHelper.CreateReactiveGroup(cellRight, "ModeContent", State.ViewMode, function(group, currentMode)
+        -- local modeCW = group:AddChildWindow("ModeCW")
         local modeRenderer = Modes[currentMode]
 
         if modeRenderer and modeRenderer.Render then
