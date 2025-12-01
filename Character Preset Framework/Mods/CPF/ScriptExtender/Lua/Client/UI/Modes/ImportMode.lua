@@ -54,7 +54,7 @@ function ImportMode:Render(parent)
         input.SizeHint = { 450, 400 }
         -- input.Text = State.ImportBuffer:GetValue()
         input.OnChange = function()
-            State.ImportBuffer:OnNext(input.Text)
+            -- State.ImportBuffer:OnNext(input.Text)
         end
 
         -- Create reactive button group that updates when ImportBuffer changes

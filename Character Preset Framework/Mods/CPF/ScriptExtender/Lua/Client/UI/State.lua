@@ -51,8 +51,13 @@ end
 
 -- REFACTOR: make this less brittle for changes to modes
 function State:SetMode(mode)
+    -- NOTE: there's a small bug causing view mode being set twice and cascading repeated logic
     -- Validate mode
     if not (mode == "VIEW" or mode == "CREATE" or mode == "IMPORT") then
+        return
+    end
+
+    if self.ViewMode:GetValue() == mode then
         return
     end
 
@@ -96,7 +101,7 @@ function State:RefreshPresets()
         self.Presets:OnNext(visibleRecords)
         local count = #visibleRecords
         self:SetStatus(Loca.FormatPlural(Loca.Keys.STATUS_FOUND_PRESETS_SINGULAR, Loca.Keys.STATUS_FOUND_PRESETS_PLURAL,
-        count))
+            count))
         CPFPrint(1, string.format("Refreshed UI with %d preset(s)", count))
 
         -- Also update compatibility when refreshing presets
