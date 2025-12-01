@@ -96,4 +96,6 @@
     <content contentuid="h644622bd0418440b9a5d5efb4a5f68221bfe" version="1">Subrace mismatch: Preset uses [1], Character uses [2].</content>
     <content contentuid="h30640f00f0584cf8a5062646bb57d5807cgd" version="1">None</content>
     <content contentuid="h12fc8ad09fc44da381f05bf59ae1f1f4fffb" version="1">Medium</content>
+    <content contentuid="h140f8c18cb4d440eb07df9488f6789a4249f" version="1">Auto-save preset portrait</content>
+    <content contentuid="he6de32cf884b45d49a727e0736a18828448d" version="1">Automatically generate and save a portrait image file when creating a preset.&lt;br&gt;This file will be saved alongside the preset JSON file.</content>
 </contentList>

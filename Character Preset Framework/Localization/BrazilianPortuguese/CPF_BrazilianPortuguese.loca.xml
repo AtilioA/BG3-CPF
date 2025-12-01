@@ -97,4 +97,6 @@
     <content contentuid="h644622bd0418440b9a5d5efb4a5f68221bfe" version="1">Incompatibilidade de Sub-raça: Predefinição usa [1], Personagem usa [2].</content>
     <content contentuid="h30640f00f0584cf8a5062646bb57d5807cgd" version="1">Nenhum</content>
     <content contentuid="h12fc8ad09fc44da381f05bf59ae1f1f4fffb" version="1">Médio</content>
+    <content contentuid="h140f8c18cb4d440eb07df9488f6789a4249f" version="1">Automaticamente salvar imagem de retrato ao criar uma predefinição</content>
+    <content contentuid="he6de32cf884b45d49a727e0736a18828448d" version="1">Automaticamente salvar imagem de retrato ao criar uma predefinição.&lt;br&gt;Este arquivo será salvo ao lado do arquivo JSON da predefinição.</content>
 </contentList>

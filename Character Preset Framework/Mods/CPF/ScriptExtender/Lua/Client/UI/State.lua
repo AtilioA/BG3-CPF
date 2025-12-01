@@ -279,6 +279,24 @@ function State:SaveNewPreset()
         return
     end
 
+    -- Generate preset portrait if enabled
+    -- REFACTOR: this should not be handled by State module
+    if PresetFileManager and PresetFileManager.SavePresetPortrait then
+        local targetEntity = nil
+        if self.TargetCharacterUUID then
+            targetEntity = Ext.Entity.Get(self.TargetCharacterUUID)
+        end
+
+        if not targetEntity then
+            CPFWarn(1, "Failed to save preset portrait: No target entity found")
+        else
+            local portraitSuccess, portraitErr = PresetFileManager:SavePresetPortrait(newPreset, targetEntity)
+            if not portraitSuccess then
+                CPFWarn(1, "Failed to save preset portrait: " .. tostring(portraitErr))
+            end
+        end
+    end
+
     self:SetStatus(Loca.Format(Loca.Keys.STATUS_PRESET_SAVED, name))
     self:RefreshPresets()
 
