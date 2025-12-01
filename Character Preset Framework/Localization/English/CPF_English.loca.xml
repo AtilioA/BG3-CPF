@@ -55,7 +55,7 @@
     <content contentuid="h67d6534f54124fab86a060570e02a61b1ag1" version="1">Import '[1]'</content>
     <content contentuid="he81f58cb726d4abf953da5d69464c75aa38c" version="1">No presets available.&lt;br&gt;Start by importing or creating a new preset.</content>
     <content contentuid="h30dd1b4e74ca45e8824e30489d6e9aa6ec63" version="1">Click a preset on the left to view details.</content>
-    <content contentuid="h9050a5972dc84d19b0cbb451b5bb4b03520b" version="1">Name: [1]</content>
+    <content contentuid="h9050a5972dc84d19b0cbb451b5bb4b03520b" version="1">Preset: [1]</content>
     <content contentuid="h66efb8618f534cdc9c230ddae89220a0d516" version="1">Author: [1]</content>
     <content contentuid="haadf3be5009346978ee68b60e4b249b16007" version="1">Version: [1]</content>
     <content contentuid="h44f6be68e24249c5aa81f058f6737b41f0e3" version="1">ID: [1]</content>
@@ -103,4 +103,5 @@
     <content contentuid="hdbcd62a9150f4a8c9a8fbcc3251d13ca9dec" version="1">No presets found.</content>
     <content contentuid="h7d1f3c68b8b448489d40d05485c450d64024" version="1">List private parts names in the preset view.</content>
     <content contentuid="he72f6a19c112408f923fe8427b8580496d48" version="1">List private parts</content>
+    <content contentuid="h6a35cc10ba9c495f92d544d2da6f6a54d1bg" version="1">Added by mod '[1]'</content>
 </contentList>

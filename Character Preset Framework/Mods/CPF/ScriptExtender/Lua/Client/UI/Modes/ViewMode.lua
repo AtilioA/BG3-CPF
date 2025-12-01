@@ -22,7 +22,7 @@ function ViewMode:Render(parent)
             local preset = record.preset
 
             -- Header
-            ViewModeHelpers.RenderHeader(group, preset)
+            ViewModeHelpers.RenderHeader(group, record)
 
             -- Compatibility checks
             local compatibilityInfo = ViewModeHelpers.GetCompatibilityInfo(preset)

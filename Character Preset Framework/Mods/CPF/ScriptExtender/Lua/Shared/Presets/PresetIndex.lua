@@ -71,7 +71,7 @@ function PresetIndex.AddEntry(filename, presetId, source)
         if entry.presetId == presetId then
             entry.hidden = entry.hidden
             entry.filename = filename ~= "" and filename or entry.filename
-            entry.source = source
+            -- entry.source = source
             found = true
             CPFDebug(2, "PresetIndex.AddEntry: Updated existing entry")
             break

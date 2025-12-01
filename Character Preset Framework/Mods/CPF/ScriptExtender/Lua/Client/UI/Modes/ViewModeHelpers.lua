@@ -148,10 +148,20 @@ function ViewModeHelpers.GetCompatibilityInfo(preset)
     }
 end
 
-function ViewModeHelpers.RenderHeader(group, preset)
+function ViewModeHelpers.RenderHeader(group, record)
+    if not record or not record.preset then
+        return CPFWarn(0, "ViewModeHelpers.RenderHeader: record or record.preset is nil")
+    end
+
+    local preset = record.preset
     group:AddText(Loca.Format(Loca.Keys.UI_LABEL_NAME_VALUE, preset.Name or "Unknown"))
+    if record.indexData.source ~= 'user' then
+        group:AddText(Loca.Format(Loca.Keys.UI_LABEL_SOURCE_VALUE, record.indexData.source))
+    end
     group:AddText(Loca.Format(Loca.Keys.UI_LABEL_AUTHOR_VALUE, preset.Author or "Unknown"))
-    group:AddText(Loca.Format(Loca.Keys.UI_LABEL_VERSION_VALUE, preset.Version or "Unknown"))
+    local versionText = group:AddText(Loca.Format(Loca.Keys.UI_LABEL_VERSION_VALUE, preset.Version or "Unknown"))
+    versionText:SetColor("Text", UIColors.COLOR_GRAY)
+
 
     local IDText = group:AddText(Loca.Format(Loca.Keys.UI_LABEL_ID_VALUE, preset._id or "Unknown"))
     IDText:SetColor("Text", UIColors.COLOR_GRAY)
