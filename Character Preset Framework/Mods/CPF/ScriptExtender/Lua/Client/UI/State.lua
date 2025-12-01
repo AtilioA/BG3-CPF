@@ -265,36 +265,24 @@ function State:SaveNewPreset()
         return
     end
 
-    -- Use PresetDiscovery to save and register (handles both file and index)
-    if not (PresetDiscovery and PresetDiscovery.RegisterUserPreset) then
-        CPFWarn(0, "PresetDiscovery not available")
-        self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_DISCOVERY_NOT_AVAILABLE))
+    -- Get target entity for portrait generation
+    local targetEntity = nil
+    if self.TargetCharacterUUID then
+        targetEntity = Ext.Entity.Get(self.TargetCharacterUUID)
+    end
+
+    -- Use Preset module to orchestrate the complete save workflow
+    if not (Preset and Preset.SaveUserPreset) then
+        CPFWarn(0, "Preset.SaveUserPreset not available")
+        self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_PRESET_MODULE_NOT_LOADED))
         return
     end
 
-    local success, err = PresetDiscovery:RegisterUserPreset(newPreset)
+    local success, err = Preset.SaveUserPreset(newPreset, targetEntity)
     if not success then
-        CPFWarn(1, "Warning when registering preset: " .. tostring(err))
+        CPFWarn(1, "Failed to save preset: " .. tostring(err))
         self:SetStatus(Loca.Format(Loca.Keys.STATUS_ERROR_REGISTER_PRESET, tostring(err)))
         return
-    end
-
-    -- Generate preset portrait if enabled
-    -- REFACTOR: this should not be handled by State module
-    if PresetFileManager and PresetFileManager.SavePresetPortrait then
-        local targetEntity = nil
-        if self.TargetCharacterUUID then
-            targetEntity = Ext.Entity.Get(self.TargetCharacterUUID)
-        end
-
-        if not targetEntity then
-            CPFWarn(1, "Failed to save preset portrait: No target entity found")
-        else
-            local portraitSuccess, portraitErr = PresetFileManager:SavePresetPortrait(newPreset, targetEntity)
-            if not portraitSuccess then
-                CPFWarn(1, "Failed to save preset portrait: " .. tostring(portraitErr))
-            end
-        end
     end
 
     self:SetStatus(Loca.Format(Loca.Keys.STATUS_PRESET_SAVED, name))

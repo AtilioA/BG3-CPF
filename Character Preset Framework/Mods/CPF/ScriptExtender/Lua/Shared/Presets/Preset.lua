@@ -288,6 +288,40 @@ function Preset.ExportToFile(preset, filePath)
     end
 end
 
+--- Saves a user preset with optional portrait generation
+---@param preset Preset The preset to save
+---@param targetEntity? EntityHandle Optional entity to use for portrait generation
+---@return boolean success
+---@return string? errorMessage
+function Preset.SaveUserPreset(preset, targetEntity)
+    -- Validate preset first
+    local valid, err = Preset.Validate(preset)
+    if not valid then
+        return false, "Validation failed: " .. tostring(err)
+    end
+
+    -- Use PresetDiscovery to save and register (handles both file and index)
+    if not (PresetDiscovery and PresetDiscovery.RegisterUserPreset) then
+        return false, "PresetDiscovery not available"
+    end
+
+    local success, regErr = PresetDiscovery:RegisterUserPreset(preset)
+    if not success then
+        return false, "Failed to register preset: " .. tostring(regErr)
+    end
+
+    -- -- Generate preset portrait if enabled and entity provided
+    -- if targetEntity and PresetFileManager and PresetFileManager.SavePresetPortrait then
+    --     local portraitSuccess, portraitErr = PresetFileManager:SavePresetPortrait(preset, targetEntity)
+    --     if not portraitSuccess then
+    --         CPFWarn(1, "Failed to save preset portrait: " .. tostring(portraitErr))
+    --         -- Don't fail the entire operation, just log the warning
+    --     end
+    -- end
+
+    return true, nil
+end
+
 --- Imports a preset from a file
 ---@param filePath string
 ---@return Preset|nil preset

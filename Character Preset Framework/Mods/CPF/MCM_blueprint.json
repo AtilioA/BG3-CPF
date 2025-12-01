@@ -56,11 +56,20 @@
                     "Id": "auto_generate_portrait",
                     "Name": "Auto-save preset portrait",
                     "Type": "checkbox",
-                    "Default": true,
+                    "Default": false,
                     "Description": "Automatically generate and save a portrait image when creating a preset.\nThis file will be saved alongside the preset JSON file.",
                     "Handles": {
                         "DescriptionHandle": "he6de32cf884b45d49a727e0736a18828448d",
                         "NameHandle": "h140f8c18cb4d440eb07df9488f6789a4249f"
+                    },
+                    "VisibleIf": {
+                        "Conditions": [
+                            {
+                                "ExpectedValue": "true",
+                                "SettingId": "auto_generate_portrait",
+                                "Operator": "=="
+                            }
+                        ]
                     }
                 },
                 {
