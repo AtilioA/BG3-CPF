@@ -163,8 +163,9 @@ function State:UpdateFormDefaults()
 end
 
 function State:UpdatePresetCompatibility()
-    -- Placeholder for compatibility checks
-    -- This would check if the current target character matches the requirements of the presets
+    -- Trigger UI refresh by re-emitting presets
+    -- This ensures that the preset list in Window.lua re-renders and re-evaluates compatibility
+    self.Presets:OnNext(self.Presets:GetValue())
 end
 
 function State:RefreshUI()

@@ -42,28 +42,79 @@ function Window:DrawSidebar(parent)
     -- Preset List - reactive group that updates when Presets changes
     local listChild = parent:AddChildWindow("PresetList")
 
-    local table = nil
+    local presetsTable = nil
     RenderHelper.CreateReactiveGroup(listChild, "PresetsList", State.Presets,
         ---@param group ExtuiGroup
         ---@param records PresetRecord[]
         function(group, records)
-            table = group:AddTable("PresetsTable", 1)
+            presetsTable = group:AddTable("PresetsTable", 1)
 
-            local _colName = table:AddColumn("Name", "WidthStretch")
+            local _colName = presetsTable:AddColumn("Name", "WidthStretch")
             -- Add header row
-            local headerRow = table:AddRow()
+            local headerRow = presetsTable:AddRow()
             headerRow:AddCell():AddSeparatorText(Loca.Get(Loca.Keys.UI_HEADER_PRESET_LIST))
-            -- Add preset rows
-            for i, record in ipairs(records) do
-                local row = table:AddRow()
 
+            -- Sort and separate presets
+            local compatible = {}
+            local incompatible = {}
+            local character = nil
+            if State.TargetCharacterUUID then
+                character = Ext.Entity.Get(State.TargetCharacterUUID)
+            end
+            if not character then character = _C() end
+
+            for _, record in ipairs(records) do
+                local isCompatible = true
+                if PresetCompatibility and character and record.preset then
+                    local warnings = PresetCompatibility.Check(record.preset, character)
+                    if #warnings > 0 then isCompatible = false end
+                end
+
+                if isCompatible then
+                    table.insert(compatible, record)
+                else
+                    table.insert(incompatible, record)
+                end
+            end
+
+            local sortFunc = function(a, b)
+                local nameA = (a.preset and a.preset.Name) or ""
+                local nameB = (b.preset and b.preset.Name) or ""
+                return nameA < nameB
+            end
+            table.sort(compatible, sortFunc)
+            table.sort(incompatible, sortFunc)
+
+            local function addPresetRow(record, isCompatible)
+                local row = presetsTable:AddRow()
                 local nameCell = row:AddCell()
-                local label = (record.preset.Name .. "##" .. record.preset._id) or ("Preset " .. i)
+                local label = (record.preset.Name .. "##" .. record.preset._id) or ("Preset " .. record.preset._id)
 
                 local item = nameCell:AddButton(label)
                 item.Size = { -1, 50 }
+                item.UserData = {
+                isCompatible = isCompatible,
+                    record = record
+                }
+                if not isCompatible then
+                    item:SetColor("Button", UIColors.BUTTON_DISABLED)
+                    item:SetColor("Text", Mods.BG3MCM.UIStyle.Colors.TextDisabled)
+                end
                 item.OnClick = function()
                     State:SelectPreset(record)
+                end
+            end
+
+            for _, record in ipairs(compatible) do
+                addPresetRow(record, true)
+            end
+
+            if #incompatible > 0 then
+                local sepRow = presetsTable:AddRow()
+                sepRow:AddCell():AddSeparatorText("Incompatible presets")
+
+                for _, record in ipairs(incompatible) do
+                    addPresetRow(record, false)
                 end
             end
 
@@ -73,7 +124,7 @@ function Window:DrawSidebar(parent)
                 if not selected then return end
                 -- Iterate children of table; if button, check label, set active/inactive
                 -- REFACTOR: this is brittle smh
-                for _, child in ipairs(table.Children) do
+                for _, child in ipairs(presetsTable.Children) do
                     local cellChild = child.Children[1].Children[1]
                     if Ext.Types.IsA(cellChild, "extui::Button") then
                         if cellChild.Label == selected.preset.Name .. "##" .. selected.preset._id then
@@ -81,9 +132,13 @@ function Window:DrawSidebar(parent)
                             cellChild:SetColor("Button", Mods.BG3MCM.UIStyle.Colors.ButtonActive)
                             -- cellChild.Label = "> " .. buttonName .. "##" .. buttonHash
                         else
+                            if cellChild.UserData.isCompatible then
+                                cellChild:SetColor("Button", Mods.BG3MCM.UIStyle.Colors.Button)
+                            else
+                                cellChild:SetColor("Button", UIColors.BUTTON_DISABLED)
+                            end
                             -- Remove '> ' if existent
                             -- cellChild.Label = cellChild.Label:gsub("^> ", "")
-                            cellChild:SetColor("Button", Mods.BG3MCM.UIStyle.Colors.Button)
                         end
                     end
                 end
