@@ -14,23 +14,13 @@ local ATTRIBUTE_KEYS = {
     { key = "Elements",  locaKey = "RESOURCE_MATERIAL_OVERRIDE" },
 }
 
--- Check if a slot should be filtered based on MCM settings
-local function _ShouldFilterPrivateParts(slotName)
-    if not slotName then return false end
-
-    local hidePrivateParts = MCM.Get('list_private_parts')
-    return hidePrivateParts and slotName == "Private Parts"
-end
-
 -- Format mod resources with filtering
 local function _FormatModResources(resources)
     if not resources then return "" end
 
     local parts = {}
     for _, resource in ipairs(resources) do
-        if not _ShouldFilterPrivateParts(resource.SlotName) then
             table.insert(parts, string.format("%s (%s)", resource.DisplayName, resource.SlotName))
-        end
     end
 
     return table.concat(parts, "\n\t")

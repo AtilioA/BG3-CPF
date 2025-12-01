@@ -19,7 +19,7 @@ PresetInspector.SimpleFieldMap = {
 local function ShouldFilterPrivateParts(slotName)
     if not slotName then return false end
 
-    local hidePrivateParts = MCM.Get('list_private_parts')
+    local hidePrivateParts = not MCM.Get('list_private_parts')
     return hidePrivateParts and slotName == "Private Parts"
 end
 
