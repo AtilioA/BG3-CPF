@@ -28,6 +28,56 @@ function ViewMode:Render(parent)
             local IDText = group:AddText(Loca.Format(Loca.Keys.UI_LABEL_ID_VALUE, preset._id or "Unknown"))
             IDText:SetColor("Text", UIColors.COLOR_GRAY)
 
+            group:AddSeparator()
+
+            -- Actions
+            -- Disable button in CC
+            local btnApply
+            if CCA.IsInCC() and not Ext.Debug.IsDeveloperMode() then
+                local ccWarning = group:AddText(Loca.Get(Loca.Keys.UI_WARN_CC_RESTRICTION))
+                ccWarning:SetColor("Text", UIColors.COLOR_RED)
+                btnApply = group:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_CANNOT_APPLY))
+                StyleHelpers.DisableButton(btnApply)
+                btnApply.Disabled = true
+            else
+                btnApply = group:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_APPLY))
+                btnApply:SetColor("Button", UIColors.COLOR_GREEN)
+                btnApply.OnClick = function()
+                    local allWarnings = {}
+                    for _, mod in ipairs(allMods) do
+                        if not mod.IsLoaded then
+                            table.insert(allWarnings, Loca.Format(Loca.Keys.UI_WARN_MISSING_MOD, mod.Name, mod.UUID))
+                        end
+                    end
+                    for _, w in ipairs(warnings) do table.insert(allWarnings, w) end
+
+                    if #allWarnings > 0 then
+                        local msg = Loca.Format(Loca.Keys.UI_MSG_COMPATIBILITY_WARNING, table.concat(allWarnings, "\n- "))
+                        MessageBox:Create(Loca.Get(Loca.Keys.UI_TITLE_COMPATIBILITY_WARNING), msg, MessageBoxMode.YesNo)
+                            :SetYesCallback(function() State:ApplyPreset(record) end)
+                            :Show(group)
+                    else
+                        State:ApplyPreset(record)
+                    end
+                end
+            end
+
+            btnApply.SameLine = false
+
+            local buttonSpacing = group:AddSpacing()
+
+            buttonSpacing.SameLine = true
+
+            local btnDelete = group:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_HIDE_PRESET))
+            btnDelete:SetColor("Button", UIColors.COLOR_RED)
+            btnDelete.OnClick = function()
+                State:HidePreset(record)
+            end
+
+            btnDelete.SameLine = true
+
+            group:AddSeparator()
+
             -- Compatibility Checks
             local warnings = {}
             local allMods = {}
@@ -78,56 +128,6 @@ function ViewMode:Render(parent)
                 compatibilityWarning:SetColor("Text", UIColors.COLOR_ORANGE)
                 compatibilityWarning.TextWrapPos = -1
             end
-
-            group:AddSeparator()
-
-            -- Actions
-            -- Disable button in CC
-            local btnApply
-            if CCA.IsInCC() and not Ext.Debug.IsDeveloperMode() then
-                local ccWarning = group:AddText(Loca.Get(Loca.Keys.UI_WARN_CC_RESTRICTION))
-                ccWarning:SetColor("Text", UIColors.COLOR_RED)
-                btnApply = group:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_CANNOT_APPLY))
-                StyleHelpers.DisableButton(btnApply)
-                btnApply.Disabled = true
-            else
-                btnApply = group:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_APPLY))
-                btnApply:SetColor("Button", UIColors.COLOR_GREEN)
-                btnApply.OnClick = function()
-                    local allWarnings = {}
-                    for _, mod in ipairs(allMods) do
-                        if not mod.IsLoaded then
-                            table.insert(allWarnings, Loca.Format(Loca.Keys.UI_WARN_MISSING_MOD, mod.Name, mod.UUID))
-                        end
-                    end
-                    for _, w in ipairs(warnings) do table.insert(allWarnings, w) end
-
-                    if #allWarnings > 0 then
-                        local msg = Loca.Format(Loca.Keys.UI_MSG_COMPATIBILITY_WARNING, table.concat(allWarnings, "\n- "))
-                        MessageBox:Create(Loca.Get(Loca.Keys.UI_TITLE_COMPATIBILITY_WARNING), msg, MessageBoxMode.YesNo)
-                            :SetYesCallback(function() State:ApplyPreset(record) end)
-                            :Show(group)
-                    else
-                        State:ApplyPreset(record)
-                    end
-                end
-            end
-
-            btnApply.SameLine = false
-
-            local buttonSpacing = group:AddSpacing()
-
-            buttonSpacing.SameLine = true
-
-            local btnDelete = group:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_HIDE_PRESET))
-            btnDelete:SetColor("Button", UIColors.COLOR_RED)
-            btnDelete.OnClick = function()
-                State:HidePreset(record)
-            end
-
-            btnDelete.SameLine = true
-
-            group:AddSeparator()
 
             -- Attributes (read-only)
             local attrChild = group:AddChildWindow("AttributesView")
