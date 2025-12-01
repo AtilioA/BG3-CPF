@@ -7,43 +7,43 @@
     <content contentuid="hee06e0059ca44ccf9b6bb69bf6968d2a3d23" version="1">Sim</content>
     <content contentuid="hd31aa4de029b4685b44e81dcaf8f2b0c1c48" version="1">Não</content>
     <content contentuid="he3112f7c5b0f438bae3e1109d81408192c53" version="1">Confirmação</content>
-    <content contentuid="h18474c6f79604d669add8acc02bac4e072ec" version="1">Encontrada(s) [1] predefinição(ões)</content>
-
+    <content contentuid="h18474c6f79604d669add8acc02bac4e072ec" version="1">Encontrado [1] preset</content>
+    <content contentuid="h398fbf77a6d34acd99c810699f4871ab00ad" version="1">Encontrados [1] presets</content>
     <content contentuid="h4351c6200bc6444694c54fbfb0854297a465" version="1">Erro: PresetRegistry não disponível</content>
-    <content contentuid="h17d66385df014e799229d1f512a1eca84dc5" version="1">Predefinição selecionada: [1]</content>
+    <content contentuid="h17d66385df014e799229d1f512a1eca84dc5" version="1">Preset selecionado: [1]</content>
     <content contentuid="ha7361001a4d64d779db31dfe08cb911a9dae" version="1">Erro: Não foi possível encontrar o personagem do jogador</content>
     <content contentuid="h19b6fafe898e435891600946a60cb850a119" version="1">Erro: Não foi possível capturar os dados de aparência do personagem</content>
     <content contentuid="ha83198c86e44496b941eff8ea174111ceffa" version="1">Dados de aparência capturados de [1]</content>
     <content contentuid="h46324266d5dd4d69bbc02dd2ba9f525166f4" version="1">Erro: Nenhum dado capturado para salvar</content>
     <content contentuid="he4bb5b307b574fe789ade55535619f5cf6g6" version="1">Erro: Nome é obrigatório</content>
     <content contentuid="ha36c2bcf0b6f4fcc81a6592a4d62538d1g0b" version="1">Erro: Módulo Preset não carregado</content>
-    <content contentuid="ha75f41d9fa6649bb826edf8b93c56901c4g9" version="1">Erro ao criar objeto de predefinição</content>
+    <content contentuid="ha75f41d9fa6649bb826edf8b93c56901c4g9" version="1">Erro ao criar objeto de preset</content>
     <content contentuid="h8b13d31cbbc14264b15a62eb9a353c737d18" version="1">Erro: PresetDiscovery não disponível</content>
-    <content contentuid="hafc884e8f1904e40aeae71edc0702235dbf9" version="1">Predefinição '[1]' salva</content>
-    <content contentuid="ha816591c0bde42b9871dc371a9a9ed1a29d8" version="1">Predefinição '[1]' excluída</content>
+    <content contentuid="hafc884e8f1904e40aeae71edc0702235dbf9" version="1">Preset '[1]' salvo</content>
+    <content contentuid="ha816591c0bde42b9871dc371a9a9ed1a29d8" version="1">Preset '[1]' excluído</content>
     <content contentuid="h978a79713fe247c783e857f994ec6c5195cb" version="1">Erro: RequestApplyPreset não disponível</content>
     <content contentuid="h3b8299aae0f1475c984bfa77abf9ee0c38f3" version="1">Erro: Não foi possível obter o UUID do jogador</content>
-    <content contentuid="he0a8f474eb6d4167801d0123ab1bda09262c" version="1">Predefinição '[1]' aplicada</content>
-    <content contentuid="h8fb25a8e511a4365b884ebfbc8a1dcf8bba2" version="1">Predefinição '[1]' aplicada (Avisos: [2])</content>
-    <content contentuid="h800b262a6dc14c9ca4ec98a796a09636dg44" version="1">Falha ao aplicar predefinição</content>
-    <content contentuid="hcd0f6c359c4f4c68885528dd3688003d184a" version="1">Falha ao aplicar predefinição: [1]</content>
+    <content contentuid="he0a8f474eb6d4167801d0123ab1bda09262c" version="1">Preset '[1]' aplicado</content>
+    <content contentuid="h8fb25a8e511a4365b884ebfbc8a1dcf8bba2" version="1">Preset '[1]' aplicado (Avisos: [2])</content>
+    <content contentuid="h800b262a6dc14c9ca4ec98a796a09636dg44" version="1">Falha ao aplicar preset</content>
+    <content contentuid="hcd0f6c359c4f4c68885528dd3688003d184a" version="1">Falha ao aplicar preset: [1]</content>
     <content contentuid="h08f455b31e964a2c83e804ed9aae1aa0eee5" version="1">Erro: Buffer de importação está vazio</content>
     <content contentuid="h7b9091979433406ea3859d7d9d9569eadb1b" version="1">Erro de importação: [1]</content>
     <content contentuid="hb863571eb8cb4db68615e3a82e673f774171" version="1">Importado '[1]'</content>
-    <content contentuid="h2db4b2e15b2443409523abd9d1e0a07f9aeg" version="1">CharacterUuid ou dados de predefinição ausentes</content>
-    <content contentuid="h1efead2668c34518b8903140aed8815fbabd" version="1">Predefinição inválida: [1]</content>
+    <content contentuid="h2db4b2e15b2443409523abd9d1e0a07f9aeg" version="1">CharacterUuid ou dados de preset ausentes</content>
+    <content contentuid="h1efead2668c34518b8903140aed8815fbabd" version="1">Preset inválido: [1]</content>
     <content contentuid="h94c17ed18d90428aa5bb08df1c91f0304960" version="1">Entidade do personagem não encontrada</content>
     <content contentuid="h6c51e75d61fc4a4d8ddffd2ca0001860de2b" version="1">Atualizar</content>
     <content contentuid="h80bfb11d4256473097146840ace2cb63g662" version="1">Importar</content>
     <content contentuid="h683bb9e5226843279de8502d325b3cf018g5" version="1">Criação</content>
-    <content contentuid="hc27829ee46184f29ac0eade3a68796ddf8gf" version="1">Lista de predefinições</content>
+    <content contentuid="hc27829ee46184f29ac0eade3a68796ddf8gf" version="1">Lista de presets</content>
     <content contentuid="h32d901cc74ff475297bbc46ff1c06fe3c6eg" version="1">Modo desconhecido: [1]</content>
-    <content contentuid="h89d42e98322d4268b2b76dcc0b18ceaae5c6" version="1">Gerenciador de predefinições</content>
-    <content contentuid="hc2a1f9d162cf4764941e7e7b09ecbc182301" version="1">Todas as predefinições reexibidas.</content>
-    <content contentuid="h5bfe58e13875413facf003e39ad3000f5g52" version="1">Falha ao reexibir predefinições.</content>
-    <content contentuid="hf96c5f584ef64d67afd0ea721cc29d74991a" version="1">Índice de predefinições redefinido corretamente.&lt;br&gt;[1] predefinições carregadas.</content>
-    <content contentuid="h8ef2d1955abb4433a0dcb4050a0b4bdefab5" version="1">Falha ao redefinir índice de predefinições.</content>
-    <content contentuid="hb9ac2e174c1e48fbb605a7c86f48a42754fd" version="1">Criar nova predefinição a partir do personagem selecionado</content>
+    <content contentuid="h89d42e98322d4268b2b76dcc0b18ceaae5c6" version="1">Gerenciador de presets</content>
+    <content contentuid="hc2a1f9d162cf4764941e7e7b09ecbc182301" version="1">Todos os presets reexibidos.</content>
+    <content contentuid="h5bfe58e13875413facf003e39ad3000f5g52" version="1">Falha ao reexibir presets.</content>
+    <content contentuid="hf96c5f584ef64d67afd0ea721cc29d74991a" version="1">Índice de presets redefinido corretamente.&lt;br&gt;[1] presets carregados.</content>
+    <content contentuid="h8ef2d1955abb4433a0dcb4050a0b4bdefab5" version="1">Falha ao redefinir índice de presets.</content>
+    <content contentuid="hb9ac2e174c1e48fbb605a7c86f48a42754fd" version="1">Criar novo preset a partir do personagem selecionado</content>
     <content contentuid="hc8ef5df3679f4d6fb2b2d64705d5c03f7890" version="1">Nome</content>
     <content contentuid="h5d602891c7a54987b1e45504826e276d10e5" version="1">Autor</content>
     <content contentuid="h8cefdfe321f54bcb8e162485c7925cf05985" version="1">Versão</content>
@@ -51,25 +51,25 @@
     <content contentuid="hf88f70878c104b3d993b3a48891c08503ba3" version="1">Atributos capturados (visualização para fins de desenvolvimento):</content>
     <content contentuid="he001c04c8a80412982d5dd4822f02fbb7023" version="1">Nenhum dado capturado.</content>
     <content contentuid="hb7f9bfae60e44eb082deb2f9beb542aebfec" version="1">Você precisa do SE v30 ou Devel para usar este recurso.</content>
-    <content contentuid="hee5043fa5f3d4141acd588509fddf70a2035" version="1">Cole um JSON de predefinição abaixo:</content>
+    <content contentuid="hee5043fa5f3d4141acd588509fddf70a2035" version="1">Cole um JSON de preset abaixo:</content>
     <content contentuid="h67d6534f54124fab86a060570e02a61b1ag1" version="1">Importar '[1]'</content>
-    <content contentuid="he81f58cb726d4abf953da5d69464c75aa38c" version="1">Nenhuma predefinição disponível.&lt;br&gt;Comece importando ou criando uma nova predefinição.</content>
-    <content contentuid="h30dd1b4e74ca45e8824e30489d6e9aa6ec63" version="1">Clique em uma predefinição à esquerda para ver detalhes.</content>
+    <content contentuid="he81f58cb726d4abf953da5d69464c75aa38c" version="1">Nenhum preset disponível.&lt;br&gt;Comece importando ou criando um novo preset.</content>
+    <content contentuid="h30dd1b4e74ca45e8824e30489d6e9aa6ec63" version="1">Clique em um preset à esquerda para ver detalhes.</content>
     <content contentuid="h9050a5972dc84d19b0cbb451b5bb4b03520b" version="1">Nome: [1]</content>
     <content contentuid="h66efb8618f534cdc9c230ddae89220a0d516" version="1">Autor: [1]</content>
     <content contentuid="haadf3be5009346978ee68b60e4b249b16007" version="1">Versão: [1]</content>
     <content contentuid="h44f6be68e24249c5aa81f058f6737b41f0e3" version="1">ID: [1]</content>
-    <content contentuid="hbf8533fc643f4377a89c2baeb9741df9dd3d" version="1">Mods usados por esta predefinição:&lt;br&gt;[1]</content>
+    <content contentuid="hbf8533fc643f4377a89c2baeb9741df9dd3d" version="1">Mods usados por este preset:&lt;br&gt;[1]</content>
     <content contentuid="h958763badc08489cb1eb779c2ec82019c1e0" version="1">Avisos de compatibilidade:&lt;br&gt;[1]</content>
-    <content contentuid="h2cef40af574a4be4b73c66bde9766b6fg59b" version="1">Predefinições não podem ser aplicadas durante a Criação de Personagem.</content>
-    <content contentuid="hd8b91fe7ceaf4ebd974f3556e102f1c75c13" version="1">Não é possível aplicar predefinição</content>
-    <content contentuid="h4fefda7199694bc78271c533da7cb00aa653" version="1">Aplicar predefinição</content>
+    <content contentuid="h2cef40af574a4be4b73c66bde9766b6fg59b" version="1">Presets não podem ser aplicados durante a Criação de Personagem.</content>
+    <content contentuid="hd8b91fe7ceaf4ebd974f3556e102f1c75c13" version="1">Não é possível aplicar preset</content>
+    <content contentuid="h4fefda7199694bc78271c533da7cb00aa653" version="1">Aplicar preset</content>
     <content contentuid="h836f1668294f4e6f8967ed01a320f7767g40" version="1">Mod ausente: [1] ([2])</content>
     <content contentuid="h2d9f1ea6dff841a984ed22f83974fa24bee3" version="1">Aviso de compatibilidade</content>
-    <content contentuid="h56e4c13b0e464c6094a2fb7d312f814bgc11" version="1">Ocultar predefinição</content>
+    <content contentuid="h56e4c13b0e464c6094a2fb7d312f814bgc11" version="1">Ocultar preset</content>
     <content contentuid="hef5c19de8f3c4301aa68ac124e119b279c13" version="1">Visuais:</content>
     <content contentuid="h88848f5c497a493195cd9450325909db6cc1" version="1">Nenhum dado disponível.</content>
-    <content contentuid="hf6f1da3cd40b4119acffc9c6513bd22f7514" version="1">Esta predefinição não é totalmente compatível com seu personagem:&lt;br&gt;&lt;br&gt;- [1]&lt;br&gt;&lt;br&gt;Isso causará problemas com a aparência do seu personagem. Encontre uma predefinição compatível ou altere seu personagem com AEE.&lt;br&gt;Tem certeza de que deseja continuar?</content>
+    <content contentuid="hf6f1da3cd40b4119acffc9c6513bd22f7514" version="1">Este preset não é totalmente compatível com seu personagem:&lt;br&gt;&lt;br&gt;- [1]&lt;br&gt;&lt;br&gt;Isso causará problemas com a aparência do seu personagem. Encontre um preset compatível ou altere seu personagem com AEE.&lt;br&gt;Tem certeza de que deseja continuar?</content>
     <content contentuid="h18016894a1b44ba9b36f6d4a7aa64e11ee1d" version="1">Material Override</content>
     <content contentuid="h186cae7a51a14c85aebbb6c6dd11671af8ef" version="1">Passive Feature</content>
     <content contentuid="hf97df5b78bab40b39c7764d5dc8a84e77a5e" version="1">Definição de cor</content>
@@ -78,27 +78,27 @@
     <content contentuid="h6bf62ca9ded54abb86e73cb6643bb381fb1c" version="1">Preset</content>
     <content contentuid="hfdc622c20e1b4b3aa1b1a9a6b0ea59ca46c2" version="1">Geral</content>
     <content contentuid="h27da329536f040db97fc9619652bedd971b5" version="1">Abrir gerenciador do CPF</content>
-    <content contentuid="ha140ff4e59204e2396b1b5e0cbb1be15854a" version="1">Abre o gerenciador de predefinições.</content>
-    <content contentuid="h0eda70dd22d24a36a778149046cd54ca3c5g" version="1">Redefinir índice de predefinições</content>
-    <content contentuid="h0b14631390894319870f2c45bab59a4f527d" version="1">Clique neste botão para redefinir o índice de predefinições.&lt;br&gt;Isso reexibirá predefinições escondidas, mas você perderá predefinições que criou.</content>
-    <content contentuid="h14d9850417844dd2ad53e1952438e0d8dd61" version="1">Entrar automaticamente no Espelho após aplicar predefinição</content>
-    <content contentuid="h05f31edd0b5442d9af969de18f1d5bf8df76" version="1">Reexibir todas as predefinições</content>
-    <content contentuid="hc2c599f4eb0241b79dfed8019a5e6697f79b" version="1">Entrar automaticamente no modo de Espelho/mudança de aparência após aplicar uma predefinição</content>
-    <content contentuid="hc52a8c48f4d641028cf4caefefc613184e9g" version="1">Clique neste botão para reexibir todas as predefinições que foram escondidas.</content>
+    <content contentuid="ha140ff4e59204e2396b1b5e0cbb1be15854a" version="1">Abre o gerenciador de presets.</content>
+    <content contentuid="h0eda70dd22d24a36a778149046cd54ca3c5g" version="1">Redefinir índice de presets</content>
+    <content contentuid="h0b14631390894319870f2c45bab59a4f527d" version="1">Clique neste botão para redefinir o índice de presets.&lt;br&gt;Isso reexibirá presets escondidos, mas você perderá presets que criou.</content>
+    <content contentuid="h14d9850417844dd2ad53e1952438e0d8dd61" version="1">Entrar automaticamente no Espelho após aplicar preset</content>
+    <content contentuid="h05f31edd0b5442d9af969de18f1d5bf8df76" version="1">Reexibir todos os presets</content>
+    <content contentuid="hc2c599f4eb0241b79dfed8019a5e6697f79b" version="1">Entrar automaticamente no modo de Espelho/mudança de aparência após aplicar um preset</content>
+    <content contentuid="hc52a8c48f4d641028cf4caefefc613184e9g" version="1">Clique neste botão para reexibir todos os presets que foram escondidos.</content>
     <content contentuid="hc554eadccbe946c5bd3227be1ac5c5291acf" version="1">0 = sem logs de depuração, 1 = depuração básica, 2 = detalhado.</content>
     <content contentuid="h3384e2c2309a48b59c80f0647e4b46a05g89" version="1">Nível de depuração</content>
     <content contentuid="h85586b55ac894f9ba411a964dac75263d00b" version="1">Depuração</content>
     <content contentuid="hdbc141d3a9c44e08aa63fee84e5ccff761f8" version="1">Depuração</content>
     <content contentuid="h0a78cf3d6c604445b6be5a19a4795506gc07" version="1">Erro: [1]</content>
     <content contentuid="h06c4579a68f84fe5a28a4504aad8cc1d1cb1" version="1">Erro: [1]</content>
-    <content contentuid="hb068d9f9741b4a4ba72211c599bccf5671b8" version="1">Incompatibilidade de Forma Corporal: Predefinição usa [1], Personagem usa [2].</content>
-    <content contentuid="h5939b98d351d421bbc40fa1c2663778c6a80" version="1">Incompatibilidade de Tipo Corporal: Predefinição usa [1], Personagem usa [2].</content>
-    <content contentuid="h5ef070cb861841f8b1e3fb40bf9b0d40c915" version="1">Incompatibilidade de Raça: Predefinição usa [1], Personagem usa [2].</content>
-    <content contentuid="h644622bd0418440b9a5d5efb4a5f68221bfe" version="1">Incompatibilidade de Sub-raça: Predefinição usa [1], Personagem usa [2].</content>
+    <content contentuid="hb068d9f9741b4a4ba72211c599bccf5671b8" version="1">Incompatibilidade de Forma Corporal: Preset usa [1], Personagem usa [2].</content>
+    <content contentuid="h5939b98d351d421bbc40fa1c2663778c6a80" version="1">Incompatibilidade de Tipo Corporal: Preset usa [1], Personagem usa [2].</content>
+    <content contentuid="h5ef070cb861841f8b1e3fb40bf9b0d40c915" version="1">Incompatibilidade de Raça: Preset usa [1], Personagem usa [2].</content>
+    <content contentuid="h644622bd0418440b9a5d5efb4a5f68221bfe" version="1">Incompatibilidade de Sub-raça: Preset usa [1], Personagem usa [2].</content>
     <content contentuid="h30640f00f0584cf8a5062646bb57d5807cgd" version="1">Nenhum</content>
     <content contentuid="h12fc8ad09fc44da381f05bf59ae1f1f4fffb" version="1">Médio</content>
-    <content contentuid="h140f8c18cb4d440eb07df9488f6789a4249f" version="1">Automaticamente salvar imagem de retrato ao criar uma predefinição</content>
-    <content contentuid="he6de32cf884b45d49a727e0736a18828448d" version="1">Automaticamente salvar imagem de retrato ao criar uma predefinição.&lt;br&gt;Este arquivo será salvo ao lado do arquivo JSON da predefinição.</content>
-    <content contentuid="h009264f133fb4ad283d5df5b0de5d7217ced" version="1">Incompatible presets</content>
-    <content contentuid="hdbcd62a9150f4a8c9a8fbcc3251d13ca9dec" version="1">No compatible presets found.</content>
+    <content contentuid="h140f8c18cb4d440eb07df9488f6789a4249f" version="1">Salvar automaticamente imagem de retrato ao criar um preset</content>
+    <content contentuid="he6de32cf884b45d49a727e0736a18828448d" version="1">Salvar automaticamente imagem de retrato ao criar um preset.&lt;br&gt;Este arquivo será salvo ao lado do arquivo JSON do preset.</content>
+    <content contentuid="h009264f133fb4ad283d5df5b0de5d7217ced" version="1">Presets incompatíveis</content>
+    <content contentuid="hdbcd62a9150f4a8c9a8fbcc3251d13ca9dec" version="1">Nenhum preset compatível.</content>
 </contentList>
