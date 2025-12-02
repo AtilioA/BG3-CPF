@@ -57,7 +57,7 @@ function Window:DrawSidebar(parent)
             headerRow:AddCell():AddSeparatorText(Loca.Get(Loca.Keys.UI_HEADER_PRESET_LIST))
 
             -- Sort and separate presets
-            local compatible, incompatible = WindowHelpers.GetSortedPresets(records)
+            local compatible, incompatible, hidden = WindowHelpers.GetSortedPresets(records)
 
             if #compatible == 0 then
                 local sepRow = presetsTable:AddRow()
@@ -74,6 +74,17 @@ function Window:DrawSidebar(parent)
 
                 for _, record in ipairs(incompatible) do
                     WindowHelpers.AddPresetRow(presetsTable, record, false)
+                end
+            end
+
+            if #hidden > 0 then
+                local hiddenRow = presetsTable:AddRow()
+                local hiddenCell = hiddenRow:AddCell()
+                local hiddenHeader = hiddenCell:AddCollapsingHeader(Loca.Get(Loca.Keys.UI_TEXT_HIDDEN_PRESETS))
+                hiddenHeader.DefaultOpen = false
+
+                for _, record in ipairs(hidden) do
+                    WindowHelpers.AddPresetRow(hiddenHeader, record, false)
                 end
             end
 

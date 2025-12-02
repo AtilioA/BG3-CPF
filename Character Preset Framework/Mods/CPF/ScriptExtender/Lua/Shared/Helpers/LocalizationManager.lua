@@ -55,6 +55,7 @@ LocalizationManager.Keys = {
     UI_HEADER_PRESET_LIST = "hc27829ee46184f29ac0eade3a68796ddf8gf",
     UI_TEXT_NO_COMPATIBLE_PRESETS = "hdbcd62a9150f4a8c9a8fbcc3251d13ca9dec",
     UI_TEXT_INCOMPATIBLE_PRESETS = "h009264f133fb4ad283d5df5b0de5d7217ced",
+    UI_TEXT_HIDDEN_PRESETS = "h3f8a9d2e7c4b4a1f9e6d5c8b7a6f5e4d3c2b",
     UI_ERROR_UNKNOWN_MODE = "h32d901cc74ff475297bbc46ff1c06fe3c6eg",
 
     -- MCMIntegration.lua

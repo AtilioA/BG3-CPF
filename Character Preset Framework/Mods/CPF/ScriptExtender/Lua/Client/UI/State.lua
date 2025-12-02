@@ -90,19 +90,21 @@ function State:RefreshPresets()
     if PresetRegistry then
         local recordsArray = PresetRegistry.GetAllAsArray()
 
-        -- Filter out hidden presets
-        local visibleRecords = {}
+        -- Pass all records to the UI (including hidden ones)
+        -- WindowHelpers will handle filtering them into categories
+        self.Presets:OnNext(recordsArray)
+
+        -- Count only visible presets for status message
+        local visibleCount = 0
         for _, record in ipairs(recordsArray) do
             if not (record.indexData and record.indexData.hidden) then
-                table.insert(visibleRecords, record)
+                visibleCount = visibleCount + 1
             end
         end
 
-        self.Presets:OnNext(visibleRecords)
-        local count = #visibleRecords
         self:SetStatus(Loca.FormatPlural(Loca.Keys.STATUS_FOUND_PRESETS_SINGULAR, Loca.Keys.STATUS_FOUND_PRESETS_PLURAL,
-            count))
-        CPFPrint(1, string.format("Refreshed UI with %d preset(s)", count))
+            visibleCount))
+        CPFPrint(1, string.format("Refreshed UI with %d preset(s)", visibleCount))
 
         -- Also update compatibility when refreshing presets
         self:UpdatePresetCompatibility()
