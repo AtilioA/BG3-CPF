@@ -20,7 +20,7 @@ local function _FormatModResources(resources)
 
     local parts = {}
     for _, resource in ipairs(resources) do
-            table.insert(parts, string.format("%s (%s)", resource.DisplayName, resource.SlotName))
+        table.insert(parts, string.format("%s (%s)", resource.DisplayName, resource.SlotName))
     end
 
     return table.concat(parts, "\n\t")
@@ -145,7 +145,7 @@ function ViewModeHelpers.RenderHeader(group, record)
 
     local preset = record.preset
     group:AddText(Loca.Format(Loca.Keys.UI_LABEL_NAME_VALUE, preset.Name or "Unknown"))
-    if record.indexData.source ~= 'user' then
+    if record.indexData.source and string.lower(record.indexData.source) ~= 'user' then
         group:AddText(Loca.Format(Loca.Keys.UI_LABEL_SOURCE_VALUE, record.indexData.source))
     end
     group:AddText(Loca.Format(Loca.Keys.UI_LABEL_AUTHOR_VALUE, preset.Author or "Unknown"))
