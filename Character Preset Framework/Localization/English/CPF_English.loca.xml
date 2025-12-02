@@ -21,6 +21,7 @@
     <content contentuid="h8b13d31cbbc14264b15a62eb9a353c737d18" version="1">Error: PresetDiscovery not available</content>
     <content contentuid="hafc884e8f1904e40aeae71edc0702235dbf9" version="1">Preset '[1]' saved</content>
     <content contentuid="ha816591c0bde42b9871dc371a9a9ed1a29d8" version="1">Preset '[1]' deleted</content>
+    <content contentuid="h9c7e5f3a1d8b6c4e2a0f9d8c7b6a5e4d3c2b" version="1">Preset '[1]' unhidden</content>
     <content contentuid="h978a79713fe247c783e857f994ec6c5195cb" version="1">Error: RequestApplyPreset not available</content>
     <content contentuid="h3b8299aae0f1475c984bfa77abf9ee0c38f3" version="1">Error: Could not get player UUID</content>
     <content contentuid="he0a8f474eb6d4167801d0123ab1bda09262c" version="1">Applied preset '[1]'</content>
@@ -67,6 +68,7 @@
     <content contentuid="h836f1668294f4e6f8967ed01a320f7767g40" version="1">Missing mod: [1] ([2])</content>
     <content contentuid="h2d9f1ea6dff841a984ed22f83974fa24bee3" version="1">Compatibility warning</content>
     <content contentuid="h56e4c13b0e464c6094a2fb7d312f814bgc11" version="1">Hide preset</content>
+    <content contentuid="h7e2f9a4c8d5b6c3e1a9f8d7c6b5a4e3d2c1b" version="1">Unhide preset</content>
     <content contentuid="hef5c19de8f3c4301aa68ac124e119b279c13" version="1">Visuals</content>
     <content contentuid="h88848f5c497a493195cd9450325909db6cc1" version="1">No data available.</content>
     <content contentuid="hf6f1da3cd40b4119acffc9c6513bd22f7514" version="1">This preset is not fully compatible with your character:&lt;br&gt;&lt;br&gt;- [1]&lt;br&gt;&lt;br&gt;This will cause issues with your character's appearance. Find a compatible preset or change your character with AEE instead.&lt;br&gt;Are you sure you want to proceed?</content>

@@ -78,13 +78,20 @@ function Window:DrawSidebar(parent)
             end
 
             if #hidden > 0 then
+
                 local hiddenRow = presetsTable:AddRow()
                 local hiddenCell = hiddenRow:AddCell()
+                hiddenCell:AddDummy(10, 10)
+                hiddenCell:AddSeparator()
+                hiddenCell:AddDummy(10, 10)
                 local hiddenHeader = hiddenCell:AddCollapsingHeader(Loca.Get(Loca.Keys.UI_TEXT_HIDDEN_PRESETS))
+                local hiddenPresetsTable = hiddenHeader:AddTable("HiddenPresetsTable", 1)
+                hiddenHeader:SetColor("Header", UIColors.BUTTON_DISABLED)
+                hiddenHeader:SetColor("Text", Mods.BG3MCM.UIStyle.Colors.TextDisabled)
                 hiddenHeader.DefaultOpen = false
 
                 for _, record in ipairs(hidden) do
-                    WindowHelpers.AddPresetRow(hiddenHeader, record, false)
+                    WindowHelpers.AddPresetRow(hiddenPresetsTable, record, false)
                 end
             end
 

@@ -171,12 +171,26 @@ function ViewModeHelpers.RenderActions(group, record, compatibilityInfo)
     local buttonSpacing = group:AddSpacing()
     buttonSpacing.SameLine = true
 
-    local btnDelete = group:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_HIDE_PRESET))
-    btnDelete:SetColor("Button", UIColors.COLOR_RED)
-    btnDelete.OnClick = function()
-        State:HidePreset(record)
+    -- Check if preset is hidden
+    local isHidden = record.indexData and record.indexData.hidden
+
+    if isHidden then
+        -- Show Unhide button for hidden presets
+        local btnUnhide = group:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_UNHIDE_PRESET))
+        -- btnUnhide:SetColor("Button", UIColors.COLOR_GREEN)
+        btnUnhide.OnClick = function()
+            State:UnhidePreset(record)
+        end
+        btnUnhide.SameLine = true
+    else
+        -- Show Hide button for visible presets
+        local btnHide = group:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_HIDE_PRESET))
+        btnHide:SetColor("Button", UIColors.COLOR_RED)
+        btnHide.OnClick = function()
+            State:HidePreset(record)
+        end
+        btnHide.SameLine = true
     end
-    btnDelete.SameLine = true
 
     group:AddSeparator()
 end

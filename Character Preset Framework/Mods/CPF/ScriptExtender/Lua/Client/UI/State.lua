@@ -329,6 +329,28 @@ function State:HidePreset(record)
     self.SelectedPreset:OnNext(nil)
 end
 
+--- Mark a preset as unhidden
+---@param record PresetRecord
+function State:UnhidePreset(record)
+    if not record or not record.preset then return end
+
+    if not PresetIndex then
+        CPFWarn(0, "PresetIndex not available")
+        self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_DISCOVERY_NOT_AVAILABLE))
+        return
+    end
+
+    PresetIndex.SetHidden(record.preset._id, false)
+    self:SetStatus(Loca.Format(Loca.Keys.STATUS_PRESET_UNHIDDEN, record.preset.Name))
+    self:RefreshPresets()
+    -- Keep the preset selected after unhiding
+    -- We need to get the updated record from the registry
+    local updatedRecord = PresetRegistry.Get(record.preset._id)
+    if updatedRecord then
+        self.SelectedPreset:OnNext(updatedRecord)
+    end
+end
+
 function State:ApplyPreset(record)
     if not record or not record.preset then return end
     local preset = record.preset
