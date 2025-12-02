@@ -152,8 +152,9 @@ function State:UpdateFormDefaults()
                 if response.UserName and response.UserName ~= "" then
                     data.Author = response.UserName
                 end
-                if response.CharacterName and response.CharacterName ~= "" then
-                    data.Name = response.CharacterName
+                local entity = _C()
+                if entity then
+                    data.Name = Ext.Loca.GetTranslatedString(entity.DisplayName.NameKey.Handle.Handle)
                 end
 
                 -- Trigger reactive update
@@ -219,14 +220,13 @@ function State:CaptureCharacterData()
     if RequestUserInfo then
         RequestUserInfo({
             OnSuccess = function(response)
-                local characterUUID = response.CharacterUUID
-                local character = Ext.Entity.Get(characterUUID)
+                local character = _C()
                 local data = self.NewPresetData:GetValue()
                 if response.UserName and response.UserName ~= "" then
                     data.Author = response.UserName
                 end
-                if response.CharacterName and response.CharacterName ~= "" then
-                    data.Name = response.CharacterName
+                if character and character.DisplayName then
+                    data.Name = Ext.Loca.GetTranslatedString(character.DisplayName.NameKey.Handle.Handle)
                 end
 
                 captureData(character)

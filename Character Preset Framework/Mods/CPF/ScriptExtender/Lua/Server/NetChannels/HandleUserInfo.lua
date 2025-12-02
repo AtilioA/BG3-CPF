@@ -10,8 +10,6 @@ local function handleUserInfo(data, userId)
     local response = {
         Status = "success",
         UserName = "",
-        CharacterName = "",
-        CharacterUUID = nil,
         UserID = userId
     }
 
@@ -21,15 +19,7 @@ local function handleUserInfo(data, userId)
         response.UserName = userName
     end
 
-    -- Get character entity for this user
-    local entity = UserID:GetUserCharacter(userId)
-    if entity then
-        response.CharacterName = Ext.Loca.GetTranslatedString(entity.DisplayName.NameKey.Handle.Handle)
-        response.CharacterUUID = entity.Uuid.EntityUuid
-    end
-
-    CPFPrint(1, string.format("Returning user info: %s, character: %s",
-        response.UserName, response.CharacterName))
+    CPFPrint(1, string.format("Returning user info: %s", response.UserName))
 
     return response
 end
