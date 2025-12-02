@@ -2,6 +2,7 @@ local State = Ext.Require("Client/UI/State.lua")
 local MessageBox = Ext.Require("Client/UI/Components/MessageBox.lua")
 local PresetInspector = Ext.Require("Shared/Presets/PresetInspector.lua")
 local PresetCompatibility = Ext.Require("Shared/Validation/PresetCompatibility.lua")
+local ResourceHelper = Ext.Require("Shared/Helpers/ResourceHelper.lua")
 
 local ViewModeHelpers = {}
 
@@ -30,8 +31,9 @@ end
 local function _FormatModLine(mod)
     local resourcesText = _FormatModResources(mod.Resources)
     if resourcesText == "" then return nil end
+    resourcesText = ResourceHelper:CleanDisplayName(resourcesText)
 
-    local prefix = mod.IsLoaded and "" or "(MISSING) "
+    local prefix = mod.IsLoaded and "" or Loca.Get(Loca.Keys.UI_MISSING_MOD) .. " "
     return string.format("%s%s: %s", prefix, mod.Name, resourcesText)
 end
 

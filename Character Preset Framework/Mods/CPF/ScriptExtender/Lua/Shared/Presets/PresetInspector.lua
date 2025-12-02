@@ -107,7 +107,11 @@ local function InspectElements(value)
             nil -- Will use default if ColorDefinition fails
         )
 
-        table.insert(results, string.format("Material: %s | Color: %s", matName, colName))
+        if colName and colName ~= "" and colName ~= "None" and colName ~= "Unknown" then
+            table.insert(results, string.format("Material: %s | Color: %s", matName, colName))
+        else
+            table.insert(results, string.format("Material: %s", matName))
+        end
     end
 
     return #results > 0 and results or nil

@@ -20,12 +20,26 @@ ResourceHelper.ResourceTypes = {
     "ColorDefinition"
 }
 
+ResourceHelper.UnwantedCharacters = {
+    "★ ",
+}
+
+function ResourceHelper:CleanDisplayName(displayName)
+    for _, char in ipairs(ResourceHelper.UnwantedCharacters) do
+        displayName = string.gsub(displayName, char, "")
+    end
+    return displayName
+end
+
 --- Helper to safely get display name
----@param resource any
+--- Removes unwanted charactersSet (★) from the display nameet---@param resource any
 ---@return string
 local function GetDisplayName(resource)
     if resource.DisplayName and resource.DisplayName.Get then
-        return resource.DisplayName:Get()
+        local displayName = resource.DisplayName:Get()
+        -- Remove the "★ " marker at the source
+        local cleaned = ResourceHelper:CleanDisplayName(displayName)
+        return cleaned
     end
     return ""
 end
@@ -89,7 +103,7 @@ function ResourceHelper:SafeExecute(strategy, resource)
     if success then
         return name, slot
     end
-    CPFWarn(0, "Failed to get resource details.")
+    CPFWarn(2, "Failed to get resource details.")
     return "Unknown", "Unknown"
 end
 
