@@ -338,7 +338,7 @@ function State:ApplyPreset(record)
     end
 
     -- Get the client player entity
-    local player = Ext.Entity.GetAllEntitiesWithComponent("ClientControl")[1]
+    local player = _C()
 
     if not player then
         CPFWarn(0, "Could not find player entity")
