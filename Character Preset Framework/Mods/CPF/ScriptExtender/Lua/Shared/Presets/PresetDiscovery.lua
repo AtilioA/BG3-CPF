@@ -192,6 +192,26 @@ function PresetDiscovery:HideUserPreset(presetId)
     return true
 end
 
+--- Unhides a user preset (unhides it in the index)
+---@param presetId string The ID of the preset to unhide
+---@return boolean success
+---@return string? error
+function PresetDiscovery:UnhideUserPreset(presetId)
+    -- Mark as unhidden in the index
+    local success, err = PresetIndex.SetHidden(presetId, false)
+    if not success then
+        return false, "Failed to unhide preset in index: " .. tostring(err)
+    end
+
+    -- Update the preset's index data in the registry
+    success = PresetRegistry.UpdateIndexData(presetId)
+    if not success then
+        CPFWarn(1, "Failed to update preset index data for: " .. presetId)
+    end
+
+    return true
+end
+
 --- Loads and registers numbered user presets (preset_0.json to preset_9.json)
 ---@return integer count Number of presets loaded
 ---@private

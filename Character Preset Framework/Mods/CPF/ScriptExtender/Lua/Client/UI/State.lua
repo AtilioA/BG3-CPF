@@ -334,13 +334,18 @@ end
 function State:UnhidePreset(record)
     if not record or not record.preset then return end
 
-    if not PresetIndex then
-        CPFWarn(0, "PresetIndex not available")
+    if not (PresetDiscovery and PresetDiscovery.UnhideUserPreset) then
+        CPFWarn(0, "PresetDiscovery not available")
         self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_DISCOVERY_NOT_AVAILABLE))
         return
     end
 
-    PresetIndex.SetHidden(record.preset._id, false)
+    local success, err = PresetDiscovery:UnhideUserPreset(record.preset._id)
+    if not success then
+        CPFWarn(0, "Failed to unhide preset: " .. tostring(err))
+        self:SetStatus(Loca.Format(Loca.Keys.STATUS_ERROR_UNHIDE_PRESET, tostring(err)))
+        return
+    end
     self:SetStatus(Loca.Format(Loca.Keys.STATUS_PRESET_UNHIDDEN, record.preset.Name))
     self:RefreshPresets()
     -- Keep the preset selected after unhiding
