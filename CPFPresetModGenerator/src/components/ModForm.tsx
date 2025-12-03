@@ -7,7 +7,7 @@ import { generateUUID, sanitizeFolderName } from '../utils/helpers';
 import { modConfigSchema, ModConfigErrors } from '../schemas/modConfigSchema';
 import { FormField } from './FormField';
 import { DependencyList } from './DependencyList';
-import { track } from '@vercel/analytics/react';
+import * as Sentry from "@sentry/nextjs";
 
 interface ModFormProps {
     config: ModConfig;
@@ -83,7 +83,7 @@ export const ModForm: React.FC<ModFormProps> = ({ config, setConfig, onGenerate,
             return;
         }
 
-        track('preset_created');
+        Sentry.captureMessage('Preset Created', 'info');
         setIsGenerating(true);
 
         // Clear any existing timeout
