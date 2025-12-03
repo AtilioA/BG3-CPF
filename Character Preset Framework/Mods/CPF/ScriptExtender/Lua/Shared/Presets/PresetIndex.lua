@@ -2,7 +2,7 @@
 ---@field filename string Relative path to the preset file (may be empty for mod presets)
 ---@field hidden boolean Whether the preset is hidden (deleted)
 ---@field presetId string The ID of the preset
----@field source string Source of the preset: "user" or "mod"
+---@field source string Source of the preset: "User" or mod name
 ---@field modName string? Name of the mod (for mod presets)
 
 ---@class PresetIndex
@@ -60,7 +60,7 @@ end
 ---@param source string Source: Mod Name or "User"
 ---@return boolean success
 function PresetIndex.AddEntry(filename, presetId, source)
-    source = source or "user"
+    source = source or "User"
     CPFDebug(2,
         string.format("PresetIndex.AddEntry: filename='%s', presetId='%s', source='%s'", filename, presetId, source))
     local entries = PresetIndex.Load()
