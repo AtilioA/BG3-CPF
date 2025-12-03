@@ -70,7 +70,11 @@ function Window:DrawSidebar(parent)
 
             if #incompatible > 0 then
                 local sepRow = presetsTable:AddRow()
-                sepRow:AddCell():AddSeparatorText(Loca.Get(Loca.Keys.UI_TEXT_INCOMPATIBLE_PRESETS))
+                local rowCell = sepRow:AddCell()
+                local incompatibleSepText = rowCell:AddSeparatorText(Loca.Get(Loca.Keys.UI_TEXT_INCOMPATIBLE_PRESETS))
+                local incompatibleSectionTooltip = incompatibleSepText:Tooltip()
+                incompatibleSectionTooltip:AddText(
+                    Loca.Get(Loca.Keys.UI_TEXT_INCOMPATIBLE_PRESETS_TOOLTIP))
 
                 for _, record in ipairs(incompatible) do
                     WindowHelpers.AddPresetRow(presetsTable, record, false)
@@ -78,7 +82,6 @@ function Window:DrawSidebar(parent)
             end
 
             if #hidden > 0 then
-
                 local hiddenRow = presetsTable:AddRow()
                 local hiddenCell = hiddenRow:AddCell()
                 hiddenCell:AddDummy(10, 10)
