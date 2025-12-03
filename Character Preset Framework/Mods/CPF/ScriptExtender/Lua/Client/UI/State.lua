@@ -310,14 +310,14 @@ function State:HidePreset(record)
     if not record or not record.preset then return end
 
     -- TODO: refactor
-    -- Use PresetDiscovery to remove (handles both registry and index)
-    if not (PresetDiscovery and PresetDiscovery.HideUserPreset) then
-        CPFWarn(0, "PresetDiscovery not available")
+    -- Use PresetManager to remove (handles both registry and index)
+    if not (PresetManager and PresetManager.HidePreset) then
+        CPFWarn(0, "PresetManager not available")
         self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_DISCOVERY_NOT_AVAILABLE))
         return
     end
 
-    local success, err = PresetDiscovery:HideUserPreset(record.preset._id)
+    local success, err = PresetManager.HidePreset(record.preset._id)
     if not success then
         CPFWarn(0, "Failed to remove preset: " .. tostring(err))
         self:SetStatus(Loca.Format(Loca.Keys.STATUS_ERROR_HIDE_PRESET, tostring(err)))
@@ -334,13 +334,13 @@ end
 function State:UnhidePreset(record)
     if not record or not record.preset then return end
 
-    if not (PresetDiscovery and PresetDiscovery.UnhideUserPreset) then
-        CPFWarn(0, "PresetDiscovery not available")
+    if not (PresetManager and PresetManager.UnhidePreset) then
+        CPFWarn(0, "PresetManager not available")
         self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_DISCOVERY_NOT_AVAILABLE))
         return
     end
 
-    local success, err = PresetDiscovery:UnhideUserPreset(record.preset._id)
+    local success, err = PresetManager.UnhidePreset(record.preset._id)
     if not success then
         CPFWarn(0, "Failed to unhide preset: " .. tostring(err))
         self:SetStatus(Loca.Format(Loca.Keys.STATUS_ERROR_UNHIDE_PRESET, tostring(err)))
@@ -448,14 +448,14 @@ function State:ImportFromBuffer()
         return
     end
 
-    -- Use PresetDiscovery to register (handles both registry and index, will refactor later :gladge:)
-    if not (PresetDiscovery and PresetDiscovery.RegisterUserPreset) then
-        CPFWarn(0, "PresetDiscovery not available")
+    -- Use PresetManager to register (handles both registry and index)
+    if not (PresetManager and PresetManager.SaveUserPreset) then
+        CPFWarn(0, "PresetManager not available")
         self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_DISCOVERY_NOT_AVAILABLE))
         return
     end
 
-    local registrationSuccess, err = PresetDiscovery:RegisterUserPreset(actualPreset)
+    local registrationSuccess, err = PresetManager.SaveUserPreset(actualPreset)
     if not registrationSuccess then
         CPFWarn(0, "Failed to register imported preset: " .. tostring(err))
         self:SetStatus(Loca.Format(Loca.Keys.STATUS_IMPORT_ERROR, err))

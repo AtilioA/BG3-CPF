@@ -28,20 +28,16 @@ function PresetRegistry.Register(preset)
         CPFWarn(1, string.format("Preset with ID '%s' already registered. Overwriting.", preset._id))
     end
 
-    if not PresetIndex then
-        return false, "PresetIndex not loaded"
-    end
-    local addedToIndex = PresetIndex.AddEntry(preset.filename, preset._id, "user")
-    if not addedToIndex then
-        return false, "Failed to add preset to index"
-    end
-
     -- Create wrapper record
     ---@type PresetRecord
     local record = {
         preset = preset,
-        indexData = PresetIndex.GetEntry(preset._id)
+        indexData = nil
     }
+
+    if PresetIndex then
+        record.indexData = PresetIndex.GetEntry(preset._id)
+    end
 
     PresetRegistry._records[preset._id] = record
 
@@ -60,14 +56,6 @@ function PresetRegistry.Unregister(id)
 
     if not PresetRegistry._records[id] then
         return false, "Preset with ID '" .. id .. "' not found"
-    end
-
-    if not PresetIndex then
-        return false, "PresetIndex not loaded"
-    end
-    local removedFromIndex = PresetIndex.RemoveEntryByPresetId(id)
-    if not removedFromIndex then
-        return false, "Failed to remove preset from index"
     end
 
     CPFPrint(2, string.format("Unregistered preset: '%s' (ID: %s)", PresetRegistry._records[id].preset.Name, id))

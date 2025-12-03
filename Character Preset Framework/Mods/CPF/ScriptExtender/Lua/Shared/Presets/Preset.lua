@@ -300,12 +300,12 @@ function Preset.SaveUserPreset(preset, targetEntity)
         return false, "Validation failed: " .. tostring(err)
     end
 
-    -- Use PresetDiscovery to save and register (handles both file and index)
-    if not (PresetDiscovery and PresetDiscovery.RegisterUserPreset) then
-        return false, "PresetDiscovery not available"
+    -- Use PresetManager to save and register (handles both file and index)
+    if not (PresetManager and PresetManager.SaveUserPreset) then
+        return false, "PresetManager not available"
     end
 
-    local success, regErr = PresetDiscovery:RegisterUserPreset(preset)
+    local success, regErr = PresetManager.SaveUserPreset(preset)
     if not success then
         return false, "Failed to register preset: " .. tostring(regErr)
     end
