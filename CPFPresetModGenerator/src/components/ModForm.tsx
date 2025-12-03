@@ -7,6 +7,7 @@ import { generateUUID, sanitizeFolderName } from '../utils/helpers';
 import { modConfigSchema, ModConfigErrors } from '../schemas/modConfigSchema';
 import { FormField } from './FormField';
 import { DependencyList } from './DependencyList';
+import { track } from '@vercel/analytics/react';
 
 interface ModFormProps {
     config: ModConfig;
@@ -82,6 +83,7 @@ export const ModForm: React.FC<ModFormProps> = ({ config, setConfig, onGenerate,
             return;
         }
 
+        track('preset_created');
         setIsGenerating(true);
 
         // Clear any existing timeout
