@@ -18,14 +18,18 @@ const Step: React.FC<StepProps> = ({ number, children }) => (
 export const NextSteps: React.FC = () => {
     return (
         <div className="bg-slate-950/50 rounded-xl p-6 border border-slate-800 text-left">
-            <h3 className="text-indigo-400 font-semibold mb-4 text-base">Next steps</h3>
+            <h2 className="text-indigo-400 font-bold mb-4 text-2xl">
+                Next steps
+                <span className='text-lg text-red-600'> *</span>
+                </h2>
+
             <ul className="space-y-4">
                 <Step number={1}>
-                    Extract the main folder from the zip file.
+                    <b>Extract</b> the main folder from the zip file.
                 </Step>
 
                 <Step number={2}>
-                    <p className="mb-2">Turn it into a mod using one of these tools:</p>
+                    <p className="mb-2"><b>Turn it into a mod</b> using one of these tools:</p>
                     <div className="flex flex-wrap gap-3 items-center">
                         <ExternalLink href="https://github.com/ShinyHobo/BG3-Modders-Multitool/releases/latest">
                             <span className="font-semibold text-md">BG3 Modders Multitool</span>

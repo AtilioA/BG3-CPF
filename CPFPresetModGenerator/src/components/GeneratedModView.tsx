@@ -18,13 +18,13 @@ export const GeneratedModView: React.FC<GeneratedModViewProps> = ({
     onDownloadAgain
 }) => {
     return (
-        <div className="max-w-7xl animate-fade-in-up">
+        <div className="max-w-xl animate-fade-in-up">
             <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-2xl p-8 md:p-12 text-center">
                 <div className="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6 ring-1 ring-green-500/50">
                     <CheckCircle className="w-10 h-10 text-green-500" />
                 </div>
 
-                <h2 className="text-3xl font-bold text-white mb-4">Mod generated successfully!</h2>
+                <h2 className="text-3xl font-bold text-white mb-4">Structure generated successfully!</h2>
                 <p className="text-slate-400 mb-8">
                     Your <code className="text-white bg-slate-800 px-2 py-1 rounded text-sm">{`CPF_${modConfig.folderName}_Mod.zip`}</code> file has been downloaded.
                 </p>
