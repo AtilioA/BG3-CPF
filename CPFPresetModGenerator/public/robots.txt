@@ -1,0 +1,6 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://bg3-cpf-preset-mod-generator.vercel.app/sitemap.xml
