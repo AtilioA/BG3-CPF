@@ -6,9 +6,73 @@ import { Analytics } from "@vercel/analytics/next"
 
 const inter = Inter({ subsets: ["latin"] });
 
+const siteUrl = "https://bg3-cpf-preset-mod-generator.vercel.app/";
+const siteName = "BG3 Preset Mod Generator";
+const siteDescription = "Turn any Character Preset Framework (CPF) preset into a Baldur's Gate 3 mod.";
+
 export const metadata: Metadata = {
-    title: "BG3 Preset Mod Generator",
-    description: "Turn any CPF preset into a mod",
+    title: {
+        default: siteName,
+        template: `%s | ${siteName}`,
+    },
+    description: siteDescription,
+    keywords: [
+        "Baldur's Gate 3",
+        "BG3",
+        "CPF",
+        "Character Preset Framework",
+        "mod generator",
+        "preset mod",
+        "BG3 mods",
+        "character presets",
+        "modding tool"
+    ],
+    authors: [{ name: "Volitio" }],
+    creator: "Volitio",
+    publisher: "Volitio",
+    metadataBase: new URL(siteUrl),
+    alternates: {
+        canonical: "/",
+    },
+    openGraph: {
+        type: "website",
+        locale: "en_US",
+        url: siteUrl,
+        title: siteName,
+        description: siteDescription,
+        siteName: siteName,
+        images: [
+            // {
+            // url: "/og-image.png",
+            //     width: 1200,
+            //     height: 630,
+            //     alt: "BG3 Preset Mod Generator",
+            // },
+        ],
+    },
+    robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+            index: true,
+            follow: true,
+            "max-video-preview": -1,
+            "max-image-preview": "large",
+            "max-snippet": -1,
+        },
+    },
+    icons: {
+        icon: [
+            { url: "/favicon.ico" },
+            { url: "/icon.png", type: "image/png", sizes: "32x32" },
+        ],
+        apple: [
+            { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+        ],
+    },
+    manifest: "/site.webmanifest",
+    verification: {
+    },
 };
 
 export default function RootLayout({
@@ -19,7 +83,25 @@ export default function RootLayout({
     return (
         <html lang="en">
             <head>
-                <title>CPF preset mod generator</title>
+                {/* Structured Data for SEO */}
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify({
+                            "@context": "https://schema.org",
+                            "@type": "WebApplication",
+                            "name": siteName,
+                            "description": siteDescription,
+                            "url": siteUrl,
+                            "applicationCategory": "UtilitiesApplication",
+                            "operatingSystem": "Any",
+                            "author": {
+                                "@type": "Person",
+                                "name": "Volitio"
+                            }
+                        })
+                    }}
+                />
             </head>
             <body className={inter.className}>
                 {children}

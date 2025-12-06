@@ -141,7 +141,7 @@ export default function Home() {
             {/* Header */}
             <header className="border-b border-slate-800 bg-slate-950/50 backdrop-blur-md sticky top-0 z-10">
                 <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-                    <button onClick={resetApp} className="flex items-center gap-2 hover:opacity-80 transition-opacity text-left">
+                    <button onClick={resetApp} className="flex items-center gap-2 hover:opacity-80 transition-opacity" aria-label="Reset to home">
                         <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20">
                             P
                         </div>
@@ -149,14 +149,14 @@ export default function Home() {
                             BG3 <span className="text-slate-400 font-medium">Preset Mod Generator</span>
                         </h1>
                     </button>
-                    <div className="flex items-center gap-4 text-sm text-slate-400">
-                        <a href={HELP_URL} target="_blank" rel="noreferrer" className="hover:text-white transition-colors flex items-center gap-1">
+                    <nav className="flex items-center gap-4 text-sm text-slate-400" aria-label="External links">
+                        <a href={HELP_URL} target="_blank" rel="noreferrer" className="hover:text-white transition-colors flex items-center gap-1" aria-label="View on Nexus Mods">
                             <SiNexusmods /> Nexus
                         </a>
-                        <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="hover:text-white transition-colors">
+                        <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="hover:text-white transition-colors" aria-label="View on GitHub">
                             <Github className="w-5 h-5" />
                         </a>
-                    </div>
+                    </nav>
                 </div>
             </header>
 
