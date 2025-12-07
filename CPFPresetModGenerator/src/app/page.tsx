@@ -9,7 +9,7 @@ import { GeneratedModView } from '@/components/GeneratedModView';
 import { PresetJson, ModConfig } from '@/types';
 import { generateUUID, sanitizeFolderName, generateMetaLsx, getGeneratedFolderName, parseDependencies } from '@/utils/helpers';
 import { Github, Info } from 'lucide-react';
-import { FaPatreon } from 'react-icons/fa6';
+import { FaDiscord, FaPatreon } from 'react-icons/fa6';
 import { HELP_URL, GITHUB_URL } from '@/constants';
 import { SiNexusmods } from 'react-icons/si';
 
@@ -151,7 +151,7 @@ export default function Home() {
                     </button>
                     <nav className="flex items-center gap-4 text-sm text-slate-400" aria-label="External links">
                         <a href={HELP_URL} target="_blank" rel="noreferrer" className="hover:text-white transition-colors flex items-center gap-1" aria-label="View on Nexus Mods">
-                            <SiNexusmods /> Nexus
+                            <SiNexusmods /> CPF on Nexus
                         </a>
                         <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="hover:text-white transition-colors" aria-label="View on GitHub">
                             <Github className="w-5 h-5" />
@@ -169,15 +169,24 @@ export default function Home() {
                 <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-col items-center justify-center gap-1 text-slate-500 text-sm">
                     <p>Processing is done locally.</p>
                     <div className="flex flex-row items-center gap-2">
-                        <p>Created by Volitio.</p>
+                        <p>Created by <span className='font-semibold'>Volitio</span>:</p>
                         <a
                             href="https://www.patreon.com/volitio/"
                             target="_blank"
                             rel="noreferrer"
-                            className="flex flex-row items-center gap-2 hover:text-[#FF424D] transition-colors"
+                            className="flex flex-row items-center gap-2 text-slate-300 hover:text-white hover:bg-rose-900 transition-colors border border-slate-600 rounded-md px-2 py-1 bg-rose-900/80"
                         >
                             <FaPatreon className="w-4 h-4" />
                             <span>Support on Patreon</span>
+                        </a>
+                        <a
+                            href="https://discord.gg/PUx3vJgapM"
+                            target="_blank"
+                            rel="noreferrer"
+                            className="flex flex-row items-center gap-2 text-slate-300 hover:text-white  hover:bg-indigo-900 transition-colors border border-slate-600 rounded-md px-2 py-1 bg-indigo-900/80"
+                        >
+                            <FaDiscord className="w-4 h-4" />
+                            <span>Join Discord</span>
                         </a>
                     </div>
                 </div>
