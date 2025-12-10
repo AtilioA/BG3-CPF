@@ -16,7 +16,7 @@ self.addEventListener('install', (event) => {
     console.log('[Service Worker] Installing...');
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
-            console.log('[Service Worker] Precaching assets');
+            console.debug('[Service Worker] Precaching assets');
             return cache.addAll(PRECACHE_ASSETS);
         }).then(() => {
             // Force the waiting service worker to become the active service worker
@@ -33,7 +33,7 @@ self.addEventListener('activate', (event) => {
             return Promise.all(
                 cacheNames.map((cacheName) => {
                     if (cacheName !== CACHE_NAME) {
-                        console.log('[Service Worker] Deleting old cache:', cacheName);
+                        console.debug('[Service Worker] Deleting old cache:', cacheName);
                         return caches.delete(cacheName);
                     }
                 })
@@ -98,18 +98,18 @@ async function cacheFirst(request) {
     const cached = await cache.match(request);
 
     if (cached) {
-        console.log('[Service Worker] Cache hit:', request.url);
+        console.debug('[Service Worker] Cache hit:', request.url);
         return cached;
     }
 
     try {
-        console.log('[Service Worker] Fetching:', request.url);
+        console.debug('[Service Worker] Fetching:', request.url);
         const response = await fetch(request);
 
         // Cache successful responses (including dynamic chunks)
         if (response.ok) {
             cache.put(request, response.clone());
-            console.log('[Service Worker] Cached:', request.url);
+            console.debug('[Service Worker] Cached:', request.url);
         }
 
         return response;
@@ -133,7 +133,7 @@ async function networkFirst(request) {
     const cache = await caches.open(CACHE_NAME);
 
     try {
-        console.log('[Service Worker] Fetching:', request.url);
+        console.debug('[Service Worker] Fetching:', request.url);
         const response = await fetch(request);
 
         // Cache successful responses
@@ -147,7 +147,7 @@ async function networkFirst(request) {
         const cached = await cache.match(request);
 
         if (cached) {
-            console.log('[Service Worker] Cache hit:', request.url);
+            console.debug('[Service Worker] Cache hit:', request.url);
             return cached;
         }
 

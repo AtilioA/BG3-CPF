@@ -17,10 +17,10 @@ export async function buildPak(files: { path: string; content: string | Uint8Arr
     let builder: any = null;
 
     try {
-        console.log("Files to pack:");
+        // console.log("Files to pack:");
 
         const modFiles = files.map(file => {
-            console.log("-", file.path, typeof file.content, (typeof file.content === "string") ? file.content.slice(0, 200) : `${file.content.length} bytes`);
+            // console.log("-", file.path, typeof file.content, (typeof file.content === "string") ? file.content.slice(0, 200) : `${file.content.length} bytes`);
 
             const contentEncoded =
                 typeof file.content === "string"
@@ -28,14 +28,14 @@ export async function buildPak(files: { path: string; content: string | Uint8Arr
                     : file.content;
 
             const modFile = new ModFile(file.path, contentEncoded);
-            console.log(`Created ModFile: ${file.path}`);
+            // console.log(`Created ModFile: ${file.path}`);
             return modFile;
         });
 
         builder = new PakBuilder(modFiles);
 
         const packedData = builder.pack();
-        console.log(`Packed .pak data size: ${packedData.length} bytes`);
+        console.debug(`Packed .pak data size: ${packedData.length} bytes`);
 
         return packedData;
 
@@ -61,7 +61,7 @@ export async function zipPak(pakData: Uint8Array, pakName: string): Promise<Blob
     zip.file(`${pakName}.pak`, pakData);
 
     const zipBlob = await zip.generateAsync({ type: "blob" });
-    console.log(`Zipped .pak file size: ${zipBlob.size} bytes`);
+    console.debug(`Zipped .pak file size: ${zipBlob.size} bytes`);
 
     return zipBlob;
 }
