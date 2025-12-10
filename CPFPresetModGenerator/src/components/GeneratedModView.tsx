@@ -42,7 +42,7 @@ export const GeneratedModView: React.FC<GeneratedModViewProps> = ({
                     Create another mod
                 </Button>
 
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6 pt-6 border-t border-slate-800/50">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mt-6 pt-6 border-t border-slate-800/50">
                     <Button
                         onClick={onBackToDetails}
                         variant="ghost"
@@ -53,22 +53,22 @@ export const GeneratedModView: React.FC<GeneratedModViewProps> = ({
                     </Button>
                     <span className="hidden sm:block text-slate-700">•</span>
                     <Button
-                        onClick={onDownloadRaw}
-                        variant="ghost"
-                        icon={<FileJson className="w-4 h-4" />}
-                        className="text-sm opacity-75 hover:opacity-100"
-                        title="Download raw files (Legacy)"
-                    >
-                        Legacy Zip
-                    </Button>
-                    <span className="hidden sm:block text-slate-700">•</span>
-                    <Button
                         onClick={onDownloadAgain}
                         variant="ghost"
                         icon={<Download className="w-4 h-4" />}
-                        className="text-sm"
+                        className="text-sm opacity-75 hover:opacity-100"
                     >
-                        Download again
+                        Download mod again
+                    </Button>
+                    <span className="hidden sm:block text-slate-700">•</span>
+                    <Button
+                        onClick={onDownloadRaw}
+                        variant="ghost"
+                        icon={<FileJson className="w-4 h-4" />}
+                        className="text-sm opacity-50 hover:opacity-100"
+                        title="Download raw files (Legacy)"
+                    >
+                        Download unpacked mod
                     </Button>
                 </div>
             </div>
