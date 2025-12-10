@@ -94,7 +94,7 @@ export default function Home() {
             const content = await zip.generateAsync({ type: "blob" });
             const saveFile = (FileSaver as any).saveAs || FileSaver;
             // Exclude UUID from the zip filename
-            const zipFileName = `CPF_${modConfig.folderName}_Raw.zip`;
+            const zipFileName = `CPF_${modConfig.folderName}_Unpacked.zip`;
             saveFile(content, zipFileName);
 
             // REVIEW: Don't set success here if called from the secondary button, but if it was the main action it would.

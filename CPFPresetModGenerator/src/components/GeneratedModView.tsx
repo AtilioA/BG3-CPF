@@ -3,6 +3,7 @@ import { CheckCircle, ArrowRight, ArrowLeft, Download, FileJson } from 'lucide-r
 import { Button } from './Button';
 import { NextSteps } from './NextSteps';
 import { ModConfig } from '@/types';
+import { ExternalLink } from './ExternalLink';
 
 interface GeneratedModViewProps {
     modConfig: ModConfig;
@@ -26,50 +27,61 @@ export const GeneratedModView: React.FC<GeneratedModViewProps> = ({
                     <CheckCircle className="w-10 h-10 text-green-500" />
                 </div>
 
-                <h2 className="text-3xl font-bold text-white mb-4">Structure generated successfully!</h2>
+                <h2 className="text-3xl font-bold text-white mb-4">Mod generated successfully!</h2>
                 <p className="text-slate-400 mb-8">
                     Your <code className="text-white bg-slate-800 px-2 py-1 rounded text-sm">{`CPF_${modConfig.folderName}_Mod.zip`}</code> file has been downloaded.
                 </p>
 
-                <NextSteps />
+                <div className="mb-4 gap-1 flex items-center flex-col justify-center">
+                    <p className='text-xl font-bold gap-1 flex flex-row'>
+                        You can now share it on <ExternalLink href="https://www.nexusmods.com/baldursgate3/mods/add">
+                            <span className="font-semibold text-md">Nexus Mods</span>
+                        </ExternalLink>!
+                    </p>
+                    <em className="text-slate-500 text-sm cursor-default">You don't to run zip contents through MMT or LSLib anymore.</em>
+                </div>
 
-                <Button
-                    onClick={onReset}
-                    variant="secondary"
-                    icon={<ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />}
-                    className="group mt-8"
-                >
-                    Create another mod
-                </Button>
+                {/* <NextSteps /> */}
 
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mt-6 pt-6 border-t border-slate-800/50">
+                <div className="flex flex-col sm:flex-col items-center justify-center gap-2 mt-8 pt-6 border-t border-slate-800">
                     <Button
-                        onClick={onBackToDetails}
-                        variant="ghost"
-                        icon={<ArrowLeft className="w-4 h-4" />}
-                        className="text-sm"
+                        onClick={onReset}
+                        variant="secondary"
+                        icon={<ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />}
+                        className="group mt-4"
                     >
-                        Back to details
+                        Create another mod?
                     </Button>
-                    <span className="hidden sm:block text-slate-700">•</span>
-                    <Button
-                        onClick={onDownloadAgain}
-                        variant="ghost"
-                        icon={<Download className="w-4 h-4" />}
-                        className="text-sm opacity-75 hover:opacity-100"
-                    >
-                        Download mod again
-                    </Button>
-                    <span className="hidden sm:block text-slate-700">•</span>
-                    <Button
-                        onClick={onDownloadRaw}
-                        variant="ghost"
-                        icon={<FileJson className="w-4 h-4" />}
-                        className="text-sm opacity-50 hover:opacity-100"
-                        title="Download raw files (Legacy)"
-                    >
-                        Download unpacked mod
-                    </Button>
+
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-1 pt-6">
+                        <Button
+                            onClick={onBackToDetails}
+                            variant="ghost"
+                            icon={<ArrowLeft className="w-4 h-4" />}
+                            className="text-sm"
+                        >
+                            Back to details
+                        </Button>
+                        <span className="hidden sm:block text-slate-700">•</span>
+                        <Button
+                            onClick={onDownloadAgain}
+                            variant="ghost"
+                            icon={<Download className="w-4 h-4" />}
+                            className="text-sm opacity-75 hover:opacity-100"
+                        >
+                            Download mod again
+                        </Button>
+                        <span className="hidden sm:block text-slate-700">•</span>
+                        <Button
+                            onClick={onDownloadRaw}
+                            variant="ghost"
+                            icon={<FileJson className="w-4 h-4" />}
+                            className="text-sm opacity-50 hover:opacity-100"
+                            title="Download raw files (Legacy)"
+                        >
+                            Download unpacked mod
+                        </Button>
+                    </div>
                 </div>
             </div>
         </div>
