@@ -1,6 +1,24 @@
 import { withSentryConfig } from '@sentry/nextjs';
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+    // Exclude service worker from being processed by Next.js
+    webpack: (config, { isServer }) => {
+        config.experiments = {
+            ...config.experiments,
+            asyncWebAssembly: true,
+        };
+
+        // Exclude service worker from webpack processing
+        if (!isServer) {
+            config.module.rules.push({
+                test: /service-worker\.js$/,
+                use: { loader: 'ignore-loader' }
+            });
+        }
+
+        return config;
+    },
+};
 
 export default withSentryConfig(nextConfig, {
     // For all available options, see:
@@ -33,11 +51,4 @@ export default withSentryConfig(nextConfig, {
     // https://docs.sentry.io/product/crons/
     // https://vercel.com/docs/cron-jobs
     automaticVercelMonitors: true,
-    webpack: (config) => {
-        config.experiments = {
-            ...config.experiments,
-            asyncWebAssembly: true,
-        };
-        return config;
-    },
 });
