@@ -127,11 +127,17 @@ export default function Home() {
                 }
             ];
 
-            const zipContent = await buildPak(files, generatedFolderName);
+            // const zipContent = await buildPak(files, generatedFolderName);
+
+            // const saveFile = (FileSaver as any).saveAs || FileSaver;
+            // const zipFileName = `CPF_${modConfig.folderName}_Mod.zip`;
+            // saveFile(new Blob([zipContent as any]), zipFileName);
+
+            const pakContent = await buildPak(files, generatedFolderName);
 
             const saveFile = (FileSaver as any).saveAs || FileSaver;
-            const zipFileName = `CPF_${modConfig.folderName}_Mod.zip`;
-            saveFile(new Blob([zipContent as any]), zipFileName);
+            const pakFileName = `CPF_${modConfig.folderName}_Mod.pak`;
+            saveFile(new Blob([pakContent as any]), pakFileName);
 
             setIsSuccess(true);
         } catch (error) {
