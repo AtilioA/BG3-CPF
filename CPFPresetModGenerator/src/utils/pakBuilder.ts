@@ -8,7 +8,7 @@ import JSZip from 'jszip';
  * @param pakName The name of the resulting .pak file inside the zip (e.g. "MyMod").
  * @returns The zipped byte array.
  */
-export async function buildPak(files: { path: string; content: string | Uint8Array }[], pakName: string = "Mod"): Promise<void> {
+export async function buildPak(files: { path: string; content: string | Uint8Array }[], pakName: string = "Mod"): Promise<Uint8Array<ArrayBufferLike>> {
     const wasm = await loadPakWasm();
     const { PakBuilder, ModFile, init_panic_hook } = wasm;
 
@@ -40,14 +40,15 @@ export async function buildPak(files: { path: string; content: string | Uint8Arr
         // Erroring here
         const packedData = builder.pack();
         console.log(`Packed data size: ${packedData.length}`);
+        return packedData;
 
-        // } finally {
-        //     if (builder && typeof builder.free === 'function') {
-        //         builder.free();
-        //     }
     }
     catch (error) {
         console.error("Error creating pak:", error);
         throw error;
+    } finally {
+        if (builder && typeof builder.free === 'function') {
+            builder.free();
+        }
     }
 }
