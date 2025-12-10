@@ -3,9 +3,16 @@
     "short_name": "BG3 PMG",
     "description": "Turn any CPF preset into a Baldur's Gate 3 mod",
     "start_url": "/",
+    "scope": "/",
     "display": "standalone",
     "background_color": "#020617",
     "theme_color": "#6366f1",
+    "orientation": "any",
+    "categories": [
+        "utilities",
+        "productivity"
+    ],
+    "prefer_related_applications": false,
     "icons": [
         {
             "src": "/icon.png",
@@ -18,5 +25,8 @@
             "sizes": "180x180",
             "type": "image/png"
         }
-    ]
+    ],
+    "screenshots": [],
+    "shortcuts": [],
+    "offline_enabled": true
 }
