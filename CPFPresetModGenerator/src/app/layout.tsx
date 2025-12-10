@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next"
+import { OfflineIndicator } from "@/components/OfflineIndicator";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -102,9 +103,28 @@ export default function RootLayout({
                         })
                     }}
                 />
+                {/* Service Worker registration */}
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `
+                            if ('serviceWorker' in navigator) {
+                                window.addEventListener('load', function() {
+                                    navigator.serviceWorker.register('/service-worker.js')
+                                        .then(function(registration) {
+                                            console.log('[SW] Registered:', registration.scope);
+                                        })
+                                        .catch(function(error) {
+                                            console.log('[SW] Registration failed:', error);
+                                        });
+                                });
+                            }
+                        `
+                    }}
+                />
             </head>
             <body className={inter.className}>
                 {children}
+                <OfflineIndicator />
                 <Analytics />
             </body>
         </html>
