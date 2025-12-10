@@ -15,37 +15,34 @@ export async function buildPak(files: { path: string; content: string | Uint8Arr
     init_panic_hook();
     const encoder = new TextEncoder();
 
+    let builder: any = null;
+
     try {
         console.log("Files to pack:");
 
-        // Create ModFile instances
         const modFiles = files.map(file => {
             console.log("-", file.path, typeof file.content, (typeof file.content === "string") ? file.content.slice(0, 200) : `${file.content.length} bytes`);
 
-            let contentEncoded: Uint8Array;
-            const content = file.content;
-            if (typeof content === 'string') {
-                contentEncoded = encoder.encode(content);
-            } else {
-                contentEncoded = content;
-            }
+            const contentEncoded =
+                typeof file.content === "string"
+                    ? encoder.encode(file.content)
+                    : file.content;
 
             const modFile = new ModFile(file.path, contentEncoded);
             console.log(`Created ModFile: ${file.path}`);
             return modFile;
         });
 
-        const builder = new PakBuilder(modFiles);
+        builder = new PakBuilder(modFiles);
 
-        // Erroring here
         const packedData = builder.pack();
         console.log(`Packed data size: ${packedData.length}`);
         return packedData;
 
-    }
-    catch (error) {
+    } catch (error) {
         console.error("Error creating pak:", error);
         throw error;
+
     } finally {
         if (builder && typeof builder.free === 'function') {
             builder.free();
