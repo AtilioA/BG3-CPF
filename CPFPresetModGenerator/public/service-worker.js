@@ -1,7 +1,7 @@
 // Service Worker for BG3 CPF Preset Mod Generator
 // Implements offline-first caching strategy
 
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v2';
 const CACHE_NAME = `bg3-pmg-${CACHE_VERSION}`;
 
 // Assets to precache on install
@@ -9,7 +9,6 @@ const PRECACHE_ASSETS = [
     '/',
     '/site.webmanifest',
     '/icon.png',
-    '/apple-icon.png',
 ];
 
 // Install event - precache critical assets
@@ -107,9 +106,10 @@ async function cacheFirst(request) {
         console.log('[Service Worker] Fetching:', request.url);
         const response = await fetch(request);
 
-        // Cache successful responses
+        // Cache successful responses (including dynamic chunks)
         if (response.ok) {
             cache.put(request, response.clone());
+            console.log('[Service Worker] Cached:', request.url);
         }
 
         return response;
