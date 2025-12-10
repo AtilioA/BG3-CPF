@@ -38,7 +38,7 @@ export const GeneratedModView: React.FC<GeneratedModViewProps> = ({
                             <span className="font-semibold text-md">Nexus Mods</span>
                         </ExternalLink>!
                     </p>
-                    <em className="text-slate-500 text-sm cursor-default">You don't to run zip contents through MMT or LSLib anymore.</em>
+                    <em className="text-slate-500 text-sm cursor-default">You don't need to run zip contents through MMT or LSLib anymore.</em>
                 </div>
 
                 {/* <NextSteps /> */}
