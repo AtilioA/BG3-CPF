@@ -14,14 +14,14 @@
         "file-saver": "^2.0.5",
         "import-in-the-middle": "^2.0.0",
         "jszip": "^3.10.1",
+        "larian-formats": "file:./src/wasm",
         "lucide-react": "^0.554.0",
         "next": "^16.0.7",
         "react": "^19.2.1",
-        "react-dom": "^19.0.0",
+        "react-dom": "^19.2.1",
         "react-icons": "^5.5.0",
         "require-in-the-middle": "^8.0.1",
-        "zod": "^4.1.12",
-        "larian-formats": "file:./src/wasm"
+        "zod": "^4.1.12"
     },
     "devDependencies": {
         "@eslint/eslintrc": "^3",
