@@ -185,7 +185,7 @@ export const ModForm: React.FC<ModFormProps> = ({ config, setConfig, onGenerate,
                                 {isGenerating ? 'Generating folder structure...' : 'Generate mod (.zip)'}
                             </button>
                             <p className="text-center text-xs text-slate-500 mt-3">
-                                Generates a .zip with a .pak file ready for distribution.
+                                Generates a mod .zip file ready for distribution.
                             </p>
                         </div>
                     </div>

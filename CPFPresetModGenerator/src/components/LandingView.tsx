@@ -24,7 +24,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onFileLoaded }) => {
                     Turn any CPF preset into a mod
                 </h2>
                 <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
-                    This website can parse one or more Character Preset Framework preset JSON files and automatically generate the zipped pak file for a standalone Baldur's Gate 3 mod.
+                    This website turns your CPF character preset JSON files into a ready-to-install Baldur's Gate 3 mod.
                 </p>
             </div>
             <DropZone onFileLoaded={onFileLoaded} />
