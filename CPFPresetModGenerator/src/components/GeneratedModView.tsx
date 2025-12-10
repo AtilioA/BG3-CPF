@@ -67,17 +67,17 @@ export const GeneratedModView: React.FC<GeneratedModViewProps> = ({
                             onClick={onDownloadAgain}
                             variant="ghost"
                             icon={<Download className="w-4 h-4" />}
-                            className="text-sm opacity-75 hover:opacity-100"
+                            className="text-sm opacity-60 hover:opacity-100"
                         >
-                            Download mod again
+                            Download packed again
                         </Button>
-                        <span className="hidden sm:block text-slate-700">•</span>
+                        <span className="hidden sm:block text-slate-700">|</span>
                         <Button
                             onClick={onDownloadRaw}
                             variant="ghost"
                             icon={<FileJson className="w-4 h-4" />}
-                            className="text-sm opacity-50 hover:opacity-100"
-                            title="Download raw files (Legacy)"
+                            className="text-sm opacity-60 hover:opacity-100"
+                            title="Download raw files (legacy)"
                         >
                             Download unpacked mod
                         </Button>
