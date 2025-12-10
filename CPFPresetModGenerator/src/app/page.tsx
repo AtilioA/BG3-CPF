@@ -108,14 +108,13 @@ export default function Home() {
         if (!modConfig) return;
 
         try {
-            const { buildPak } = await import('@/utils/pakBuilder');
+            const { buildAndZipPak } = await import('@/utils/pakBuilder');
 
             const generatedFolderName = getGeneratedFolderName(modConfig.folderName, modConfig.uuid);
             const metaLsxContent = generateMetaLsx(modConfig);
             const presetsJson = JSON.stringify(modConfig.presets, null, 2);
 
             // Prepare files for packing
-            // The path in add_file determines the internal structure of the .pak
             const files = [
                 {
                     path: `Mods/${generatedFolderName}/meta.lsx`,
@@ -127,17 +126,11 @@ export default function Home() {
                 }
             ];
 
-            // const zipContent = await buildPak(files, generatedFolderName);
-
-            // const saveFile = (FileSaver as any).saveAs || FileSaver;
-            // const zipFileName = `CPF_${modConfig.folderName}_Mod.zip`;
-            // saveFile(new Blob([zipContent as any]), zipFileName);
-
-            const pakContent = await buildPak(files, generatedFolderName);
+            const zipBlob = await buildAndZipPak(files, generatedFolderName);
 
             const saveFile = (FileSaver as any).saveAs || FileSaver;
-            const pakFileName = `CPF_${modConfig.folderName}_Mod.pak`;
-            saveFile(new Blob([pakContent as any]), pakFileName);
+            const zipFileName = `CPF_${modConfig.folderName}_Mod.zip`;
+            saveFile(zipBlob, zipFileName);
 
             setIsSuccess(true);
         } catch (error) {

@@ -3,12 +3,11 @@ import { loadPakWasm } from './loadPakWasm';
 import JSZip from 'jszip';
 
 /**
- * Packs the given files into a .pak using WASM and then zips it.
+ * Packs the given files into a .pak using WASM.
  * @param files Array of files to pack, where content can be string or Uint8Array.
- * @param pakName The name of the resulting .pak file inside the zip (e.g. "MyMod").
- * @returns The zipped byte array.
+ * @returns The raw .pak file as a Uint8Array.
  */
-export async function buildPak(files: { path: string; content: string | Uint8Array }[], pakName: string = "Mod"): Promise<Uint8Array<ArrayBufferLike>> {
+export async function buildPak(files: { path: string; content: string | Uint8Array }[]): Promise<Uint8Array> {
     const wasm = await loadPakWasm();
     const { PakBuilder, ModFile, init_panic_hook } = wasm;
 
@@ -36,7 +35,8 @@ export async function buildPak(files: { path: string; content: string | Uint8Arr
         builder = new PakBuilder(modFiles);
 
         const packedData = builder.pack();
-        console.log(`Packed data size: ${packedData.length}`);
+        console.log(`Packed .pak data size: ${packedData.length} bytes`);
+
         return packedData;
 
     } catch (error) {
@@ -48,4 +48,32 @@ export async function buildPak(files: { path: string; content: string | Uint8Arr
             builder.free();
         }
     }
+}
+
+/**
+ * Zips a .pak file.
+ * @param pakData The raw .pak file data as a Uint8Array.
+ * @param pakName The name of the .pak file inside the zip (e.g. "MyMod").
+ * @returns A Blob containing the zipped .pak file.
+ */
+export async function zipPak(pakData: Uint8Array, pakName: string): Promise<Blob> {
+    const zip = new JSZip();
+    zip.file(`${pakName}.pak`, pakData);
+
+    const zipBlob = await zip.generateAsync({ type: "blob" });
+    console.log(`Zipped .pak file size: ${zipBlob.size} bytes`);
+
+    return zipBlob;
+}
+
+/**
+ * Builds a .pak file and zips it in one step.
+ * This is a convenience function that composes buildPak and zipPak.
+ * @param files Array of files to pack, where content can be string or Uint8Array.
+ * @param pakName The name of the .pak file inside the zip (e.g. "MyMod").
+ * @returns A Blob containing the zipped .pak file.
+ */
+export async function buildAndZipPak(files: { path: string; content: string | Uint8Array }[], pakName: string): Promise<Blob> {
+    const pakData = await buildPak(files);
+    return zipPak(pakData, pakName);
 }
