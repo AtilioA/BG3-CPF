@@ -1,0 +1,23 @@
+{
+  "name": "larian-formats-wasm",
+  "type": "module",
+  "collaborators": [
+    "Saghm Rossi <mail@saghm.com>"
+  ],
+  "version": "0.3.1",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/saghm/xiba"
+  },
+  "files": [
+    "larian_formats_wasm_bg.wasm",
+    "larian_formats_wasm.js",
+    "larian_formats_wasm.d.ts"
+  ],
+  "main": "larian_formats_wasm.js",
+  "types": "larian_formats_wasm.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}

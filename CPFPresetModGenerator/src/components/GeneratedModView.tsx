@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle, ArrowRight, ArrowLeft, Download } from 'lucide-react';
+import { CheckCircle, ArrowRight, ArrowLeft, Download, FileJson } from 'lucide-react';
 import { Button } from './Button';
 import { NextSteps } from './NextSteps';
 import { ModConfig } from '@/types';
@@ -9,13 +9,15 @@ interface GeneratedModViewProps {
     onReset: () => void;
     onBackToDetails: () => void;
     onDownloadAgain: () => void;
+    onDownloadRaw: () => void;
 }
 
 export const GeneratedModView: React.FC<GeneratedModViewProps> = ({
     modConfig,
     onReset,
     onBackToDetails,
-    onDownloadAgain
+    onDownloadAgain,
+    onDownloadRaw
 }) => {
     return (
         <div className="max-w-xl animate-fade-in-up">
@@ -48,6 +50,16 @@ export const GeneratedModView: React.FC<GeneratedModViewProps> = ({
                         className="text-sm"
                     >
                         Back to details
+                    </Button>
+                    <span className="hidden sm:block text-slate-700">•</span>
+                    <Button
+                        onClick={onDownloadRaw}
+                        variant="ghost"
+                        icon={<FileJson className="w-4 h-4" />}
+                        className="text-sm opacity-75 hover:opacity-100"
+                        title="Download raw files (Legacy)"
+                    >
+                        Legacy Zip
                     </Button>
                     <span className="hidden sm:block text-slate-700">•</span>
                     <Button

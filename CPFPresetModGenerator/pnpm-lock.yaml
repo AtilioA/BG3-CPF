@@ -23,6 +23,9 @@ importers:
       jszip:
         specifier: ^3.10.1
         version: 3.10.1
+      larian-formats:
+        specifier: file:./src/wasm
+        version: larian-formats-wasm@file:src/wasm
       lucide-react:
         specifier: ^0.554.0
         version: 0.554.0(react@19.2.1)
@@ -2089,6 +2092,9 @@ packages:
   language-tags@1.0.9:
     resolution: {integrity: sha512-MbjN408fEndfiQXbFQ1vnd+1NoLDsnQW41410oQBXiyXDMYH5z505juWa4KUE1LqxRC7DgOgZDbKLxHIwm27hA==}
     engines: {node: '>=0.10'}
+
+  larian-formats-wasm@file:src/wasm:
+    resolution: {directory: src/wasm, type: directory}
 
   levn@0.4.1:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
@@ -5155,6 +5161,8 @@ snapshots:
   language-tags@1.0.9:
     dependencies:
       language-subtag-registry: 0.3.23
+
+  larian-formats-wasm@file:src/wasm: {}
 
   levn@0.4.1:
     dependencies:

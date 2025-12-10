@@ -62,7 +62,7 @@ export default function Home() {
         }
     };
 
-    const handleGenerateZip = async () => {
+    const handleGenerateRaw = async () => {
         if (!modConfig) return;
 
         const zip = new JSZip();
@@ -94,13 +94,49 @@ export default function Home() {
             const content = await zip.generateAsync({ type: "blob" });
             const saveFile = (FileSaver as any).saveAs || FileSaver;
             // Exclude UUID from the zip filename
-            const zipFileName = `CPF_${modConfig.folderName}_Mod.zip`;
+            const zipFileName = `CPF_${modConfig.folderName}_Raw.zip`;
             saveFile(content, zipFileName);
 
-            setIsSuccess(true);
+            // REVIEW: Don't set success here if called from the secondary button, but if it was the main action it would.
         } catch (error) {
             console.error("Error zipping file:", error);
             alert("An error occurred while creating the zip file.");
+        }
+    };
+
+    const handleGeneratePak = async () => {
+        if (!modConfig) return;
+
+        try {
+            const { buildPak } = await import('@/utils/pakBuilder');
+
+            const generatedFolderName = getGeneratedFolderName(modConfig.folderName, modConfig.uuid);
+            const metaLsxContent = generateMetaLsx(modConfig);
+            const presetsJson = JSON.stringify(modConfig.presets, null, 2);
+
+            // Prepare files for packing
+            // The path in add_file determines the internal structure of the .pak
+            const files = [
+                {
+                    path: `Mods/${generatedFolderName}/meta.lsx`,
+                    content: metaLsxContent
+                },
+                {
+                    path: `Mods/${generatedFolderName}/CPF_presets.json`,
+                    content: presetsJson
+                }
+            ];
+
+            const zipContent = await buildPak(files, generatedFolderName);
+
+            const saveFile = (FileSaver as any).saveAs || FileSaver;
+            const zipFileName = `CPF_${modConfig.folderName}_Mod.zip`;
+            saveFile(new Blob([zipContent as any]), zipFileName);
+
+            setIsSuccess(true);
+        } catch (error) {
+            console.error("Error creating pak:", error);
+            alert("An error occurred while creating the pak file.");
         }
     };
 
@@ -120,7 +156,8 @@ export default function Home() {
                     modConfig={modConfig}
                     onReset={resetApp}
                     onBackToDetails={() => setIsSuccess(false)}
-                    onDownloadAgain={handleGenerateZip}
+                    onDownloadAgain={handleGeneratePak}
+                    onDownloadRaw={handleGenerateRaw}
                 />
             );
         }
@@ -129,7 +166,7 @@ export default function Home() {
             <ModForm
                 config={modConfig}
                 setConfig={setModConfig}
-                onGenerate={handleGenerateZip}
+                onGenerate={handleGeneratePak}
                 onReset={resetApp}
             />
         );
