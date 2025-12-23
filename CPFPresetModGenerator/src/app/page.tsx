@@ -205,7 +205,11 @@ export default function Home() {
                 <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-col items-center justify-center gap-1 text-slate-500 text-sm">
                     <p>Processing is done locally.</p>
                     <div className="flex flex-row items-center gap-2">
-                        <p>Created by <span className='font-semibold'>Volitio</span>:</p>
+                        <p>Created by <a className='font-semibold'
+                            href="https://www.volitio.dev"
+                            target="_blank"
+                            rel="noreferrer"
+                        >Volitio</a>:</p>
                         <a
                             href="https://www.patreon.com/volitio/"
                             target="_blank"
