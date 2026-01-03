@@ -52,10 +52,10 @@ export const DropZone: React.FC<DropZoneProps> = ({ onFileLoaded }) => {
     const processFiles = async (files: FileList | File[]) => {
         if (files.length === 0) return;
 
-        if (files.length > 20) {
-            setError("You can only upload up to 20 files at once.");
-            return;
-        }
+        // if (files.length > 20) {
+        //     setError("You can only upload up to 20 files at once.");
+        //     return;
+        // }
 
         const loadedPresets: any[] = [];
         let hasError = false;
