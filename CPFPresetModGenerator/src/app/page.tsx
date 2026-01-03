@@ -192,6 +192,15 @@ export default function Home() {
                         <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="hover:text-white transition-colors" aria-label="View on GitHub">
                             <Github className="w-5 h-5" />
                         </a>
+                        <a
+                            href="https://volitio.dev"
+                            target="_blank"
+                            rel="noreferrer"
+                            className="hidden sm:flex items-center gap-1 text-xs text-slate-500 hover:text-slate-300 transition-colors"
+                            aria-label="Visit main website volitio.dev"
+                        >
+                            volitio.dev
+                        </a>
                     </nav>
                 </div>
             </header>

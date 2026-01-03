@@ -82,6 +82,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <head>
+                <link rel="canonical" href="https://volitio.dev" />
                 {/* Structured Data for SEO */}
                 <script
                     type="application/ld+json"
