@@ -40,4 +40,5 @@ RequireFiles("Shared/", {
     "Helpers/_Init",
     "Validation/_Init",
     "Presets/_Init",
+    "API",
 })
