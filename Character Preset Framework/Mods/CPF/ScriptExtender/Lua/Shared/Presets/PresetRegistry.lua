@@ -124,4 +124,46 @@ function PresetRegistry.UpdateIndexData(id)
     return false
 end
 
-return PresetRegistry
+---@class PresetFilter
+---@field Race? string
+---@field BodyType? integer
+---@field BodyShape? integer
+
+--- Gets presets that match the specified filters
+---@param filters? PresetFilter Table of filters (Race, BodyType, BodyShape)
+---@return PresetRecord[] records Array of matching preset records
+function PresetRegistry.GetFiltered(filters)
+    if not filters then
+        return PresetRegistry.GetAllAsArray()
+    end
+
+    local records = {}
+    for _, record in pairs(PresetRegistry._records) do
+        local preset = record.preset
+        local matches = true
+
+        if preset and preset.Data and preset.Data.CCStats then
+            local stats = preset.Data.CCStats
+
+            if filters.Race and stats.Race ~= filters.Race then
+                matches = false
+            end
+
+            if matches and filters.BodyType and stats.BodyType ~= filters.BodyType then
+                matches = false
+            end
+
+            if matches and filters.BodyShape and stats.BodyShape ~= filters.BodyShape then
+                matches = false
+            end
+        else
+            -- If preset data is missing/invalid, it doesn't match specific filters
+            matches = false
+        end
+
+        if matches then
+            table.insert(records, record)
+        end
+    end
+    return records
+end

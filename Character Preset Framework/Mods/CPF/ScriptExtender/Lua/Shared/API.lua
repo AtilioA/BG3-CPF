@@ -1,14 +1,15 @@
 API = {}
 
---- Retrieves a list of all registered presets.
----@return Preset[] presets List of preset objects
+--- Retrieves a list of registered presets, optionally filtered.
+---@param filters? PresetFilter Optional filters (Race, BodyType, BodyShape)
+---@return Preset[] presets List of matching preset objects
 ---@return string? error Error message if retrieval failed
-function API.GetPresetList()
+function API.GetPresetList(filters)
     if not PresetRegistry then
         return {}, "PresetRegistry not initialized"
     end
 
-    local records = PresetRegistry.GetAllAsArray()
+    local records = PresetRegistry.GetFiltered(filters)
     local presets = {}
 
     for _, record in ipairs(records) do
