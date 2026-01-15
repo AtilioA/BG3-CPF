@@ -41,3 +41,95 @@ function API.GetPreset(id)
 
     return record.preset, nil
 end
+
+--- Retrieves all presets grouped by 32 character template variants (Race + Gender + BodyType)
+--- In practice, this is used by Custom Disguise Self Appearance.
+---@return table<string, Preset[]> buckets
+function API.GetPresetsByCharacterTemplate()
+    local RACE_UUID_TO_NAME = {
+        ["b6dccbed-30f3-424b-a181-c4540cf38197"] = "TIEFLING",
+        ["0eb594cb-8820-4be6-a58d-8be7a1a98fba"] = "HUMAN",
+        ["0ab2874d-cfdc-405e-8a97-d37bfbb23c52"] = "DWARF",
+        ["45f4ac10-3c89-4fb2-b37d-f973bb9110c0"] = "HALFELF",
+        ["f1b3f884-4029-4f0f-b158-1f9fe0ae5a0d"] = "GNOME",
+        ["5c39a726-71c8-4748-ba8d-f768b3c11a91"] = "HALFORC",
+        ["4f5d1434-5175-4fa9-b7dc-ab24fba37929"] = "DROW",
+        ["bdf9b779-002c-4077-b377-8ea7c1faa795"] = "GITHYANKI",
+        ["6c038dcb-7eb5-431d-84f8-cecfaf1c0c5a"] = "ELF",
+        ["78cd3bcc-1c43-4a2a-aa80-c34322c16a04"] = "HALFLING",
+        ["9c61a74a-20df-4119-89c5-d996956b6c66"] = "DRAGONBORN"
+    }
+
+    -- Initialize buckets for the 32 variants
+    local buckets = {
+        TIEFLING_MALE = {},
+        TIEFLING_FEMALE = {},
+        DROW_MALE = {},
+        DROW_FEMALE = {},
+        HUMAN_MALE = {},
+        HUMAN_FEMALE = {},
+        GITHYANKI_MALE = {},
+        GITHYANKI_FEMALE = {},
+        DWARF_MALE = {},
+        DWARF_FEMALE = {},
+        ELF_MALE = {},
+        ELF_FEMALE = {},
+        HALFELF_MALE = {},
+        HALFELF_FEMALE = {},
+        HALFLING_MALE = {},
+        HALFLING_FEMALE = {},
+        GNOME_MALE = {},
+        GNOME_FEMALE = {},
+        DRAGONBORN_MALE = {},
+        DRAGONBORN_FEMALE = {},
+        HALFORC_MALE = {},
+        HALFORC_FEMALE = {},
+        -- Strong variants
+        HUMAN_STRONG_MALE = {},
+        HUMAN_STRONG_FEMALE = {},
+        DROW_STRONG_MALE = {},
+        DROW_STRONG_FEMALE = {},
+        ELF_STRONG_MALE = {},
+        ELF_STRONG_FEMALE = {},
+        HALFELF_STRONG_MALE = {},
+        HALFELF_STRONG_FEMALE = {},
+        TIEFLING_STRONG_MALE = {},
+        TIEFLING_STRONG_FEMALE = {}
+    }
+
+    if not PresetRegistry then
+        return buckets
+    end
+
+    local records = PresetRegistry.GetAllAsArray()
+    for _, record in ipairs(records) do
+        local preset = record.preset
+        if preset and preset.Data and preset.Data.CCStats then
+            local stats = preset.Data.CCStats
+            local raceName = RACE_UUID_TO_NAME[stats.Race]
+
+            if raceName then
+                -- Determine Gender (0 = Male, 1 = Female)
+                local gender = (stats.BodyType == 1) and "FEMALE" or "MALE"
+
+                -- Determine Shape (0 = Medium, 1 = Strong)
+                local isStrong = (stats.BodyShape == 1)
+
+                -- Construct key for bucket
+                local key
+                if isStrong then
+                    key = string.format("%s_STRONG_%s", raceName, gender)
+                else
+                    key = string.format("%s_%s", raceName, gender)
+                end
+
+                -- Add to bucket if it exists (some races don't have strong variants in our list)
+                if buckets[key] then
+                    table.insert(buckets[key], preset)
+                end
+            end
+        end
+    end
+
+    return buckets
+end
