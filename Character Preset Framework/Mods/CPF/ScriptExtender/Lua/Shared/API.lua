@@ -133,3 +133,14 @@ function API.GetPresetsByCharacterTemplate()
 
     return buckets
 end
+
+--- Validates that a preset ID exists in the registry.
+---@param uuid GUIDSTRING The preset UUID to validate
+---@return boolean valid True if the preset exists
+function API.ValidatePresetId(uuid)
+    local preset, _ = API.GetPreset(uuid)
+    if not preset then
+        return false
+    end
+    return Preset.Validate(preset)
+end
