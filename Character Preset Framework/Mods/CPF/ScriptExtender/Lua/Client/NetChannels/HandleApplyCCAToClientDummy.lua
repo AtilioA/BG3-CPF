@@ -167,6 +167,11 @@ end
 local function handleApplyCCAToClientDummy(data, userId)
     CPFPrint(2, "Received request to apply preset data to client dummy")
 
+    local photoModeDummies = Ext.Entity.GetAllEntitiesWithComponent("PhotoModeDummy")
+    if photoModeDummies and #photoModeDummies > 0 then
+        -- Reload visuals for photo mode. Thanks Focus for the tip!
+        Ext.System.ClientVisual.ReloadAllVisuals = true
+    end
     if not data.PresetData then
         CPFPrint(2, "No PresetData provided in request")
         return
