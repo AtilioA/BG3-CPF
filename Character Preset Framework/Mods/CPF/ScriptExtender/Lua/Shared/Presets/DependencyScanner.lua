@@ -17,7 +17,6 @@ local modUUIDToNameMap = {}
 
 --- Builds the reverse lookup map for resources to mods
 --- TODO: might need caching or postponing this for very large load orders (1000+ mods)
----@private
 function DependencyScanner:_BuildReverseLookup()
     if next(resourceToModMap) ~= nil then return end
 

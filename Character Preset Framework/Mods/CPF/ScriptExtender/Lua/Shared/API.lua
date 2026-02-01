@@ -110,7 +110,7 @@ function API.GetPresetsByCharacterTemplate()
 
             if raceName then
                 -- Determine Gender (0 = Male, 1 = Female)
-                local gender = (stats.BodyType == 1) and "FEMALE" or "MALE"
+                local gender = (stats.BodyType == Ext.Enums.BodyType.Male) and "MALE" or "FEMALE"
 
                 -- Determine Shape (0 = Medium, 1 = Strong)
                 local isStrong = (stats.BodyShape == 1)
