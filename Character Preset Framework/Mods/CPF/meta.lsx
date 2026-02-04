@@ -18,7 +18,7 @@
         <node id="ModuleInfo">
           <attribute id="Author" type="LSString" value="Volitio" />
           <attribute id="CharacterCreationLevelName" type="FixedString" value="" />
-          <attribute id="Description" type="LSString" value="Framework/manager that allows players to create, share, and import character creation presets easily. Visit bg3-cpf.vercel.app for more info." />
+          <attribute id="Description" type="LSString" value="Framework/manager that allows players to create, share, and import character creation presets easily. Visit cpf.volitio.dev for more info." />
           <attribute id="Folder" type="LSString" value="CPF" />
           <attribute id="LobbyLevelName" type="FixedString" value="" />
           <attribute id="MD5" type="LSString" value="" />
