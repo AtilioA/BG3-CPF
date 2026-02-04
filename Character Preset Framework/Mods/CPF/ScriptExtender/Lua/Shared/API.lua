@@ -44,8 +44,13 @@ end
 
 --- Retrieves all presets grouped by 32 character template variants (Race + Gender + BodyType)
 --- In practice, this is used by Custom Disguise Self Appearance.
+---@param onlyAvailable boolean? If true (default), only return presets with all dependencies loaded
 ---@return table<string, Preset[]> buckets
-function API.GetPresetsByCharacterTemplate()
+function API.GetPresetsByCharacterTemplate(onlyAvailable)
+    if onlyAvailable == nil then
+        onlyAvailable = true
+    end
+
     local RACE_UUID_TO_NAME = {
         ["b6dccbed-30f3-424b-a181-c4540cf38197"] = "TIEFLING",
         ["0eb594cb-8820-4be6-a58d-8be7a1a98fba"] = "HUMAN",
@@ -125,7 +130,15 @@ function API.GetPresetsByCharacterTemplate()
 
                 -- Add to bucket if it exists (some races don't have strong variants in our list)
                 if buckets[key] then
-                    table.insert(buckets[key], preset)
+                    -- Check if preset is available (all dependencies loaded)
+                    if not onlyAvailable then
+                        table.insert(buckets[key], preset)
+                    else
+                        local isAvailable, _ = API.CheckPresetAvailable(preset)
+                        if isAvailable then
+                            table.insert(buckets[key], preset)
+                        end
+                    end
                 end
             end
         end
@@ -143,4 +156,28 @@ function API.ValidatePresetId(uuid)
         return false
     end
     return Preset.Validate(preset)
+end
+
+--- Checks if a preset has all its dependencies (mods) loaded and available.
+---@param preset Preset The preset to check
+---@return boolean available True if all dependencies are loaded
+---@return string[] missingMods List of missing mod names/UUIDs if not available
+function API.CheckPresetAvailable(preset)
+    if not preset then
+        return false, {}
+    end
+    local missingMods = PresetCompatibility.CheckMods(preset)
+    return #missingMods == 0, missingMods
+end
+
+--- Checks if a preset ID has all its dependencies loaded.
+---@param presetId string The UUID of the preset to check
+---@return boolean available True if preset exists and all dependencies are loaded
+function API.IsPresetAvailable(presetId)
+    local preset, err = API.GetPreset(presetId)
+    if not preset then
+        return false
+    end
+    local available, _ = API.CheckPresetAvailable(preset)
+    return available
 end
