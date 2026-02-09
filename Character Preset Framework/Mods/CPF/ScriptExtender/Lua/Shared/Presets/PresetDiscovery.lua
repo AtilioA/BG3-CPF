@@ -185,19 +185,6 @@ function PresetDiscovery:LoadPresets()
     CPFPrint(1, "Loading user presets from registry...")
     local registryEntries = PresetIndex.Load()
     for _, entry in ipairs(registryEntries) do
-        local source = entry.source or "User"
-        if source ~= "User" then
-            CPFWarn(2, string.format("Skipping non-user index entry for preset '%s' (source: %s)",
-                tostring(entry.presetId), tostring(source)))
-            goto continue
-        end
-
-        if type(entry.filename) ~= "string" or entry.filename:match("^%s*$") then
-            CPFWarn(2, string.format("Skipping user index entry with empty filename for preset '%s'",
-                tostring(entry.presetId)))
-            goto continue
-        end
-
         -- Load all presets, including hidden ones
         -- The UI will filter based on preset._indexData.hidden
         local preset = self:_LoadAndLogJSON(entry.filename, 'user')
@@ -206,7 +193,6 @@ function PresetDiscovery:LoadPresets()
                 totalCount = totalCount + 1
             end
         end
-        ::continue::
     end
 
     -- Load 'Numbered User Presets' (preset_0.json to preset_9.json)

@@ -8,11 +8,6 @@ JsonLayer = {}
 ---@return table|nil data The parsed JSON data, or nil if the file could not be loaded or parsed
 ---@return string? errorMessage Error message if loading failed
 function JsonLayer:Load(filePath, mode)
-    if type(filePath) ~= "string" or filePath:match("^%s*$") then
-        return nil, "Invalid file path"
-    end
-
-    mode = mode or "data"
     local fileContent = Ext.IO.LoadFile(filePath, mode)
     if not fileContent or fileContent == "" then
         return nil, "File not found or empty"
