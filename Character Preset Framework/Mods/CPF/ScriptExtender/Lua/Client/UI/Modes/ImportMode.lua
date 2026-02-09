@@ -7,7 +7,7 @@ local ImportMode = {}
 function ImportMode:Render(parent)
     -- Wrap entire content in a managed group
     RenderHelper.CreateManagedGroup(parent, "ImportModeContent", function(group)
-        if (not Ext.Debug.IsDeveloperMode()) and (Ext.Utils.Version() <= 30) then
+        if (Ext.Utils.Version() < 30) then
             group:AddText(Loca.Get(Loca.Keys.UI_ERROR_SE_VERSION))
             CPFWarn(1, "Import feature is still not available!")
             return false
