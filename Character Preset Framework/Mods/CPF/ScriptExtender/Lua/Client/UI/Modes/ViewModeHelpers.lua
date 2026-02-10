@@ -83,6 +83,7 @@ end
 local function _CreateDisabledApplyButton(group)
     local ccWarning = group:AddText(Loca.Get(Loca.Keys.UI_WARN_CC_RESTRICTION))
     ccWarning:SetColor("Text", UIColors.COLOR_RED)
+    ccWarning.TextWrapPos = 0
 
     local btnApply = group:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_CANNOT_APPLY))
     if StyleHelpers and StyleHelpers.DisableButton then
@@ -109,14 +110,17 @@ end
 local function _RenderInspectedValue(attrChild, label, inspected)
     if type(inspected) == "table" then
         if #inspected > 0 then
-            attrChild:AddText(label .. ":")
+            local labelText = attrChild:AddText(label .. ":")
+            labelText.TextWrapPos = 0
             for _, line in ipairs(inspected) do
-                attrChild:AddText("  - " .. line)
+                local lineText = attrChild:AddText("  - " .. line)
+                lineText.TextWrapPos = 0
             end
         end
     else
         if inspected ~= "" and not string.find(inspected, "Unknown") then
-            attrChild:AddText(string.format("%s: %s", label, inspected))
+            local inspectedText = attrChild:AddText(string.format("%s: %s", label, inspected))
+            inspectedText.TextWrapPos = 0
         end
     end
 end
@@ -146,17 +150,21 @@ function ViewModeHelpers.RenderHeader(group, record)
     end
 
     local preset = record.preset
-    group:AddText(Loca.Format(Loca.Keys.UI_LABEL_NAME_VALUE, preset.Name or "Unknown"))
+    local nameText = group:AddText(Loca.Format(Loca.Keys.UI_LABEL_NAME_VALUE, preset.Name or "Unknown"))
+    nameText.TextWrapPos = 0
     if record.indexData.source and string.lower(record.indexData.source) ~= 'user' then
-        group:AddText(Loca.Format(Loca.Keys.UI_LABEL_SOURCE_VALUE, record.indexData.source))
+        local sourceText = group:AddText(Loca.Format(Loca.Keys.UI_LABEL_SOURCE_VALUE, record.indexData.source))
+        sourceText.TextWrapPos = 0
     end
-    group:AddText(Loca.Format(Loca.Keys.UI_LABEL_AUTHOR_VALUE, preset.Author or "Unknown"))
+    local authorText = group:AddText(Loca.Format(Loca.Keys.UI_LABEL_AUTHOR_VALUE, preset.Author or "Unknown"))
+    authorText.TextWrapPos = 0
     local versionText = group:AddText(Loca.Format(Loca.Keys.UI_LABEL_VERSION_VALUE, preset.Version or "Unknown"))
     versionText:SetColor("Text", UIColors.COLOR_GRAY)
-
+    versionText.TextWrapPos = 0
 
     local IDText = group:AddText(Loca.Format(Loca.Keys.UI_LABEL_ID_VALUE, preset._id or "Unknown"))
     IDText:SetColor("Text", UIColors.COLOR_GRAY)
+    IDText.TextWrapPos = 0
 
     group:AddSeparator()
 end
@@ -239,7 +247,8 @@ function ViewModeHelpers.RenderAttributes(group, preset)
     local appearanceData = preset.Data and preset.Data.CCAppearance
 
     if not appearanceData then
-        attrChild:AddText(Loca.Get(Loca.Keys.UI_MSG_NO_DATA_AVAILABLE))
+        local noDataText = attrChild:AddText(Loca.Get(Loca.Keys.UI_MSG_NO_DATA_AVAILABLE))
+        noDataText.TextWrapPos = 0
         return
     end
 

@@ -28,6 +28,7 @@ function Window:DrawSidebar(parent)
 
     local vSeparator = parent:AddText("|")
     vSeparator.SameLine = true
+    vSeparator.TextWrapPos = 0
 
     local btnCreate = parent:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_PRESET_CREATION))
 
@@ -61,7 +62,8 @@ function Window:DrawSidebar(parent)
 
             if #compatible == 0 then
                 local sepRow = presetsTable:AddRow()
-                sepRow:AddCell():AddText(Loca.Get(Loca.Keys.UI_TEXT_NO_COMPATIBLE_PRESETS))
+                local noPresetsText = sepRow:AddCell():AddText(Loca.Get(Loca.Keys.UI_TEXT_NO_COMPATIBLE_PRESETS))
+                noPresetsText.TextWrapPos = 0
             end
 
             for _, record in ipairs(compatible) do
@@ -73,8 +75,9 @@ function Window:DrawSidebar(parent)
                 local rowCell = sepRow:AddCell()
                 local incompatibleSepText = rowCell:AddSeparatorText(Loca.Get(Loca.Keys.UI_TEXT_INCOMPATIBLE_PRESETS))
                 local incompatibleSectionTooltip = incompatibleSepText:Tooltip()
-                incompatibleSectionTooltip:AddText(
+                local incompatibleTooltipText = incompatibleSectionTooltip:AddText(
                     Loca.Get(Loca.Keys.UI_TEXT_INCOMPATIBLE_PRESETS_TOOLTIP))
+                incompatibleTooltipText.TextWrapPos = 0
 
                 for _, record in ipairs(incompatible) do
                     WindowHelpers.AddPresetRow(presetsTable, record, false)
@@ -125,6 +128,7 @@ function Window:RenderCPF(window)
     -- TODO: Add some distinctive color to the status bar?
     if not self.StatusText then
         self.StatusText = window:AddText("")
+        self.StatusText.TextWrapPos = 0
     end
     self.StatusText.Label = State.StatusMessage:GetValue() or ""
     State.StatusMessage:Subscribe(function(msg)
@@ -153,7 +157,8 @@ function Window:RenderCPF(window)
         if modeRenderer and modeRenderer.Render then
             modeRenderer:Render(group)
         else
-            group:AddText(Loca.Format(Loca.Keys.UI_ERROR_UNKNOWN_MODE, currentMode))
+            local unknownModeText = group:AddText(Loca.Format(Loca.Keys.UI_ERROR_UNKNOWN_MODE, currentMode))
+            unknownModeText.TextWrapPos = 0
         end
     end)
 end

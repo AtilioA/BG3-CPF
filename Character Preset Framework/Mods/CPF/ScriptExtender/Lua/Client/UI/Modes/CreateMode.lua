@@ -7,7 +7,8 @@ local CreateMode = {}
 function CreateMode:Render(parent)
     -- Wrap entire content in a managed group
     local group = RenderHelper.CreateManagedGroup(parent, "CreateModeContent", function(g)
-        g:AddText(Loca.Get(Loca.Keys.UI_CREATE_HEADER))
+        local createHeaderText = g:AddText(Loca.Get(Loca.Keys.UI_CREATE_HEADER))
+        createHeaderText.TextWrapPos = 0
         g:AddSeparator()
 
         -- Create reactive group for input fields that updates when NewPresetData changes

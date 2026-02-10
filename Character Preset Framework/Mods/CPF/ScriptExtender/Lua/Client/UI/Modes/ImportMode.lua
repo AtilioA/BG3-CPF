@@ -8,12 +8,15 @@ function ImportMode:Render(parent)
     -- Wrap entire content in a managed group
     RenderHelper.CreateManagedGroup(parent, "ImportModeContent", function(group)
         if (Ext.Utils.Version() < 30) then
-            group:AddText(Loca.Get(Loca.Keys.UI_ERROR_SE_VERSION))
+            local errorText = group:AddText(Loca.Get(Loca.Keys.UI_ERROR_SE_VERSION))
+            errorText.TextWrapPos = 0
             CPFWarn(1, "Import feature is still not available!")
             return false
         end
-        group:AddText(Loca.Get(Loca.Keys.UI_IMPORT_PAGE))
-        group:AddText(Loca.Get(Loca.Keys.UI_MSG_PASTE_JSON))
+        local importPageText = group:AddText(Loca.Get(Loca.Keys.UI_IMPORT_PAGE))
+        importPageText.TextWrapPos = 0
+        local pasteJsonText = group:AddText(Loca.Get(Loca.Keys.UI_MSG_PASTE_JSON))
+        pasteJsonText.TextWrapPos = 0
 
         local input = group:AddInputText("")
         input.Multiline = true

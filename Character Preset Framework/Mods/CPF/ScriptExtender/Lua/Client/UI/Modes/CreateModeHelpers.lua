@@ -3,7 +3,8 @@ local State = Ext.Require("Client/UI/State.lua")
 local CreateModeHelpers = {}
 
 function CreateModeHelpers.CreateInputField(group, labelKey, fieldName, presetData)
-    group:AddText(Loca.Get(labelKey))
+    local labelText = group:AddText(Loca.Get(labelKey))
+    labelText.TextWrapPos = 0
     local input = group:AddInputText("")
     input.SameLine = true
     input.Text = presetData[fieldName]
@@ -49,9 +50,11 @@ function CreateModeHelpers.RenderCapturedDataPreview(previewGroup, capturedData)
 
     if capturedData then
         -- Show captured data
-        previewChild:AddText(Ext.Json.Stringify(capturedData))
+        local capturedDataText = previewChild:AddText(Ext.Json.Stringify(capturedData))
+        capturedDataText.TextWrapPos = 0
     else
-        previewChild:AddText(Loca.Get(Loca.Keys.UI_MSG_NO_DATA_CAPTURED))
+        local noDataText = previewChild:AddText(Loca.Get(Loca.Keys.UI_MSG_NO_DATA_CAPTURED))
+        noDataText.TextWrapPos = 0
     end
 end
 
