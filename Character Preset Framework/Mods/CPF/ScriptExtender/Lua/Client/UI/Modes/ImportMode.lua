@@ -17,9 +17,9 @@ function ImportMode:Render(parent)
         local input = group:AddInputText("")
         input.Multiline = true
         input.SizeHint = { 450, 400 }
-        -- input.Text = State.ImportBuffer:GetValue()
+        input.Text = State.ImportBuffer:GetValue()
         input.OnChange = function()
-            -- State.ImportBuffer:OnNext(input.Text)
+            State.ImportBuffer:OnNext(input.Text)
         end
 
         -- Create reactive button group that updates when ImportBuffer changes
