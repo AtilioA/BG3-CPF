@@ -72,3 +72,4 @@ node_modules/
 tasks.json
 tasks/
 *.zip
+agent*
