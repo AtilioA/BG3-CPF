@@ -44,7 +44,7 @@
     <content contentuid="h5bfe58e13875413facf003e39ad3000f5g52" version="1">Failed to unhide presets.</content>
     <content contentuid="hf96c5f584ef64d67afd0ea721cc29d74991a" version="1">Preset index correctly reset.&lt;br&gt;[1] presets loaded.</content>
     <content contentuid="h8ef2d1955abb4433a0dcb4050a0b4bdefab5" version="1">Failed to reset presets index.</content>
-    <content contentuid="hb9ac2e174c1e48fbb605a7c86f48a42754fd" version="1">Create new preset from selected character</content>
+    <content contentuid="hb9ac2e174c1e48fbb605a7c86f48a42754fd" version="1">Create new preset from current character.</content>
     <content contentuid="hc8ef5df3679f4d6fb2b2d64705d5c03f7890" version="1">Name</content>
     <content contentuid="h5d602891c7a54987b1e45504826e276d10e5" version="1">Author</content>
     <content contentuid="h8cefdfe321f54bcb8e162485c7925cf05985" version="1">Version</content>
@@ -52,7 +52,7 @@
     <content contentuid="hf88f70878c104b3d993b3a48891c08503ba3" version="1">Captured attributes (preview; for dev purposes):</content>
     <content contentuid="he001c04c8a80412982d5dd4822f02fbb7023" version="1">No data captured.</content>
     <content contentuid="hb7f9bfae60e44eb082deb2f9beb542aebfec" version="1">You need SE v30 or Devel to use this feature.</content>
-    <content contentuid="hee5043fa5f3d4141acd588509fddf70a2035" version="1">Paste a preset JSON below:</content>
+    <content contentuid="hee5043fa5f3d4141acd588509fddf70a2035" version="1">Paste the contents of a preset JSON below:</content>
     <content contentuid="h67d6534f54124fab86a060570e02a61b1ag1" version="1">Import '[1]'</content>
     <content contentuid="he81f58cb726d4abf953da5d69464c75aa38c" version="1">No presets available.&lt;br&gt;Start by importing or creating a new preset.</content>
     <content contentuid="h30dd1b4e74ca45e8824e30489d6e9aa6ec63" version="1">Click a preset on the left to view details.</content>
@@ -109,4 +109,5 @@
     <content contentuid="h6a35cc10ba9c495f92d544d2da6f6a54d1bg" version="1">Added by mod '[1]'</content>
     <content contentuid="h260064d4905642cbaf2f04ca04e7bef407bb" version="1">(MISSING)</content>
     <content contentuid="h606727e2b83f42999b7a716f8f29979582de" version="1">These presets are not compatible with your currently-controlled character.</content>
+    <content contentuid="h0a096d5fc9834b5d9217f17476c6f4d1e05b" version="1">You can also import presets here.</content>
 </contentList>

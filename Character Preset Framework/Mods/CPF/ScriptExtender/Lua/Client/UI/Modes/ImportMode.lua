@@ -12,6 +12,7 @@ function ImportMode:Render(parent)
             CPFWarn(1, "Import feature is still not available!")
             return false
         end
+        group:AddText(Loca.Get(Loca.Keys.UI_IMPORT_PAGE))
         group:AddText(Loca.Get(Loca.Keys.UI_MSG_PASTE_JSON))
 
         local input = group:AddInputText("")

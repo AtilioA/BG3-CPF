@@ -78,6 +78,7 @@ LocalizationManager.Keys = {
 
     -- ImportMode.lua
     UI_ERROR_SE_VERSION = "hb7f9bfae60e44eb082deb2f9beb542aebfec",
+    UI_IMPORT_PAGE = "h0a096d5fc9834b5d9217f17476c6f4d1e05b",
     UI_MSG_PASTE_JSON = "hee5043fa5f3d4141acd588509fddf70a2035",
     UI_BUTTON_IMPORT_NAMED = "h67d6534f54124fab86a060570e02a61b1ag1",
 
