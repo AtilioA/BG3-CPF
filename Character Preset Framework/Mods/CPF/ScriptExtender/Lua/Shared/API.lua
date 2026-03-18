@@ -110,6 +110,11 @@ function API.GetPresetsByCharacterTemplate(onlyAvailable)
     for _, record in ipairs(records) do
         local preset = record.preset
         if preset and preset.Data and preset.Data.CCStats then
+            -- Skip hidden presets
+            if record.indexData and record.indexData.hidden then
+                goto continue
+            end
+
             local stats = preset.Data.CCStats
             local raceName = RACE_UUID_TO_NAME[stats.Race]
 
@@ -142,6 +147,8 @@ function API.GetPresetsByCharacterTemplate(onlyAvailable)
                 end
             end
         end
+
+        ::continue::
     end
 
     return buckets
@@ -180,4 +187,38 @@ function API.IsPresetAvailable(presetId)
     end
     local available, _ = API.CheckPresetAvailable(preset)
     return available
+end
+
+--- Applies a preset to an entity. Must be called from server context.
+---@param entityUuid string The UUID of the target entity
+---@param presetId string The UUID of the preset to apply
+---@param options? {autoEnterMirror?: boolean} Optional apply behavior overrides
+---@return boolean success True if the preset was applied
+---@return string? error Error message if application failed
+function API.ApplyPreset(entityUuid, presetId, options)
+    if not Ext.IsServer() then
+        return false, "ApplyPreset must be called from server context"
+    end
+
+    options = options or {}
+
+    if type(entityUuid) ~= "string" then
+        return false, "Invalid parameter: entityUuid must be a string"
+    end
+
+    if type(presetId) ~= "string" then
+        return false, "Invalid parameter: presetId must be a string"
+    end
+
+    local preset, err = API.GetPreset(presetId)
+    if not preset then
+        return false, err
+    end
+
+    local result = PresetApplication.Apply(entityUuid, preset, {
+        checkAvailability = true,
+        autoEnterMirror = options.autoEnterMirror == true,
+    })
+
+    return result.Success, result.Error
 end
