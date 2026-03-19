@@ -1,6 +1,27 @@
 ---@class PresetCompatibility
 PresetCompatibility = {}
 
+---@param targetEntity EntityHandle|nil
+---@return CCStats|CharacterCreationStatsComponent|nil
+local function resolveTargetStats(targetEntity)
+    if not targetEntity then
+        return nil
+    end
+
+    if CCA and CCA.ExtractData then
+        local targetData = CCA.ExtractData(targetEntity)
+        if targetData and targetData.CCStats then
+            return targetData.CCStats
+        end
+    end
+
+    if targetEntity.CharacterCreationStats then
+        return targetEntity.CharacterCreationStats
+    end
+
+    return nil
+end
+
 --- Checks if preset stats are compatible with target stats
 ---@param presetStats CCStats
 ---@param targetStats CCStats|CharacterCreationStatsComponent
@@ -59,13 +80,12 @@ function PresetCompatibility.Check(preset, targetEntity)
         return warnings
     end
 
-    -- REFACTOR: allow comparing to CC dummy (does not have CharacterCreationStats)
-    if not targetEntity or not targetEntity.CharacterCreationStats then
-        CPFWarn(0, "PresetCompatibility.Check: Target entity is missing CharacterCreationStats")
+    local targetStats = resolveTargetStats(targetEntity)
+    if not targetStats then
         return warnings
     end
 
-    return PresetCompatibility.CheckStats(preset.Data.CCStats, targetEntity.CharacterCreationStats)
+    return PresetCompatibility.CheckStats(preset.Data.CCStats, targetStats)
 end
 
 --- Checks if required mods for a preset are loaded
