@@ -1,12 +1,50 @@
 API = {}
 
+API._registryLoadAttempted = false
+API._lastRegistryTableRef = nil
+
+--- Ensures the preset registry is hydrated in the current Lua context.
+--- This is required for server-side API calls, since discovery is normally triggered by client UI init.
+---@return boolean success
+---@return string? error
+function API.EnsurePresetRegistryLoaded()
+    if not PresetRegistry then
+        return false, "PresetRegistry not initialized"
+    end
+
+    local recordsTable = PresetRegistry.GetAll()
+    if API._lastRegistryTableRef ~= recordsTable then
+        API._lastRegistryTableRef = recordsTable
+        API._registryLoadAttempted = false
+    end
+
+    if PresetRegistry.Count() > 0 then
+        API._registryLoadAttempted = true
+        return true, nil
+    end
+
+    if API._registryLoadAttempted then
+        return true, nil
+    end
+
+    if not PresetDiscovery or not PresetDiscovery.LoadPresets then
+        return false, "PresetDiscovery not initialized"
+    end
+
+    API._registryLoadAttempted = true
+    local loadedCount = PresetDiscovery:LoadPresets()
+    CPFPrint(1, string.format("API.EnsurePresetRegistryLoaded: discovered %d preset(s)", loadedCount or 0))
+    return true, nil
+end
+
 --- Retrieves a list of registered presets, optionally filtered.
 ---@param filters? PresetFilter Optional filters (Race, BodyType, BodyShape)
 ---@return Preset[] presets List of matching preset objects
 ---@return string? error Error message if retrieval failed
 function API.GetPresetList(filters)
-    if not PresetRegistry then
-        return {}, "PresetRegistry not initialized"
+    local loaded, loadErr = API.EnsurePresetRegistryLoaded()
+    if not loaded then
+        return {}, loadErr or "Failed to load presets"
     end
 
     local records = PresetRegistry.GetFiltered(filters)
@@ -30,8 +68,9 @@ function API.GetPreset(id)
         return nil, "Invalid parameter: ID must be a string"
     end
 
-    if not PresetRegistry then
-        return nil, "PresetRegistry not initialized"
+    local loaded, loadErr = API.EnsurePresetRegistryLoaded()
+    if not loaded then
+        return nil, loadErr or "Failed to load presets"
     end
 
     local record = PresetRegistry.Get(id)
@@ -102,7 +141,8 @@ function API.GetPresetsByCharacterTemplate(onlyAvailable)
         TIEFLING_STRONG_FEMALE = {}
     }
 
-    if not PresetRegistry then
+    local loaded, _ = API.EnsurePresetRegistryLoaded()
+    if not loaded then
         return buckets
     end
 
