@@ -88,7 +88,7 @@
     <content contentuid="h0b14631390894319870f2c45bab59a4f527d" version="1">Click this button to reset the presets index.&lt;br&gt;This will unhide presets, but you will lose presets that you have created.</content>
     <content contentuid="h14d9850417844dd2ad53e1952438e0d8dd61" version="1">Auto-enter mirror after applying preset</content>
     <content contentuid="h05f31edd0b5442d9af969de18f1d5bf8df76" version="1">Unhide all presets</content>
-    <content contentuid="hc2c599f4eb0241b79dfed8019a5e6697f79b" version="1">Automatically enter the mirror/appearance change mode after applying a preset</content>
+    <content contentuid="hc2c599f4eb0241b79dfed8019a5e6697f79b" version="1">Automatically enter the mirror/appearance change mode after applying a preset.&lt;br&gt;Recommended to ensure the portrait updates correctly (otherwise, perform a level-up).</content>
     <content contentuid="hc52a8c48f4d641028cf4caefefc613184e9g" version="1">Click this button to unhide all presets.</content>
     <content contentuid="hc554eadccbe946c5bd3227be1ac5c5291acf" version="1">0 = no debug logs, 1 = basic debug, 2 = verbose.</content>
     <content contentuid="h3384e2c2309a48b59c80f0647e4b46a05g89" version="1">Debug level</content>
@@ -107,7 +107,7 @@
     <content contentuid="h009264f133fb4ad283d5df5b0de5d7217ced" version="1">Currently incompatible</content>
     <content contentuid="h3f8a9d2e7c4b4a1f9e6d5c8b7a6f5e4d3c2b" version="1">Hidden presets</content>
     <content contentuid="hdbcd62a9150f4a8c9a8fbcc3251d13ca9dec" version="1">No presets found.</content>
-    <content contentuid="h7d1f3c68b8b448489d40d05485c450d64024" version="1">List private parts names in the preset view.</content>
+    <content contentuid="h7d1f3c68b8b448489d40d05485c450d64024" version="1">List private parts names when viewing preset details.</content>
     <content contentuid="he72f6a19c112408f923fe8427b8580496d48" version="1">List private parts</content>
     <content contentuid="h6a35cc10ba9c495f92d544d2da6f6a54d1bg" version="1">Added by mod '[1]'</content>
     <content contentuid="h260064d4905642cbaf2f04ca04e7bef407bb" version="1">(MISSING)</content>

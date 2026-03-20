@@ -46,7 +46,7 @@
                     "Name": "Auto-enter mirror after applying preset",
                     "Type": "checkbox",
                     "Default": true,
-                    "Description": "Automatically enter the mirror/appearance change mode after applying a preset",
+                    "Description": "Automatically enter the mirror/appearance change mode after applying a preset.\nRecommended to ensure the portrait updates correctly (otherwise, perform a level-up).",
                     "Handles": {
                         "DescriptionHandle": "hc2c599f4eb0241b79dfed8019a5e6697f79b",
                         "NameHandle": "h14d9850417844dd2ad53e1952438e0d8dd61"
@@ -57,7 +57,7 @@
                     "Name": "List private parts",
                     "Type": "checkbox",
                     "Default": false,
-                    "Description": "List private parts names in the preset view.",
+                    "Description": "List private parts names when viewing preset details.",
                     "Handles": {
                         "NameHandle": "he72f6a19c112408f923fe8427b8580496d48",
                         "DescriptionHandle": "h7d1f3c68b8b448489d40d05485c450d64024"
