@@ -1,27 +1,6 @@
 ---@class PresetCompatibility
 PresetCompatibility = {}
 
----@param targetEntity EntityHandle|nil
----@return CCStats|CharacterCreationStatsComponent|nil
-local function resolveTargetStats(targetEntity)
-    if not targetEntity then
-        return nil
-    end
-
-    if CCA and CCA.ExtractData then
-        local targetData = CCA.ExtractData(targetEntity)
-        if targetData and targetData.CCStats then
-            return targetData.CCStats
-        end
-    end
-
-    if targetEntity.CharacterCreationStats then
-        return targetEntity.CharacterCreationStats
-    end
-
-    return nil
-end
-
 --- Checks if preset stats are compatible with target stats
 ---@param presetStats CCStats
 ---@param targetStats CCStats|CharacterCreationStatsComponent
@@ -80,7 +59,7 @@ function PresetCompatibility.Check(preset, targetEntity)
         return warnings
     end
 
-    local targetStats = resolveTargetStats(targetEntity)
+    local targetStats = CCA.ResolveCharacterStats(targetEntity)
     if not targetStats then
         return warnings
     end

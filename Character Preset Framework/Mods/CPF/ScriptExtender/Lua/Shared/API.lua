@@ -59,6 +59,137 @@ function API.GetPresetList(filters)
     return presets, nil
 end
 
+---@param raceName string
+---@return string
+local function normalizeRaceBucketName(raceName)
+    local normalized = string.upper(raceName)
+    normalized = string.gsub(normalized, "[^A-Z]", "")
+
+    local aliases = {
+        HALFELF = "HALFELF",
+        HALFORC = "HALFORC",
+    }
+
+    return aliases[normalized] or normalized
+end
+
+---@class AvailablePresetsResult
+---@field Ok boolean
+---@field Reason "MATCHED"|"NO_MATCH"|"INVALID_INPUT"|"REGISTRY_LOAD_FAILED"|"ENTITY_NOT_FOUND"|"STATS_NOT_FOUND"|"RACE_NOT_FOUND"|"RACE_DATA_NOT_FOUND"
+---@field Presets Preset[]
+---@field Error string|nil
+---@field BucketKey string|nil
+
+---@param ok boolean
+---@param reason string
+---@param presets Preset[]
+---@param errorMessage string|nil
+---@param bucketKey string|nil
+---@return AvailablePresetsResult
+local function buildAvailablePresetsResult(ok, reason, presets, errorMessage, bucketKey)
+    return {
+        Ok = ok,
+        Reason = reason,
+        Presets = presets or {},
+        Error = errorMessage,
+        BucketKey = bucketKey,
+    }
+end
+
+--- Retrieves available presets for a character by matching its template bucket.
+--- Bucket format: <RACE>_<MALE|FEMALE|STRONG_MALE|STRONG_FEMALE>
+---@param characterGuid string Character entity GUID/UUID
+---@return AvailablePresetsResult result
+function API.GetAvailablePresetsForCharacter(characterGuid)
+    if type(characterGuid) ~= "string" then
+        return buildAvailablePresetsResult(
+            false,
+            "INVALID_INPUT",
+            {},
+            "Invalid parameter: characterGuid must be a string",
+            nil
+        )
+    end
+
+    local loaded, loadErr = API.EnsurePresetRegistryLoaded()
+    if not loaded then
+        return buildAvailablePresetsResult(
+            false,
+            "REGISTRY_LOAD_FAILED",
+            {},
+            loadErr or "Failed to load presets",
+            nil
+        )
+    end
+
+    local entity = Ext.Entity.Get(characterGuid)
+    if not entity then
+        return buildAvailablePresetsResult(
+            false,
+            "ENTITY_NOT_FOUND",
+            {},
+            "Entity not found: " .. characterGuid,
+            nil
+        )
+    end
+
+    local targetStats = CCA.ResolveCharacterStats(entity)
+    if not targetStats then
+        return buildAvailablePresetsResult(
+            false,
+            "STATS_NOT_FOUND",
+            {},
+            "CharacterCreationStats not found for entity: " .. characterGuid,
+            nil
+        )
+    end
+
+    if not targetStats.Race then
+        return buildAvailablePresetsResult(
+            false,
+            "RACE_NOT_FOUND",
+            {},
+            "Character race not found for entity: " .. characterGuid,
+            nil
+        )
+    end
+
+    local raceData = Ext.StaticData.Get(targetStats.Race, "Race")
+    if not raceData or not raceData.Name then
+        return buildAvailablePresetsResult(
+            false,
+            "RACE_DATA_NOT_FOUND",
+            {},
+            "Race static data not found for race GUID: " .. tostring(targetStats.Race),
+            nil
+        )
+    end
+
+    local normalizedRaceName = normalizeRaceBucketName(raceData.Name)
+    local maleBodyTypeEnum = Ext.Enums and Ext.Enums.BodyType and Ext.Enums.BodyType.Male
+    local isMale = (maleBodyTypeEnum and targetStats.BodyType == maleBodyTypeEnum) or (targetStats.BodyType == 0)
+    local isStrong = (targetStats.BodyShape == 1)
+
+    local bodySuffix = isMale and "MALE" or "FEMALE"
+    if isStrong then
+        bodySuffix = "STRONG_" .. bodySuffix
+    end
+
+    local bucketKey = normalizedRaceName .. "_" .. bodySuffix
+    local buckets = API.GetPresetsByCharacterTemplate(true)
+    local presets = buckets[bucketKey]
+
+    if not presets then
+        return buildAvailablePresetsResult(true, "NO_MATCH", {}, nil, bucketKey)
+    end
+
+    if #presets == 0 then
+        return buildAvailablePresetsResult(true, "NO_MATCH", {}, nil, bucketKey)
+    end
+
+    return buildAvailablePresetsResult(true, "MATCHED", presets, nil, bucketKey)
+end
+
 --- Retrieves a specific preset by its ID.
 ---@param id string The UUID of the preset to retrieve
 ---@return Preset? preset The preset object, or nil if not found or invalid

@@ -138,6 +138,27 @@ function CCA.ExtractFromEntity(entity)
     }
 end
 
+--- Resolves character creation stats for an entity.
+--- Uses ExtractData first so mirror/CC contexts are also supported.
+---@param entity EntityHandle|nil
+---@return CCStats|CharacterCreationStatsComponent|nil
+function CCA.ResolveCharacterStats(entity)
+    if not entity then
+        return nil
+    end
+
+    local data = CCA.ExtractData(entity)
+    if data and data.CCStats then
+        return data.CCStats
+    end
+
+    if entity.CharacterCreationStats then
+        return entity.CharacterCreationStats
+    end
+
+    return nil
+end
+
 --- Main entry point to extract data from any source (CC, Mirror, or Entity)
 ---@param entity EntityHandle
 ---@return PresetData|nil
