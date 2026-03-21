@@ -163,7 +163,7 @@ end
 --- Loads all presets from all mods in the load order AND user presets from registry
 ---@return integer totalCount Total number of presets loaded
 function PresetDiscovery:LoadPresets()
-    CPFPrint(0, "Starting preset discovery...")
+    CPFPrint(1, "Starting preset discovery...")
 
     local totalCount = 0
     local loadOrder = Ext.Mod.GetLoadOrder()
