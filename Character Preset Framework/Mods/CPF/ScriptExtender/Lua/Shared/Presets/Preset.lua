@@ -33,9 +33,10 @@ end
 
 --- Extracts unified preset data (Stats + Appearance) from an entity
 ---@param entity EntityHandle
+---@param warnOnMissingStats boolean? Pass true when extracting for preset creation/saving
 ---@return PresetData|nil
-function Preset.ExtractData(entity)
-    return CCA.ExtractData(entity)
+function Preset.ExtractData(entity, warnOnMissingStats)
+    return CCA.ExtractData(entity, warnOnMissingStats)
 end
 
 --- Creates a new preset from unified character data

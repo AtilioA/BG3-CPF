@@ -132,7 +132,7 @@ function State:UpdateCapturedData()
     if self.TargetCharacterUUID then
         local character = Ext.Entity.Get(self.TargetCharacterUUID)
         if character then
-            data = Preset.ExtractData(character)
+            data = Preset.ExtractData(character, true)
             self.CapturedData:OnNext(data)
         end
     end
@@ -196,7 +196,7 @@ function State:CaptureCharacterData()
         end
 
         -- Get the unified data (Stats + Appearance)
-        local unifiedData = Preset.ExtractData(player)
+        local unifiedData = Preset.ExtractData(player, true)
 
         if not unifiedData or not unifiedData.CCAppearance then
             CPFWarn(0, "Player entity does not have CharacterCreationAppearance component")

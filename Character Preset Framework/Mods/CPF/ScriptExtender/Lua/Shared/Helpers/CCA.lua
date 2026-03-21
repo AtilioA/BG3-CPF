@@ -107,13 +107,14 @@ end
 
 --- Extracts data from a regular Gameplay Entity
 ---@param entity EntityHandle
+---@param warnOnMissingStats boolean? Only warn if true (use for preset creation, not reads/comparisons)
 ---@return PresetData|nil
-function CCA.ExtractFromEntity(entity)
+function CCA.ExtractFromEntity(entity, warnOnMissingStats)
     if not entity then return nil end
 
     local stats = entity.CharacterCreationStats
-    if not stats then
-        CPFWarn(0, "Entity has no CharacterCreationStats")
+    if not stats and warnOnMissingStats then
+        CPFWarn(1, "Entity has no CharacterCreationStats")
     end
 
     local ccStats = nil
@@ -161,8 +162,9 @@ end
 
 --- Main entry point to extract data from any source (CC, Mirror, or Entity)
 ---@param entity EntityHandle
+---@param warnOnMissingStats boolean? Passed to ExtractFromEntity; only warn for preset-creation paths
 ---@return PresetData|nil
-function CCA.ExtractData(entity)
+function CCA.ExtractData(entity, warnOnMissingStats)
     -- Case 1: Character Creation
     if CCA.IsInCC() then
         CPFDebug(1, "CCA.ExtractData: Extracting from CC Dummy")
@@ -177,7 +179,7 @@ function CCA.ExtractData(entity)
 
     -- Case 3: Regular Entity
     CPFDebug(1, "CCA.ExtractData: Extracting from Entity")
-    return CCA.ExtractFromEntity(entity)
+    return CCA.ExtractFromEntity(entity, warnOnMissingStats)
 end
 
 -- Deprecated: Use CCA.ExtractData instead
