@@ -46,10 +46,21 @@
                     "Name": "Auto-enter mirror after applying preset",
                     "Type": "checkbox",
                     "Default": true,
-                    "Description": "Automatically enter the mirror/appearance change mode after applying a preset.\nRecommended to ensure the portrait updates correctly (otherwise, perform a level-up).",
+                    "Description": "Automatically enter the mirror/appearance change mode after applying a preset.",
                     "Handles": {
                         "DescriptionHandle": "hc2c599f4eb0241b79dfed8019a5e6697f79b",
                         "NameHandle": "h14d9850417844dd2ad53e1952438e0d8dd61"
+                    }
+                },
+                {
+                    "Id": "auto_update_portrait",
+                    "Name": "Auto-update portrait after applying preset",
+                    "Type": "checkbox",
+                    "Default": true,
+                    "Description": "Automatically re-render and update the character's portrait icon after applying a preset.\nThe portrait takes a few seconds to update.",
+                    "Handles": {
+                        "NameHandle": "hbbf4c0e210c94c09adf38c51aba7e6e8b6g4",
+                        "DescriptionHandle": "h5e76ac62b74e4f5ba59c683e7fdc22f0c148"
                     }
                 },
                 {

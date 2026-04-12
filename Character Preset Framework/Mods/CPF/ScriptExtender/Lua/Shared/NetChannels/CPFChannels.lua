@@ -2,6 +2,7 @@
 ---@class CPFNetChannels
 ---@field RequestApplyPreset ExtenderNetChannel
 ---@field RequestUserInfo ExtenderNetChannel
+---@field IconUpdate ExtenderNetChannel
 NetChannels = {}
 
 ---Creates and returns a netchannel with the given name
@@ -24,5 +25,9 @@ NetChannels.RequestUserInfo = createChannel("RequestUserInfo")
 ---ApplyCCAToClientDummy channel for applying CCA to client-side dummy
 ---@class ApplyCCAToClientDummyChannel : ExtenderNetChannel
 NetChannels.ApplyCCAToClientDummy = createChannel("ApplyCCAToClientDummy")
+
+---IconUpdate channel for sending rendered portrait icons from client to server
+---@class IconUpdateChannel : ExtenderNetChannel
+NetChannels.IconUpdate = createChannel("IconUpdate")
 
 return NetChannels

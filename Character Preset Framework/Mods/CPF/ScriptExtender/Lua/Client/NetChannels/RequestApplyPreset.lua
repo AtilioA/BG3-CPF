@@ -16,6 +16,11 @@ function RequestApplyPreset(characterUuid, presetPayload, options)
     -- Send request to server
     NetChannels.RequestApplyPreset:RequestToServer(requestData, function(response)
         if response.Status == "success" then
+            -- Update portrait after successful apply
+            if MCM and MCM.Get("auto_update_portrait") and IconManager then
+                IconManager:RequestPortraitUpdate(requestData.CharacterUuid)
+            end
+
             if options.OnSuccess then
                 options.OnSuccess(response)
             end
@@ -30,3 +35,4 @@ function RequestApplyPreset(characterUuid, presetPayload, options)
 end
 
 return RequestApplyPreset
+

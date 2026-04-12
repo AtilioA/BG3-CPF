@@ -1,3 +1,4 @@
 RequireFiles("Client/Helpers/", {
-    "Dummy"
+    "Dummy",
+    "IconManager",
 })

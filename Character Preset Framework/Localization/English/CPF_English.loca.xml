@@ -88,7 +88,7 @@
     <content contentuid="h0b14631390894319870f2c45bab59a4f527d" version="1">Click this button to reset the presets index.&lt;br&gt;This will unhide presets, but you will lose presets that you have created.</content>
     <content contentuid="h14d9850417844dd2ad53e1952438e0d8dd61" version="1">Auto-enter mirror after applying preset</content>
     <content contentuid="h05f31edd0b5442d9af969de18f1d5bf8df76" version="1">Unhide all presets</content>
-    <content contentuid="hc2c599f4eb0241b79dfed8019a5e6697f79b" version="1">Automatically enter the mirror/appearance change mode after applying a preset.&lt;br&gt;Recommended to ensure the portrait updates correctly (otherwise, perform a level-up).</content>
+    <content contentuid="hc2c599f4eb0241b79dfed8019a5e6697f79b" version="1">Automatically enter the mirror/appearance change mode after applying a preset.</content>
     <content contentuid="hc52a8c48f4d641028cf4caefefc613184e9g" version="1">Click this button to unhide all presets.</content>
     <content contentuid="hc554eadccbe946c5bd3227be1ac5c5291acf" version="1">0 = no debug logs, 1 = basic debug, 2 = verbose.</content>
     <content contentuid="h3384e2c2309a48b59c80f0647e4b46a05g89" version="1">Debug level</content>
@@ -113,4 +113,6 @@
     <content contentuid="h260064d4905642cbaf2f04ca04e7bef407bb" version="1">(MISSING)</content>
     <content contentuid="h606727e2b83f42999b7a716f8f29979582de" version="1">These presets are not compatible with your currently-controlled character.</content>
     <content contentuid="h0a096d5fc9834b5d9217f17476c6f4d1e05b" version="1">You can also import presets here.</content>
+    <content contentuid="hbbf4c0e210c94c09adf38c51aba7e6e8b6g4" version="1">Auto-update portrait after applying preset</content>
+    <content contentuid="h5e76ac62b74e4f5ba59c683e7fdc22f0c148" version="1">Automatically re-render and update the character's portrait icon after applying a preset.&lt;br&gt;The portrait takes a few seconds to update.</content>
 </contentList>
