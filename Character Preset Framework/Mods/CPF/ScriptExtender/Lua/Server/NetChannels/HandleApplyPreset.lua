@@ -21,6 +21,8 @@ local function handleApplyPreset(data, userId)
         return response
     end
 
+    PresetCompat.NormalizePresetMetallicTint(data.Preset)
+
     -- -- If dry run, just return validation results
     -- if data.DryRun then
     --     response.Status = "success"

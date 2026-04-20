@@ -2,6 +2,7 @@ RequireFiles("Shared/Helpers/", {
     "Constants",
     "VC/_Init",
     "Enums/_Init",
+    "PresetCompat",
     "ModValidation",
     "Table",
     "Printer",
