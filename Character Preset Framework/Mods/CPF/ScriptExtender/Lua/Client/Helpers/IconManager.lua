@@ -614,14 +614,21 @@ function IconManager:RequestPortraitUpdate(characterUuid)
 
             self:SubmitRequest(request)
 
-            Ext.Entity.OnCreateDeferredOnce("ClientCharacterIconResult", function(entity)
-                Ext.System.ClientCharacterIconRender.SessionCount = math.max(
-                    Ext.System.ClientCharacterIconRender.SessionCount - 1, 0)
-                NetChannels.IconUpdate:SendToServer({
-                    Icon = entity.ClientCharacterIconResult.Icon,
-                    Target = characterUuid
-                })
-                CPFPrint(1, "IconManager: Portrait updated for " .. tostring(characterUuid))
+            --- characters get added to the queue in sequential order of request.
+            --- as requests are processed and ClientCharacterIconResult components are created, pop the next character
+            ---@type Guid[]
+            local queue = {}
+            Ext.Entity.OnCreateDeferred("ClientCharacterIconResult", function(entity)
+                if #queue > 0 then
+                    local nextTarget = table.remove(queue, 1)
+                    NetChannels.IconUpdate:SendToServer({
+                        Icon = entity.ClientCharacterIconResult.Icon,
+                        Target = nextTarget
+                    })
+                    Ext.System.ClientCharacterIconRender.SessionCount = math.max(
+                        Ext.System.ClientCharacterIconRender.SessionCount - 1, 0)
+                    CPFPrint(1, "IconManager: Portrait updated for " .. tostring(nextTarget))
+                end
             end)
         end)
 
