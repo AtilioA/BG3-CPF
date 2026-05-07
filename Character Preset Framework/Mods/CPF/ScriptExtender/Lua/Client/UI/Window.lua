@@ -75,9 +75,9 @@ function Window:DrawSidebar(parent)
                 local rowCell = sepRow:AddCell()
                 local incompatibleSepText = rowCell:AddSeparatorText(Loca.Get(Loca.Keys.UI_TEXT_INCOMPATIBLE_PRESETS))
                 local incompatibleSectionTooltip = incompatibleSepText:Tooltip()
-                local incompatibleTooltipText = incompatibleSectionTooltip:AddText(
+                local incompatibleTooltipText = incompatibleSectionTooltip:AddText("    " ..
                     Loca.Get(Loca.Keys.UI_TEXT_INCOMPATIBLE_PRESETS_TOOLTIP))
-                incompatibleTooltipText.TextWrapPos = 0
+                incompatibleTooltipText.TextWrapPos = 500
 
                 for _, record in ipairs(incompatible) do
                     WindowHelpers.AddPresetRow(presetsTable, record, false)
