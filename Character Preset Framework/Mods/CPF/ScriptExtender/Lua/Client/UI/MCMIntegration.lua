@@ -9,23 +9,23 @@ function MCMIntegration.Initialize()
         Window:RenderCPF(window)
     end, ModuleUUID)
 
-    MCM.EventButton.RegisterCallback("unhide_presets", function()
+    MCM.EventButton.RegisterCallback("unarchive_presets", function()
         -- REFACTOR: make this less scattered and with mixed responsibilities
         -- Ideally, some things would be done via reactivex
-        local unhid = PresetIndex:UnhideAll()
+        local unarchived = PresetIndex:UnarchiveAll()
         PresetRegistry:Clear()
         PresetDiscovery:LoadPresets()
         State:RefreshPresets()
-        if unhid then
+        if unarchived then
             MCM.EventButton.ShowFeedback(
-                "unhide_presets",
-                Loca.Get(Loca.Keys.MCM_MSG_UNHIDDEN_SUCCESS),
+                "unarchive_presets",
+                Loca.Get(Loca.Keys.MCM_MSG_UNARCHIVED_SUCCESS),
                 "success"
             )
         else
             MCM.EventButton.ShowFeedback(
-                "unhide_presets",
-                Loca.Get(Loca.Keys.MCM_MSG_UNHIDDEN_FAILURE),
+                "unarchive_presets",
+                Loca.Get(Loca.Keys.MCM_MSG_UNARCHIVED_FAILURE),
                 "error"
             )
         end
@@ -66,24 +66,24 @@ function MCMIntegration.Initialize_MCM_1_38()
     })
 
     MCM.EventButton.RegisterCallback({
-        buttonId = "unhide_presets",
+        buttonId = "unarchive_presets",
         callback = function()
             -- REFACTOR: make this less scattered and with mixed responsibilities
             -- Ideally, some things would be done via reactivex
-            local unhid = PresetIndex:UnhideAll()
+            local unarchived = PresetIndex:UnarchiveAll()
             PresetRegistry:Clear()
             PresetDiscovery:LoadPresets()
             State:RefreshPresets()
-            if unhid then
+            if unarchived then
                 MCM.EventButton.ShowFeedback({
-                    buttonId = "unhide_presets",
-                    message = Loca.Get(Loca.Keys.MCM_MSG_UNHIDDEN_SUCCESS),
+                    buttonId = "unarchive_presets",
+                    message = Loca.Get(Loca.Keys.MCM_MSG_UNARCHIVED_SUCCESS),
                     feedbackType = "success"
                 })
             else
                 MCM.EventButton.ShowFeedback({
-                    buttonId = "unhide_presets",
-                    message = Loca.Get(Loca.Keys.MCM_MSG_UNHIDDEN_FAILURE),
+                    buttonId = "unarchive_presets",
+                    message = Loca.Get(Loca.Keys.MCM_MSG_UNARCHIVED_FAILURE),
                     feedbackType = "error"
                 })
             end

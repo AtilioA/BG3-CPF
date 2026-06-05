@@ -17,25 +17,25 @@ function ViewMode:GetEmptyMessageKey()
         return Loca.Keys.UI_MSG_NO_PRESETS
     end
 
-    -- Count hidden presets and check visible compatibility
-    local hiddenCount = 0
+    -- Count archived presets and check visible compatibility
+    local archivedCount = 0
     local visibleCount = 0
     local compatibleVisibleCount = 0
-    local anyHiddenWouldBeIncompatible = false
+    local anyArchivedWouldBeIncompatible = false
 
     local player = _C()
 
     for _, record in ipairs(presets) do
-        local isHidden = record.indexData and record.indexData.hidden
+        local isArchived = record.indexData and record.indexData.hidden
 
-        if isHidden then
-            hiddenCount = hiddenCount + 1
+        if isArchived then
+            archivedCount = archivedCount + 1
 
-            -- Check if this hidden preset would be incompatible if unhidden
+            -- Check if this archived preset would be incompatible if unarchived
             if player and record.preset then
                 local warnings = PresetCompatibility.Check(record.preset, player)
                 if #warnings > 0 then
-                    anyHiddenWouldBeIncompatible = true
+                    anyArchivedWouldBeIncompatible = true
                 end
             end
         else
@@ -54,12 +54,12 @@ function ViewMode:GetEmptyMessageKey()
         end
     end
 
-    -- All presets are hidden
-    if hiddenCount == totalCount then
-        if anyHiddenWouldBeIncompatible then
-            return Loca.Keys.UI_MSG_ALL_HIDDEN_AND_INCOMPATIBLE
+    -- All presets are archived
+    if archivedCount == totalCount then
+        if anyArchivedWouldBeIncompatible then
+            return Loca.Keys.UI_MSG_ALL_ARCHIVED_AND_INCOMPATIBLE
         else
-            return Loca.Keys.UI_MSG_ALL_PRESETS_HIDDEN
+            return Loca.Keys.UI_MSG_ALL_PRESETS_ARCHIVED
         end
     end
 

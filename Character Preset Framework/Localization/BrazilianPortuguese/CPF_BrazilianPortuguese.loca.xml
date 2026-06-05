@@ -20,7 +20,9 @@
     <content contentuid="ha75f41d9fa6649bb826edf8b93c56901c4g9" version="1">Erro ao criar objeto de preset</content>
     <content contentuid="h8b13d31cbbc14264b15a62eb9a353c737d18" version="1">Erro: PresetDiscovery não disponível</content>
     <content contentuid="hafc884e8f1904e40aeae71edc0702235dbf9" version="1">Preset '[1]' salvo</content>
-    <content contentuid="ha816591c0bde42b9871dc371a9a9ed1a29d8" version="1">Preset '[1]' excluído</content>
+    <content contentuid="ha816591c0bde42b9871dc371a9a9ed1a29d8" version="1">Preset '[1]' arquivado</content>
+    <content contentuid="h9c7e5f3a1d8b6c4e2a0f9d8c7b6a5e4d3c2b" version="1">Preset '[1]' desarquivado</content>
+    <content contentuid="h41e8b95fa35d4157a9570e9d14ad32e4692g" version="1">Preset '[1]' excluído</content>
     <content contentuid="h978a79713fe247c783e857f994ec6c5195cb" version="1">Erro: RequestApplyPreset não disponível</content>
     <content contentuid="h3b8299aae0f1475c984bfa77abf9ee0c38f3" version="1">Erro: Não foi possível obter o UUID do jogador</content>
     <content contentuid="he0a8f474eb6d4167801d0123ab1bda09262c" version="1">Preset '[1]' aplicado</content>
@@ -39,8 +41,8 @@
     <content contentuid="hc27829ee46184f29ac0eade3a68796ddf8gf" version="1">Lista de presets</content>
     <content contentuid="h32d901cc74ff475297bbc46ff1c06fe3c6eg" version="1">Modo desconhecido: [1]</content>
     <content contentuid="h89d42e98322d4268b2b76dcc0b18ceaae5c6" version="1">Gerenciador de presets</content>
-    <content contentuid="hc2a1f9d162cf4764941e7e7b09ecbc182301" version="1">Todos os presets reexibidos.</content>
-    <content contentuid="h5bfe58e13875413facf003e39ad3000f5g52" version="1">Falha ao reexibir presets.</content>
+    <content contentuid="hc2a1f9d162cf4764941e7e7b09ecbc182301" version="1">Todos os presets desarquivados.</content>
+    <content contentuid="h5bfe58e13875413facf003e39ad3000f5g52" version="1">Falha ao desarquivar presets.</content>
     <content contentuid="hf96c5f584ef64d67afd0ea721cc29d74991a" version="1">Índice de presets redefinido corretamente.&lt;br&gt;[1] presets carregados.</content>
     <content contentuid="h8ef2d1955abb4433a0dcb4050a0b4bdefab5" version="1">Falha ao redefinir índice de presets.</content>
     <content contentuid="hb9ac2e174c1e48fbb605a7c86f48a42754fd" version="1">Criar novo preset a partir do personagem selecionado</content>
@@ -55,9 +57,9 @@
     <content contentuid="h67d6534f54124fab86a060570e02a61b1ag1" version="1">Importar '[1]'</content>
     <content contentuid="he81f58cb726d4abf953da5d69464c75aa38c" version="1">Nenhum preset disponível.&lt;br&gt;Comece importando ou criando um novo preset.</content>
     <content contentuid="h30dd1b4e74ca45e8824e30489d6e9aa6ec63" version="1">Clique em um preset à esquerda para ver detalhes.</content>
-    <content contentuid="h2dbaf25970eb41acb8dfc3b5a51f998ab91b" version="1">Todos os presets estão ocultos.&lt;br&gt;Reexiba-os na lista de presets ou crie/importe um novo.</content>
+    <content contentuid="h2dbaf25970eb41acb8dfc3b5a51f998ab91b" version="1">Todos os presets estão arquivados.&lt;br&gt;Desarquive-os na lista de presets ou crie/importe um novo.</content>
     <content contentuid="h76188ed9f93042119da62fb0c1da1a0668cc" version="1">Todos os presets visíveis são incompatíveis com seu personagem atual.&lt;br&gt;Importe ou crie um novo preset.</content>
-    <content contentuid="h50a1d67bb16b4f60ae1b93c8055500c520e6" version="1">Todos os presets estão ocultos. Alguns podem ser incompatíveis.&lt;br&gt;Reexiba-os para verificar ou crie/importe um novo.</content>
+    <content contentuid="h50a1d67bb16b4f60ae1b93c8055500c520e6" version="1">Todos os presets estão arquivados. Alguns podem ser incompatíveis.&lt;br&gt;Desarquive-os ou crie/importe um novo.</content>
     <content contentuid="h9050a5972dc84d19b0cbb451b5bb4b03520b" version="1">Preset: [1]</content>
     <content contentuid="h66efb8618f534cdc9c230ddae89220a0d516" version="1">Autor: [1]</content>
     <content contentuid="haadf3be5009346978ee68b60e4b249b16007" version="1">Versão: [1]</content>
@@ -69,7 +71,11 @@
     <content contentuid="h4fefda7199694bc78271c533da7cb00aa653" version="1">Aplicar preset</content>
     <content contentuid="h836f1668294f4e6f8967ed01a320f7767g40" version="1">Mod ausente: [1] ([2])</content>
     <content contentuid="h2d9f1ea6dff841a984ed22f83974fa24bee3" version="1">Aviso de compatibilidade</content>
-    <content contentuid="h56e4c13b0e464c6094a2fb7d312f814bgc11" version="1">Ocultar preset</content>
+    <content contentuid="h56e4c13b0e464c6094a2fb7d312f814bgc11" version="1">Arquivar preset</content>
+    <content contentuid="h7e2f9a4c8d5b6c3e1a9f8d7c6b5a4e3d2c1b" version="1">Desarquivar preset</content>
+    <content contentuid="hfd19df03e87b4ff7a1a15c54f491744d266c" version="1">Excluir preset</content>
+    <content contentuid="h05bf6fc3129b449ca8c3fe0e372506c8393g" version="1">Excluir preset</content>
+    <content contentuid="h46c2ba9b55a74667ac55a97cee0d6f373921" version="1">Excluir preset '[1]'?&lt;br&gt;Isso removerá o preset do índice do CPF e limpará o arquivo do preset.&lt;br&gt;Esta ação não pode ser desfeita.</content>
     <content contentuid="hef5c19de8f3c4301aa68ac124e119b279c13" version="1">Visuais</content>
     <content contentuid="h88848f5c497a493195cd9450325909db6cc1" version="1">Nenhum dado disponível.</content>
     <content contentuid="hf6f1da3cd40b4119acffc9c6513bd22f7514" version="1">Este preset não é totalmente compatível com seu personagem:&lt;br&gt;&lt;br&gt;- [1]&lt;br&gt;&lt;br&gt;Isso causará problemas com a aparência do seu personagem. Encontre um preset compatível ou altere seu personagem com AEE.&lt;br&gt;Tem certeza de que deseja continuar?</content>
@@ -83,11 +89,11 @@
     <content contentuid="h27da329536f040db97fc9619652bedd971b5" version="1">Abrir gerenciador do CPF</content>
     <content contentuid="ha140ff4e59204e2396b1b5e0cbb1be15854a" version="1">Abre o gerenciador de presets.</content>
     <content contentuid="h0eda70dd22d24a36a778149046cd54ca3c5g" version="1">Redefinir índice de presets</content>
-    <content contentuid="h0b14631390894319870f2c45bab59a4f527d" version="1">Clique neste botão para redefinir o índice de presets.&lt;br&gt;Isso reexibirá presets escondidos, mas você perderá presets que criou.</content>
+    <content contentuid="h0b14631390894319870f2c45bab59a4f527d" version="1">Clique neste botão para redefinir o índice de presets.&lt;br&gt;Isso desarquivará presets, mas você perderá presets que criou.</content>
     <content contentuid="h14d9850417844dd2ad53e1952438e0d8dd61" version="1">Entrar automaticamente no Espelho após aplicar preset</content>
-    <content contentuid="h05f31edd0b5442d9af969de18f1d5bf8df76" version="1">Reexibir todos os presets</content>
+    <content contentuid="h05f31edd0b5442d9af969de18f1d5bf8df76" version="1">Desarquivar todos os presets</content>
     <content contentuid="hc2c599f4eb0241b79dfed8019a5e6697f79b" version="1">Entrar automaticamente no modo de Espelho/mudança de aparência após aplicar um preset.&lt;br&gt;Recomendado para garantir que o retrato seja atualizado corretamente (caso contrário, faça um level-up).</content>
-    <content contentuid="hc52a8c48f4d641028cf4caefefc613184e9g" version="1">Clique neste botão para reexibir todos os presets que foram escondidos.</content>
+    <content contentuid="hc52a8c48f4d641028cf4caefefc613184e9g" version="1">Clique neste botão para desarquivar todos os presets.</content>
     <content contentuid="hc554eadccbe946c5bd3227be1ac5c5291acf" version="1">0 = sem logs de depuração, 1 = depuração básica, 2 = detalhado.</content>
     <content contentuid="h3384e2c2309a48b59c80f0647e4b46a05g89" version="1">Nível de depuração</content>
     <content contentuid="h85586b55ac894f9ba411a964dac75263d00b" version="1">Depuração</content>
@@ -107,7 +113,9 @@
     <content contentuid="h7d1f3c68b8b448489d40d05485c450d64024" version="1">Listar partes íntimas na visualização de presets.</content>
     <content contentuid="he72f6a19c112408f923fe8427b8580496d48" version="1">Listar partes íntimas</content>
     <content contentuid="h6a35cc10ba9c495f92d544d2da6f6a54d1bg" version="1">Adicionado pelo mod '[1]'</content>
-    <content contentuid="h3f8a9d2e7c4b4a1f9e6d5c8b7a6f5e4d3c2b" version="1">Presets ocultos</content>
+    <content contentuid="h3f8a9d2e7c4b4a1f9e6d5c8b7a6f5e4d3c2b" version="1">Presets arquivados</content>
+    <content contentuid="h61a584dbd1f54912a024eff437f503fc8300" version="1">Erro: [1]</content>
+    <content contentuid="h366ad1b19f5340cbaff51497205865fa3f64" version="1">Erro: [1]</content>
     <content contentuid="h260064d4905642cbaf2f04ca04e7bef407bb" version="1">(AUSENTE)</content>
     <content contentuid="h606727e2b83f42999b7a716f8f29979582de" version="1">Estes presets não são compatíveis com seu personagem atual.</content>
     <content contentuid="h0a096d5fc9834b5d9217f17476c6f4d1e05b" version="1">You can also import presets here.</content>

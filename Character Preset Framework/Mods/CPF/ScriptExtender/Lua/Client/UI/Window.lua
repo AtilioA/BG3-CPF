@@ -58,7 +58,7 @@ function Window:DrawSidebar(parent)
             headerRow:AddCell():AddSeparatorText(Loca.Get(Loca.Keys.UI_HEADER_PRESET_LIST))
 
             -- Sort and separate presets
-            local compatible, incompatible, hidden = WindowHelpers.GetSortedPresets(records)
+            local compatible, incompatible, archived = WindowHelpers.GetSortedPresets(records)
 
             if #compatible == 0 then
                 local sepRow = presetsTable:AddRow()
@@ -84,20 +84,20 @@ function Window:DrawSidebar(parent)
                 end
             end
 
-            if #hidden > 0 then
-                local hiddenRow = presetsTable:AddRow()
-                local hiddenCell = hiddenRow:AddCell()
-                hiddenCell:AddDummy(10, 10)
-                hiddenCell:AddSeparator()
-                hiddenCell:AddDummy(10, 10)
-                local hiddenHeader = hiddenCell:AddCollapsingHeader(Loca.Get(Loca.Keys.UI_TEXT_HIDDEN_PRESETS))
-                local hiddenPresetsTable = hiddenHeader:AddTable("HiddenPresetsTable", 1)
-                hiddenHeader:SetColor("Header", UIColors.BUTTON_DISABLED)
-                hiddenHeader:SetColor("Text", Mods.BG3MCM.UIStyle.Colors.TextDisabled)
-                hiddenHeader.DefaultOpen = false
+            if #archived > 0 then
+                local archivedRow = presetsTable:AddRow()
+                local archivedCell = archivedRow:AddCell()
+                archivedCell:AddDummy(10, 10)
+                archivedCell:AddSeparator()
+                archivedCell:AddDummy(10, 10)
+                local archivedHeader = archivedCell:AddCollapsingHeader(Loca.Get(Loca.Keys.UI_TEXT_ARCHIVED_PRESETS))
+                local archivedPresetsTable = archivedHeader:AddTable("ArchivedPresetsTable", 1)
+                archivedHeader:SetColor("Header", UIColors.BUTTON_DISABLED)
+                archivedHeader:SetColor("Text", Mods.BG3MCM.UIStyle.Colors.TextDisabled)
+                archivedHeader.DefaultOpen = false
 
-                for _, record in ipairs(hidden) do
-                    WindowHelpers.AddPresetRow(hiddenPresetsTable, record, false)
+                for _, record in ipairs(archived) do
+                    WindowHelpers.AddPresetRow(archivedPresetsTable, record, false)
                 end
             end
 

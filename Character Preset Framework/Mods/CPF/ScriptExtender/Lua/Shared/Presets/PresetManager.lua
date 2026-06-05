@@ -1,5 +1,5 @@
 ---@class PresetManager
---- Service for managing user presets (Save, Hide, Unhide)
+--- Service for managing user presets (Save, Archive, Unarchive, Delete)
 PresetManager = {}
 
 --- Saves a user preset, registers it, and updates the index
@@ -53,15 +53,14 @@ function PresetManager.SaveUserPreset(preset)
     return true, nil, filename
 end
 
---- Hides a user preset
----@param presetId string The ID of the preset to hide
+--- Archives a user preset
+---@param presetId string The ID of the preset to archive
 ---@return boolean success
 ---@return string? error
-function PresetManager.HidePreset(presetId)
-    -- Mark as hidden in the index
-    local success, err = PresetIndex.RemoveEntryByPresetId(presetId)
+function PresetManager.ArchivePreset(presetId)
+    local success, err = PresetIndex.ArchiveEntryByPresetId(presetId)
     if not success then
-        return false, "Failed to hide preset in index: " .. tostring(err)
+        return false, "Failed to archive preset in index: " .. tostring(err)
     end
 
     -- Update the preset's index data in the registry
@@ -73,15 +72,14 @@ function PresetManager.HidePreset(presetId)
     return true
 end
 
---- Unhides a user preset
----@param presetId string The ID of the preset to unhide
+--- Unarchives a user preset
+---@param presetId string The ID of the preset to unarchive
 ---@return boolean success
 ---@return string? error
-function PresetManager.UnhidePreset(presetId)
-    -- Mark as unhidden in the index
-    local success, err = PresetIndex.SetHidden(presetId, false)
+function PresetManager.UnarchivePreset(presetId)
+    local success, err = PresetIndex.SetArchived(presetId, false)
     if not success then
-        return false, "Failed to unhide preset in index: " .. tostring(err)
+        return false, "Failed to unarchive preset in index: " .. tostring(err)
     end
 
     -- Update the preset's index data in the registry
@@ -90,6 +88,34 @@ function PresetManager.UnhidePreset(presetId)
         CPFWarn(1, "Failed to update preset index data for: " .. presetId)
     end
 
+    return true
+end
+
+--- Deletes a user preset by clearing its file and removing it from the index and registry
+---@param presetId string The ID of the preset to delete
+---@return boolean success
+---@return string? error
+function PresetManager.DeletePreset(presetId)
+    local entry = PresetIndex.GetEntry(presetId)
+    if not entry then
+        return false, "Preset not found in index"
+    end
+
+    if string.lower(entry.source or "") ~= "user" or not entry.filename or entry.filename == "" then
+        return false, "Only user preset files can be deleted"
+    end
+
+    local success, err = PresetFileManager:ClearUserPresetFile(entry.filename)
+    if not success then
+        return false, err
+    end
+
+    success, err = PresetIndex.DeleteEntryByPresetId(presetId)
+    if not success then
+        return false, "Failed to delete preset from index: " .. tostring(err)
+    end
+
+    PresetRegistry.Unregister(presetId)
     return true
 end
 

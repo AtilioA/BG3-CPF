@@ -95,10 +95,10 @@
                     }
                 },
                 {
-                    "Id": "unhide_presets",
-                    "Name": "Unhide all presets",
+                    "Id": "unarchive_presets",
+                    "Name": "Unarchive all presets",
                     "Type": "event_button",
-                    "Description": "Click this button to unhide all presets.",
+                    "Description": "Click this button to unarchive all presets.",
                     "Handles": {
                         "DescriptionHandle": "hc52a8c48f4d641028cf4caefefc613184e9g",
                         "NameHandle": "h05f31edd0b5442d9af969de18f1d5bf8df76"
@@ -147,7 +147,7 @@
                             "Id": "reset_presets_index",
                             "Name": "Reset presets index",
                             "Type": "event_button",
-                            "Description": "Click this button to reset the presets index.\nThis will unhide presets, but you will lose presets that you have created.",
+                            "Description": "Click this button to reset the presets index.\nThis will unarchive presets, but you will lose presets that you have created. This will not restore deleted presets.",
                             "VisibleIf": {
                                 "Conditions": [
                                     {

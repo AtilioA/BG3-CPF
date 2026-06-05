@@ -281,7 +281,7 @@ function API.GetPresetsByCharacterTemplate(onlyAvailable)
     for _, record in ipairs(records) do
         local preset = record.preset
         if preset and preset.Data and preset.Data.CCStats then
-            -- Skip hidden presets
+            -- Skip archived presets
             if record.indexData and record.indexData.hidden then
                 goto continue
             end

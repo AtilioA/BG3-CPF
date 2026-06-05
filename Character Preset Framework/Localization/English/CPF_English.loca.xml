@@ -20,8 +20,9 @@
     <content contentuid="ha75f41d9fa6649bb826edf8b93c56901c4g9" version="1">Error creating preset object</content>
     <content contentuid="h8b13d31cbbc14264b15a62eb9a353c737d18" version="1">Error: PresetDiscovery not available</content>
     <content contentuid="hafc884e8f1904e40aeae71edc0702235dbf9" version="1">Preset '[1]' saved</content>
-    <content contentuid="ha816591c0bde42b9871dc371a9a9ed1a29d8" version="1">Preset '[1]' deleted</content>
-    <content contentuid="h9c7e5f3a1d8b6c4e2a0f9d8c7b6a5e4d3c2b" version="1">Preset '[1]' unhidden</content>
+    <content contentuid="ha816591c0bde42b9871dc371a9a9ed1a29d8" version="1">Preset '[1]' archived</content>
+    <content contentuid="h9c7e5f3a1d8b6c4e2a0f9d8c7b6a5e4d3c2b" version="1">Preset '[1]' unarchived</content>
+    <content contentuid="h41e8b95fa35d4157a9570e9d14ad32e4692g" version="1">Preset '[1]' deleted</content>
     <content contentuid="h978a79713fe247c783e857f994ec6c5195cb" version="1">Error: RequestApplyPreset not available</content>
     <content contentuid="h3b8299aae0f1475c984bfa77abf9ee0c38f3" version="1">Error: Could not get player UUID</content>
     <content contentuid="he0a8f474eb6d4167801d0123ab1bda09262c" version="1">Applied preset '[1]'</content>
@@ -40,8 +41,8 @@
     <content contentuid="hc27829ee46184f29ac0eade3a68796ddf8gf" version="1">Preset list</content>
     <content contentuid="h32d901cc74ff475297bbc46ff1c06fe3c6eg" version="1">Unknown mode: [1]</content>
     <content contentuid="h89d42e98322d4268b2b76dcc0b18ceaae5c6" version="1">Preset manager</content>
-    <content contentuid="hc2a1f9d162cf4764941e7e7b09ecbc182301" version="1">All presets unhidden.</content>
-    <content contentuid="h5bfe58e13875413facf003e39ad3000f5g52" version="1">Failed to unhide presets.</content>
+    <content contentuid="hc2a1f9d162cf4764941e7e7b09ecbc182301" version="1">All presets unarchived.</content>
+    <content contentuid="h5bfe58e13875413facf003e39ad3000f5g52" version="1">Failed to unarchive presets.</content>
     <content contentuid="hf96c5f584ef64d67afd0ea721cc29d74991a" version="1">Preset index correctly reset.&lt;br&gt;[1] presets loaded.</content>
     <content contentuid="h8ef2d1955abb4433a0dcb4050a0b4bdefab5" version="1">Failed to reset presets index.</content>
     <content contentuid="hb9ac2e174c1e48fbb605a7c86f48a42754fd" version="1">Create new preset from current character.</content>
@@ -56,9 +57,9 @@
     <content contentuid="h67d6534f54124fab86a060570e02a61b1ag1" version="1">Import '[1]'</content>
     <content contentuid="he81f58cb726d4abf953da5d69464c75aa38c" version="1">No presets available.&lt;br&gt;Start by importing or creating a new preset.</content>
     <content contentuid="h30dd1b4e74ca45e8824e30489d6e9aa6ec63" version="1">Click a preset on the left to view details.</content>
-    <content contentuid="h2dbaf25970eb41acb8dfc3b5a51f998ab91b" version="1">All presets are hidden.&lt;br&gt;Unhide them in the preset list or create/import a new one.</content>
+    <content contentuid="h2dbaf25970eb41acb8dfc3b5a51f998ab91b" version="1">All presets are archived.&lt;br&gt;Unarchive them in the preset list or create/import a new one.</content>
     <content contentuid="h76188ed9f93042119da62fb0c1da1a0668cc" version="1">All visible presets are incompatible with your current character.&lt;br&gt;Import or create a new preset.</content>
-    <content contentuid="h50a1d67bb16b4f60ae1b93c8055500c520e6" version="1">All presets are hidden. Some may be incompatible.&lt;br&gt;Unhide them or create/import new ones.</content>
+    <content contentuid="h50a1d67bb16b4f60ae1b93c8055500c520e6" version="1">All presets are archived. Some may be incompatible.&lt;br&gt;Unarchive them or create/import new ones.</content>
     <content contentuid="h9050a5972dc84d19b0cbb451b5bb4b03520b" version="1">Preset: [1]</content>
     <content contentuid="h66efb8618f534cdc9c230ddae89220a0d516" version="1">Author: [1]</content>
     <content contentuid="haadf3be5009346978ee68b60e4b249b16007" version="1">Version: [1]</content>
@@ -70,8 +71,11 @@
     <content contentuid="h4fefda7199694bc78271c533da7cb00aa653" version="1">Apply preset</content>
     <content contentuid="h836f1668294f4e6f8967ed01a320f7767g40" version="1">Missing mod: [1] ([2])</content>
     <content contentuid="h2d9f1ea6dff841a984ed22f83974fa24bee3" version="1">Compatibility warning</content>
-    <content contentuid="h56e4c13b0e464c6094a2fb7d312f814bgc11" version="1">Hide preset</content>
-    <content contentuid="h7e2f9a4c8d5b6c3e1a9f8d7c6b5a4e3d2c1b" version="1">Unhide preset</content>
+    <content contentuid="h56e4c13b0e464c6094a2fb7d312f814bgc11" version="1">Archive preset</content>
+    <content contentuid="h7e2f9a4c8d5b6c3e1a9f8d7c6b5a4e3d2c1b" version="1">Unarchive preset</content>
+    <content contentuid="hfd19df03e87b4ff7a1a15c54f491744d266c" version="1">Delete preset</content>
+    <content contentuid="h05bf6fc3129b449ca8c3fe0e372506c8393g" version="1">Delete preset</content>
+    <content contentuid="h46c2ba9b55a74667ac55a97cee0d6f373921" version="1">Delete preset '[1]'?&lt;br&gt;This will remove it from CPF's index and clear the preset file.&lt;br&gt;This cannot be undone.</content>
     <content contentuid="hef5c19de8f3c4301aa68ac124e119b279c13" version="1">Visuals</content>
     <content contentuid="h88848f5c497a493195cd9450325909db6cc1" version="1">No data available.</content>
     <content contentuid="hf6f1da3cd40b4119acffc9c6513bd22f7514" version="1">This preset is not fully compatible with your character:&lt;br&gt;&lt;br&gt;- [1]&lt;br&gt;&lt;br&gt;This will cause issues with your character's appearance. Find a compatible preset or change your character with AEE instead.&lt;br&gt;Are you sure you want to proceed?</content>
@@ -85,11 +89,11 @@
     <content contentuid="h27da329536f040db97fc9619652bedd971b5" version="1">Open CPF preset manager</content>
     <content contentuid="ha140ff4e59204e2396b1b5e0cbb1be15854a" version="1">Opens the preset manager.</content>
     <content contentuid="h0eda70dd22d24a36a778149046cd54ca3c5g" version="1">Reset presets index</content>
-    <content contentuid="h0b14631390894319870f2c45bab59a4f527d" version="1">Click this button to reset the presets index.&lt;br&gt;This will unhide presets, but you will lose presets that you have created.</content>
+    <content contentuid="h0b14631390894319870f2c45bab59a4f527d" version="1">Click this button to reset the presets index.&lt;br&gt;This will unarchive presets, but you will lose presets that you have created. This will not restore deleted presets.</content>
     <content contentuid="h14d9850417844dd2ad53e1952438e0d8dd61" version="1">Auto-enter mirror after applying preset</content>
-    <content contentuid="h05f31edd0b5442d9af969de18f1d5bf8df76" version="1">Unhide all presets</content>
+    <content contentuid="h05f31edd0b5442d9af969de18f1d5bf8df76" version="1">Unarchive all presets</content>
     <content contentuid="hc2c599f4eb0241b79dfed8019a5e6697f79b" version="1">Automatically enter the mirror/appearance change mode after applying a preset.</content>
-    <content contentuid="hc52a8c48f4d641028cf4caefefc613184e9g" version="1">Click this button to unhide all presets.</content>
+    <content contentuid="hc52a8c48f4d641028cf4caefefc613184e9g" version="1">Click this button to unarchive all presets.</content>
     <content contentuid="hc554eadccbe946c5bd3227be1ac5c5291acf" version="1">0 = no debug logs, 1 = basic debug, 2 = verbose.</content>
     <content contentuid="h3384e2c2309a48b59c80f0647e4b46a05g89" version="1">Debug level</content>
     <content contentuid="h85586b55ac894f9ba411a964dac75263d00b" version="1">Debug</content>
@@ -105,7 +109,9 @@
     <content contentuid="h140f8c18cb4d440eb07df9488f6789a4249f" version="1">Auto-save preset portrait</content>
     <content contentuid="he6de32cf884b45d49a727e0736a18828448d" version="1">Automatically generate and save a portrait image file when creating a preset.&lt;br&gt;This file will be saved alongside the preset JSON file.</content>
     <content contentuid="h009264f133fb4ad283d5df5b0de5d7217ced" version="1">Currently incompatible</content>
-    <content contentuid="h3f8a9d2e7c4b4a1f9e6d5c8b7a6f5e4d3c2b" version="1">Hidden presets</content>
+    <content contentuid="h3f8a9d2e7c4b4a1f9e6d5c8b7a6f5e4d3c2b" version="1">Archived presets</content>
+    <content contentuid="h61a584dbd1f54912a024eff437f503fc8300" version="1">Error: [1]</content>
+    <content contentuid="h366ad1b19f5340cbaff51497205865fa3f64" version="1">Error: [1]</content>
     <content contentuid="hdbcd62a9150f4a8c9a8fbcc3251d13ca9dec" version="1">No presets found.</content>
     <content contentuid="h7d1f3c68b8b448489d40d05485c450d64024" version="1">List private parts names when viewing preset details.</content>
     <content contentuid="he72f6a19c112408f923fe8427b8580496d48" version="1">List private parts</content>

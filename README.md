@@ -17,7 +17,7 @@ Mod authors can create and distribute character preset mods, providing players w
 - **MCM integration**: Seamless integration with Mod Configuration Menu for easy access and keybinding management.
 - **Mirror (appearance change) full support**: Save and apply presets during magic mirror usage.
 - **Character creation partial support**: Save presets during character creation.
-- **Preset management**: Hide/unhide presets, reset preset index, and organize your preset library.
+- **Preset management**: Archive/unarchive presets, delete archived user presets, reset preset index, and organize your preset library.
 - **Localization support**: Displays strings in the user's preferred language if translations are provided.
 
 ## Contributing & support

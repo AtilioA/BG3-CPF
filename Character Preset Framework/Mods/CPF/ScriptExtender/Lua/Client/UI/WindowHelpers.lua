@@ -6,7 +6,7 @@ local WindowHelpers = {}
 function WindowHelpers.GetSortedPresets(records)
     local compatible = {}
     local incompatible = {}
-    local hidden = {}
+    local archived = {}
     local character = nil
     if State.TargetCharacterUUID then
         character = Ext.Entity.Get(State.TargetCharacterUUID)
@@ -14,9 +14,9 @@ function WindowHelpers.GetSortedPresets(records)
     if not character then character = _C() end
 
     for _, record in ipairs(records) do
-        -- Check if preset is hidden
+        -- The index stores archived state in the legacy `hidden` field.
         if record.indexData and record.indexData.hidden then
-            table.insert(hidden, record)
+            table.insert(archived, record)
         else
             -- Check compatibility for visible presets
             local isCompatible = true
@@ -40,9 +40,9 @@ function WindowHelpers.GetSortedPresets(records)
     end
     table.sort(compatible, sortFunc)
     table.sort(incompatible, sortFunc)
-    table.sort(hidden, sortFunc)
+    table.sort(archived, sortFunc)
 
-    return compatible, incompatible, hidden
+    return compatible, incompatible, archived
 end
 
 function WindowHelpers.AddPresetRow(presetsTable, record, isCompatible)

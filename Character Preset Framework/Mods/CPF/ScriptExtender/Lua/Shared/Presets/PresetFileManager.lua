@@ -123,4 +123,24 @@ function PresetFileManager:LoadUserPreset(filename)
     return preset, nil
 end
 
+--- Clears a user preset file (can't remove the file from disk)
+---@param filename string The filename to clear
+---@return boolean success
+---@return string? error
+function PresetFileManager:ClearUserPresetFile(filename)
+    if not filename or filename == "" then
+        return false, "Missing preset filename"
+    end
+
+    local success, err = pcall(function()
+        Ext.IO.SaveFile(filename, "")
+    end)
+
+    if not success then
+        return false, "Failed to clear preset file: " .. tostring(err)
+    end
+
+    return true, nil
+end
+
 return PresetFileManager

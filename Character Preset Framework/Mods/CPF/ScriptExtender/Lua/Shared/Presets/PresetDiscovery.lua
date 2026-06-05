@@ -181,12 +181,12 @@ function PresetDiscovery:LoadPresets()
         end
     end
 
-    -- Load User Presets from Registry (including hidden ones)
+    -- Load User Presets from Registry (including archived ones)
     CPFPrint(1, "Loading user presets from registry...")
     local registryEntries = PresetIndex.Load()
     for _, entry in ipairs(registryEntries) do
-        -- Load all presets, including hidden ones
-        -- The UI will filter based on preset._indexData.hidden
+        -- Load all presets, including archived ones
+        -- The UI will filter based on the index's legacy `hidden` field.
         local preset = self:_LoadAndLogJSON(entry.filename, 'user')
         if preset then
             if self:RegisterPreset(preset, "User", "(Indexed)") then

@@ -1,6 +1,6 @@
 ---@class PresetIndexEntry
 ---@field filename string Relative path to the preset file (may be empty for mod presets)
----@field hidden boolean Whether the preset is hidden (deleted)
+---@field hidden boolean Whether the preset is archived
 ---@field presetId string The ID of the preset
 ---@field source string Source of the preset: "User" or mod name
 ---@field modName string? Name of the mod (for mod presets)
@@ -94,10 +94,10 @@ function PresetIndex.AddEntry(filename, presetId, source)
     return success
 end
 
---- Removes (hides) an entry from the index by filename
+--- Archives an entry in the index by filename
 ---@param filename string Relative path to the preset file
 ---@return boolean success
-function PresetIndex.RemoveEntry(filename)
+function PresetIndex.ArchiveEntry(filename)
     local entries = PresetIndex.Load()
     local changed = false
 
@@ -116,10 +116,10 @@ function PresetIndex.RemoveEntry(filename)
     return true
 end
 
---- Removes (hides) an entry from the index by preset ID
+--- Archives an entry in the index by preset ID
 ---@param presetId string The ID of the preset
 ---@return boolean success
-function PresetIndex.RemoveEntryByPresetId(presetId)
+function PresetIndex.ArchiveEntryByPresetId(presetId)
     local entries = PresetIndex.Load()
     local changed = false
 
@@ -128,6 +128,28 @@ function PresetIndex.RemoveEntryByPresetId(presetId)
             entry.hidden = true
             changed = true
             -- IDs should be unique safe to break.
+            break
+        end
+    end
+
+    if changed then
+        return PresetIndex.Save(entries)
+    end
+
+    return true
+end
+
+--- Deletes an entry from the index by preset ID
+---@param presetId string The ID of the preset
+---@return boolean success
+function PresetIndex.DeleteEntryByPresetId(presetId)
+    local entries = PresetIndex.Load()
+    local changed = false
+
+    for i = #entries, 1, -1 do
+        if entries[i].presetId == presetId then
+            table.remove(entries, i)
+            changed = true
             break
         end
     end
@@ -161,17 +183,17 @@ function PresetIndex.Clear()
     return PresetIndex.Save({})
 end
 
---- Sets the hidden state of a single entry from the index by preset ID
+--- Sets the archived state of a single entry from the index by preset ID
 ---@param presetId string The ID of the preset
----@param hidden boolean Whether the preset should be hidden
+---@param archived boolean Whether the preset should be archived
 ---@return boolean success
-function PresetIndex.SetHidden(presetId, hidden)
+function PresetIndex.SetArchived(presetId, archived)
     local entries = PresetIndex.Load()
     local changed = false
 
     for _, entry in ipairs(entries) do
         if entry.presetId == presetId then
-            entry.hidden = hidden
+            entry.hidden = archived
             changed = true
             -- IDs should be unique safe to break.
             break
@@ -185,10 +207,10 @@ function PresetIndex.SetHidden(presetId, hidden)
     return true
 end
 
---- Unhide all presets in the preset index
+--- Unarchives all presets in the preset index
 ---@return boolean success
-function PresetIndex.UnhideAll()
-    CPFDebug(1, "PresetIndex.UnhideAll: Unhiding all presets")
+function PresetIndex.UnarchiveAll()
+    CPFDebug(1, "PresetIndex.UnarchiveAll: Unarchiving all presets")
     local entries = PresetIndex.Load()
     for _, entry in ipairs(entries) do
         entry.hidden = false

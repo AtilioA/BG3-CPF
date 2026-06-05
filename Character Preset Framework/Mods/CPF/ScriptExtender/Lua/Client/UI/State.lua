@@ -90,7 +90,7 @@ function State:RefreshPresets()
     if PresetRegistry then
         local recordsArray = PresetRegistry.GetAllAsArray()
 
-        -- Pass all records to the UI (including hidden ones)
+        -- Pass all records to the UI (including archived ones)
         -- WindowHelpers will handle filtering them into categories
         self.Presets:OnNext(recordsArray)
 
@@ -304,56 +304,77 @@ function State:SaveNewPreset()
     end
 end
 
---- Mark a preset as hidden
+--- Mark a preset as archived
 ---@param record PresetRecord
-function State:HidePreset(record)
+function State:ArchivePreset(record)
     if not record or not record.preset then return end
 
-    -- TODO: refactor
-    -- Use PresetManager to remove (handles both registry and index)
-    if not (PresetManager and PresetManager.HidePreset) then
+    if not (PresetManager and PresetManager.ArchivePreset) then
         CPFWarn(0, "PresetManager not available")
         self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_DISCOVERY_NOT_AVAILABLE))
         return
     end
 
-    local success, err = PresetManager.HidePreset(record.preset._id)
+    local success, err = PresetManager.ArchivePreset(record.preset._id)
     if not success then
-        CPFWarn(0, "Failed to remove preset: " .. tostring(err))
-        self:SetStatus(Loca.Format(Loca.Keys.STATUS_ERROR_HIDE_PRESET, tostring(err)))
+        CPFWarn(0, "Failed to archive preset: " .. tostring(err))
+        self:SetStatus(Loca.Format(Loca.Keys.STATUS_ERROR_ARCHIVE_PRESET, tostring(err)))
+        return
+    end
+
+    self:SetStatus(Loca.Format(Loca.Keys.STATUS_PRESET_ARCHIVED, record.preset.Name))
+    self:RefreshPresets()
+    self.SelectedPreset:OnNext(nil)
+end
+
+--- Mark a preset as unarchived
+---@param record PresetRecord
+function State:UnarchivePreset(record)
+    if not record or not record.preset then return end
+
+    if not (PresetManager and PresetManager.UnarchivePreset) then
+        CPFWarn(0, "PresetManager not available")
+        self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_DISCOVERY_NOT_AVAILABLE))
+        return
+    end
+
+    local success, err = PresetManager.UnarchivePreset(record.preset._id)
+    if not success then
+        CPFWarn(0, "Failed to unarchive preset: " .. tostring(err))
+        self:SetStatus(Loca.Format(Loca.Keys.STATUS_ERROR_UNARCHIVE_PRESET, tostring(err)))
+        return
+    end
+    self:SetStatus(Loca.Format(Loca.Keys.STATUS_PRESET_UNARCHIVED, record.preset.Name))
+    self:RefreshPresets()
+    -- Keep the preset selected after unarchiving
+    -- We need to get the updated record from the registry
+    local updatedRecord = PresetRegistry.Get(record.preset._id)
+    if updatedRecord then
+        self.SelectedPreset:OnNext(updatedRecord)
+    end
+end
+
+--- Delete an archived user preset from the index and clear its file
+---@param record PresetRecord
+function State:DeletePreset(record)
+    if not record or not record.preset then return end
+
+    if not (PresetManager and PresetManager.DeletePreset) then
+        CPFWarn(0, "PresetManager not available")
+        self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_DISCOVERY_NOT_AVAILABLE))
+        return
+    end
+
+    local success, err = PresetManager.DeletePreset(record.preset._id)
+    if not success then
+        CPFWarn(0, "Failed to delete preset: " .. tostring(err))
+        self:SetStatus(Loca.Format(Loca.Keys.STATUS_ERROR_DELETE_PRESET, tostring(err)))
         return
     end
 
     self:SetStatus(Loca.Format(Loca.Keys.STATUS_PRESET_DELETED, record.preset.Name))
     self:RefreshPresets()
     self.SelectedPreset:OnNext(nil)
-end
-
---- Mark a preset as unhidden
----@param record PresetRecord
-function State:UnhidePreset(record)
-    if not record or not record.preset then return end
-
-    if not (PresetManager and PresetManager.UnhidePreset) then
-        CPFWarn(0, "PresetManager not available")
-        self:SetStatus(Loca.Get(Loca.Keys.STATUS_ERROR_DISCOVERY_NOT_AVAILABLE))
-        return
-    end
-
-    local success, err = PresetManager.UnhidePreset(record.preset._id)
-    if not success then
-        CPFWarn(0, "Failed to unhide preset: " .. tostring(err))
-        self:SetStatus(Loca.Format(Loca.Keys.STATUS_ERROR_UNHIDE_PRESET, tostring(err)))
-        return
-    end
-    self:SetStatus(Loca.Format(Loca.Keys.STATUS_PRESET_UNHIDDEN, record.preset.Name))
-    self:RefreshPresets()
-    -- Keep the preset selected after unhiding
-    -- We need to get the updated record from the registry
-    local updatedRecord = PresetRegistry.Get(record.preset._id)
-    if updatedRecord then
-        self.SelectedPreset:OnNext(updatedRecord)
-    end
 end
 
 function State:ApplyPreset(record)
@@ -462,8 +483,8 @@ function State:ImportFromBuffer()
         return
     end
 
-    -- Unhide preset just in case
-    PresetIndex.SetHidden(actualPreset._id, false)
+    -- Unarchive preset just in case
+    PresetIndex.SetArchived(actualPreset._id, false)
     self.ImportBuffer:OnNext("")
     self:SetStatus(Loca.Format(Loca.Keys.STATUS_IMPORTED_PRESET, actualPreset.Name))
     self:RefreshPresets()

@@ -79,6 +79,19 @@ local function _ShowApplyConfirmation(group, record, warnings)
         :Show(group)
 end
 
+--- Show delete confirmation for an archived preset
+---@param group ExtuiGroup
+---@param record PresetRecord
+local function _ShowDeleteConfirmation(group, record)
+    MessageBox:Create(
+        Loca.Get(Loca.Keys.UI_TITLE_DELETE_PRESET),
+        Loca.Format(Loca.Keys.UI_MSG_DELETE_PRESET_CONFIRM, record.preset.Name),
+        MessageBoxMode.YesNo
+    )
+        :SetYesCallback(function() State:DeletePreset(record) end)
+        :Show(group)
+end
+
 -- Create disabled apply button for CC
 local function _CreateDisabledApplyButton(group)
     local ccWarning = group:AddText(Loca.Get(Loca.Keys.UI_WARN_CC_RESTRICTION))
@@ -181,25 +194,37 @@ function ViewModeHelpers.RenderActions(group, record, compatibilityInfo)
     local buttonSpacing = group:AddSpacing()
     buttonSpacing.SameLine = true
 
-    -- Check if preset is hidden
-    local isHidden = record.indexData and record.indexData.hidden
+    local isArchived = record.indexData and record.indexData.hidden
 
-    if isHidden then
-        -- Show Unhide button for hidden presets
-        local btnUnhide = group:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_UNHIDE_PRESET))
-        -- btnUnhide:SetColor("Button", UIColors.COLOR_GREEN)
-        btnUnhide.OnClick = function()
-            State:UnhidePreset(record)
+    if isArchived then
+        -- Show unarchive button for archived presets
+        local btnUnarchive = group:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_UNARCHIVE_PRESET))
+        btnUnarchive.OnClick = function()
+            State:UnarchivePreset(record)
         end
-        btnUnhide.SameLine = true
+        btnUnarchive.SameLine = true
+
+        local isUserPreset = record.indexData
+            and string.lower(record.indexData.source or "") == "user"
+            and record.indexData.filename
+            and record.indexData.filename ~= ""
+
+        if isUserPreset then
+            local btnDelete = group:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_DELETE_PRESET))
+            btnDelete:SetColor("Button", UIColors.COLOR_RED)
+            btnDelete.OnClick = function()
+                _ShowDeleteConfirmation(group, record)
+            end
+            btnDelete.SameLine = true
+        end
     else
-        -- Show Hide button for visible presets
-        local btnHide = group:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_HIDE_PRESET))
-        btnHide:SetColor("Button", UIColors.COLOR_RED)
-        btnHide.OnClick = function()
-            State:HidePreset(record)
+        -- Show Archive button for visible presets
+        local btnArchive = group:AddButton(Loca.Get(Loca.Keys.UI_BUTTON_ARCHIVE_PRESET))
+        btnArchive:SetColor("Button", UIColors.COLOR_RED)
+        btnArchive.OnClick = function()
+            State:ArchivePreset(record)
         end
-        btnHide.SameLine = true
+        btnArchive.SameLine = true
     end
 
     group:AddSeparator()

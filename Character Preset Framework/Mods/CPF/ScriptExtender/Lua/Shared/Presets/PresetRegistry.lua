@@ -104,7 +104,7 @@ function PresetRegistry.Count()
     return count
 end
 
---- Updates the index data for a preset (e.g., when hidden status changes)
+--- Updates the index data for a preset (e.g., when archived status changes)
 ---@param id string The preset ID
 ---@return boolean success Whether the update was successful
 function PresetRegistry.UpdateIndexData(id)
