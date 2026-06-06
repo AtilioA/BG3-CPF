@@ -17,8 +17,6 @@ function PresetRegistry.Register(preset)
         return false, "Preset is nil"
     end
 
-    PresetCompat.NormalizePresetMetallicTint(preset)
-
     -- Validate the preset before registering
     local valid, err = Preset.Validate(preset)
     if not valid then

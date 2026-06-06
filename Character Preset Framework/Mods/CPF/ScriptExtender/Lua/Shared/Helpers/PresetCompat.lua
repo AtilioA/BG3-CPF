@@ -22,11 +22,11 @@ function PresetCompat.UInt32BitsToFloat(value)
         return string.unpack("<f", string.pack("<I4", value))
     end)
 
-    if success then
+    if success and converted == converted and converted >= 0 and converted <= 1 then
         return converted
     end
 
-    return 0
+    return nil
 end
 
 ---@param preset table|nil
@@ -54,6 +54,7 @@ function PresetCompat.NormalizePresetMetallicTint(preset)
                 if converted ~= nil then
                     element.MetallicTint = converted
                     convertedCount = convertedCount + 1
+                    CPFDebug(2, string.format("Converted legacy MetallicTint %s to %.6f", tostring(metallicTint), converted))
                 end
             end
         end

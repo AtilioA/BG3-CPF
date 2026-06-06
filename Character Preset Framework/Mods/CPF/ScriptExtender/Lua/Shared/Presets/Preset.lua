@@ -25,6 +25,26 @@
 
 Preset = {}
 
+Preset.ErrorCodes = {
+    EMPTY_JSON = "EMPTY_JSON",
+    INVALID_TABLE = "INVALID_TABLE",
+    PARSE_ERROR = "PARSE_ERROR",
+    VALIDATION_ERROR = "VALIDATION_ERROR",
+}
+
+Preset.ErrorMessages = {
+    [Preset.ErrorCodes.EMPTY_JSON] = "Empty JSON string",
+    [Preset.ErrorCodes.INVALID_TABLE] = "Preset must be a table",
+    [Preset.ErrorCodes.PARSE_ERROR] = "Parse error",
+    [Preset.ErrorCodes.VALIDATION_ERROR] = "Validation failed",
+}
+
+---@param code string|nil
+---@return string message
+function Preset.GetErrorMessage(code)
+    return Preset.ErrorMessages[code] or JsonLayer.ErrorMessages[code] or tostring(code)
+end
+
 --- Generates a unique ID for a preset
 ---@return string
 local function generatePresetId()
@@ -151,13 +171,33 @@ function Preset.Serialize(preset, beautify)
     end
 end
 
+--- Normalizes and validates a parsed preset table.
+---@param preset table
+---@return Preset|nil preset
+---@return string? errorCode
+function Preset.FromTable(preset)
+    if type(preset) ~= "table" then
+        return nil, Preset.ErrorCodes.INVALID_TABLE
+    end
+
+    PresetCompat.NormalizePresetMetallicTint(preset)
+
+    local valid, err = Preset.Validate(preset)
+    if not valid then
+        return nil, Preset.ErrorCodes.VALIDATION_ERROR
+    end
+
+    ---@cast preset Preset
+    return preset, nil
+end
+
 --- Deserializes a JSON string to a preset object
 ---@param jsonString string
 ---@return Preset|nil preset -- Returns nil on error
----@return string? errorMessage
+---@return string? errorCode
 function Preset.Deserialize(jsonString)
     if not jsonString or jsonString == "" then
-        return nil, "Empty JSON string"
+        return nil, Preset.ErrorCodes.EMPTY_JSON
     end
 
     local success, result = pcall(function()
@@ -165,17 +205,10 @@ function Preset.Deserialize(jsonString)
     end)
 
     if not success then
-        return nil, "Parse error: " .. tostring(result)
+        return nil, Preset.ErrorCodes.PARSE_ERROR
     end
 
-    -- Validate the parsed preset
-    local valid, err = Preset.Validate(result)
-    if not valid then
-        return nil, "Validation failed: " .. err
-    end
-
-    ---@cast result Preset
-    return result, nil
+    return Preset.FromTable(result)
 end
 
 --- Validates a preset object structure
@@ -325,22 +358,16 @@ end
 
 --- Imports a preset from a file
 ---@param filePath string
+---@param mode? string
 ---@return Preset|nil preset
----@return string? errorMessage
-function Preset.ImportFromFile(filePath)
-    local success, content = pcall(function()
-        return Ext.IO.LoadFile(filePath)
-    end)
-
-    if not success then
-        return nil, "File read error: " .. tostring(content)
+---@return string? errorCode
+function Preset.ImportFromFile(filePath, mode)
+    local data, err = JsonLayer:Load(filePath, mode)
+    if not data then
+        return nil, err
     end
 
-    if not content or content == "" then
-        return nil, "File is empty or could not be read"
-    end
-
-    return Preset.Deserialize(content)
+    return Preset.FromTable(data)
 end
 
 ---@class ModDepInfo

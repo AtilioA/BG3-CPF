@@ -450,22 +450,24 @@ function State:ImportFromBuffer()
 
     if not success then
         CPFWarn(0, "Import failed: " .. tostring(presetOrError))
-        self:SetStatus(Loca.Format(Loca.Keys.STATUS_IMPORT_ERROR, presetOrError))
+        self:SetStatus(Loca.Format(Loca.Keys.STATUS_IMPORT_ERROR, tostring(presetOrError)))
         return
     end
 
     -- Handle xpcall result (first return is success boolean)
     if not presetOrError then
-        CPFWarn(0, "Failed to parse/validate import buffer: " .. tostring(presetDeserializeError))
-        self:SetStatus(Loca.Format(Loca.Keys.STATUS_IMPORT_ERROR, presetDeserializeError))
+        local errorMessage = Preset.GetErrorMessage(presetDeserializeError)
+        CPFWarn(0, "Failed to parse/validate import buffer: " .. errorMessage)
+        self:SetStatus(Loca.Format(Loca.Keys.STATUS_IMPORT_ERROR, errorMessage))
         return
     end
 
     -- Deserialize returns (preset, err), so we need to check the actual result
     local actualPreset, validationErr = presetOrError, presetDeserializeError
     if not actualPreset then
-        CPFWarn(0, "Failed to deserialize import buffer: " .. tostring(validationErr))
-        self:SetStatus(Loca.Format(Loca.Keys.STATUS_IMPORT_ERROR, validationErr))
+        local errorMessage = Preset.GetErrorMessage(validationErr)
+        CPFWarn(0, "Failed to deserialize import buffer: " .. errorMessage)
+        self:SetStatus(Loca.Format(Loca.Keys.STATUS_IMPORT_ERROR, errorMessage))
         return
     end
 
@@ -479,7 +481,7 @@ function State:ImportFromBuffer()
     local registrationSuccess, err = PresetManager.SaveUserPreset(actualPreset)
     if not registrationSuccess then
         CPFWarn(0, "Failed to register imported preset: " .. tostring(err))
-        self:SetStatus(Loca.Format(Loca.Keys.STATUS_IMPORT_ERROR, err))
+        self:SetStatus(Loca.Format(Loca.Keys.STATUS_IMPORT_ERROR, tostring(err)))
         return
     end
 

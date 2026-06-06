@@ -6,23 +6,49 @@ PresetDiscovery = {}
 PresetDiscovery.SinglePresetPathPattern = "Mods/%s/CPF_preset.json"
 PresetDiscovery.MultiPresetPathPattern = "Mods/%s/CPF_presets.json"
 
---- Loads a JSON file and logs appropriate errors
+--- Loads a preset file
 ---@param filePath string The file path to load
 ---@param mode string The mode to load the file with
----@return table|nil data The loaded data, or nil if failed
+---@return Preset|nil preset The loaded preset, or nil if failed
 ---@private
-function PresetDiscovery:_LoadAndLogJSON(filePath, mode)
-    local data, err = JsonLayer:Load(filePath, mode)
+function PresetDiscovery:_LoadAndLogPreset(filePath, mode)
+    local preset, err = Preset.ImportFromFile(filePath, mode)
 
-    if not data then
-        if err and string.find(err, "Parse error") then
-            CPFWarn(0, "Failed to parse JSON file: " .. filePath)
+    if not preset then
+        if err == JsonLayer.ErrorCodes.PARSE_ERROR or err == Preset.ErrorCodes.VALIDATION_ERROR then
+            CPFWarn(0, "Failed to parse preset file: " .. filePath .. ": " .. Preset.GetErrorMessage(err))
         else
-            CPFDebug(3, "JSON file not found: " .. filePath)
+            CPFDebug(3, "Preset file not found: " .. filePath)
         end
+        return nil
     end
 
-    return data
+    return preset
+end
+
+--- Loads an array of presets file
+---@param filePath string The file path to load
+---@param mode string The mode to load the file with
+---@return table|nil rawPresets The loaded raw preset entries, or nil if failed
+---@private
+function PresetDiscovery:_LoadAndLogPresetArray(filePath, mode)
+    local rawPresets, err = JsonLayer:Load(filePath, mode)
+
+    if not rawPresets then
+        if err == JsonLayer.ErrorCodes.PARSE_ERROR then
+            CPFWarn(0, "Failed to parse preset file: " .. filePath .. ": " .. Preset.GetErrorMessage(err))
+        else
+            CPFDebug(3, "Preset file not found: " .. filePath)
+        end
+        return nil
+    end
+
+    if not Table.IsArray(rawPresets) then
+        CPFWarn(0, "Failed to parse preset file: " .. filePath .. ": preset array file is not a valid array")
+        return nil
+    end
+
+    return rawPresets
 end
 
 --- Validates and registers a single preset
@@ -54,7 +80,7 @@ end
 ---@private
 function PresetDiscovery:_LoadSinglePreset(modName, modDir)
     local filePath = string.format(self.SinglePresetPathPattern, modDir)
-    local preset = self:_LoadAndLogJSON(filePath, 'data')
+    local preset = self:_LoadAndLogPreset(filePath, 'data')
 
     if not preset then
         return 0
@@ -76,23 +102,23 @@ end
 ---@private
 function PresetDiscovery:_LoadMultiplePresets(modName, modDir)
     local filePath = string.format(self.MultiPresetPathPattern, modDir)
-    local presets = self:_LoadAndLogJSON(filePath, 'data')
+    local rawPresets = self:_LoadAndLogPresetArray(filePath, 'data')
 
-    if not presets then
+    if not rawPresets then
         return 0
     end
 
     CPFPrint(1, string.format("Found CPF_presets.json in mod '%s'", modName))
 
-    if not Table.IsArray(presets) then
-        CPFWarn(0, string.format("CPF_presets.json in mod '%s' is not a valid array", modName))
-        return 0
-    end
-
     local loadedCount = 0
-    for i, preset in ipairs(presets) do
-        if self:RegisterPreset(preset, modName, string.format("(index %d)", i)) then
-            loadedCount = loadedCount + 1
+    for i, rawPreset in ipairs(rawPresets) do
+        local preset, err = Preset.FromTable(rawPreset)
+        if preset then
+            if self:RegisterPreset(preset, modName, string.format("(index %d)", i)) then
+                loadedCount = loadedCount + 1
+            end
+        else
+            CPFWarn(0, string.format("Failed to parse preset file %s index %d: %s", filePath, i, Preset.GetErrorMessage(err)))
         end
     end
 
@@ -135,7 +161,7 @@ function PresetDiscovery:_LoadNumberedUserPresets()
     -- Scan from 0 to 9
     for i = 0, 9 do
         local filename = string.format("CPF/preset_%01d.json", i)
-        local preset = self:_LoadAndLogJSON(filename, 'user')
+        local preset = self:_LoadAndLogPreset(filename, 'user')
 
         if preset then
             -- Check if already in registry (avoid duplicates from index)
@@ -187,7 +213,7 @@ function PresetDiscovery:LoadPresets()
     for _, entry in ipairs(registryEntries) do
         -- Load all presets, including archived ones
         -- The UI will filter based on the index's legacy `hidden` field.
-        local preset = self:_LoadAndLogJSON(entry.filename, 'user')
+        local preset = self:_LoadAndLogPreset(entry.filename, 'user')
         if preset then
             if self:RegisterPreset(preset, "User", "(Indexed)") then
                 totalCount = totalCount + 1

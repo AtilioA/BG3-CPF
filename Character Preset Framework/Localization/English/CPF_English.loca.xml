@@ -75,7 +75,7 @@
     <content contentuid="h7e2f9a4c8d5b6c3e1a9f8d7c6b5a4e3d2c1b" version="1">Unarchive preset</content>
     <content contentuid="hfd19df03e87b4ff7a1a15c54f491744d266c" version="1">Delete preset</content>
     <content contentuid="h05bf6fc3129b449ca8c3fe0e372506c8393g" version="1">Delete preset</content>
-    <content contentuid="h46c2ba9b55a74667ac55a97cee0d6f373921" version="1">Delete preset '[1]'?&lt;br&gt;This will remove it from CPF's index and clear the preset file.&lt;br&gt;This cannot be undone.</content>
+    <content contentuid="h46c2ba9b55a74667ac55a97cee0d6f373921" version="1">Delete preset '[1]'?&lt;br&gt;This cannot be undone.</content>
     <content contentuid="hef5c19de8f3c4301aa68ac124e119b279c13" version="1">Visuals</content>
     <content contentuid="h88848f5c497a493195cd9450325909db6cc1" version="1">No data available.</content>
     <content contentuid="hf6f1da3cd40b4119acffc9c6513bd22f7514" version="1">This preset is not fully compatible with your character:&lt;br&gt;&lt;br&gt;- [1]&lt;br&gt;&lt;br&gt;This will cause issues with your character's appearance. Find a compatible preset or change your character with AEE instead.&lt;br&gt;Are you sure you want to proceed?</content>

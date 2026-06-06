@@ -16,8 +16,9 @@ function ImportModeHelpers.ParsePresetName(buffer)
             if Preset and Preset.Deserialize then
                 local preset, err = Preset.Deserialize(buffer)
                 if err then
-                    CPFWarn(0, err)
-                    State:SetStatus(err)
+                    local errorMessage = Preset.GetErrorMessage(err)
+                    CPFWarn(0, errorMessage)
+                    State:SetStatus(errorMessage)
                 end
                 if preset and preset.Name then
                     return preset.Name
@@ -26,7 +27,7 @@ function ImportModeHelpers.ParsePresetName(buffer)
             return nil
         end,
         function(err)
-            CPFWarn(0, err)
+            CPFWarn(0, tostring(err))
             return nil
         end
     )
