@@ -40,7 +40,7 @@ export const META_LSX_TEMPLATE = `<?xml version="1.0" encoding="UTF-8"?>
                     <attribute id="PublishHandle" type="uint64" value="0" />
                     <children>
                         <node id="PublishVersion">
-                        <attribute id="Version64" type="int64" value="41376821576466432" />
+                        <attribute id="Version64" type="int64" value="36028797018963968" />
                         </node>
                         <node id="Scripts" />
                         <node id="TargetModes">
