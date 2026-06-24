@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import JSZip from 'jszip';
-import FileSaver from 'file-saver';
+import { saveAs } from 'file-saver';
 import { ModForm } from '@/components/ModForm';
 import { LandingView } from '@/components/LandingView';
 import { GeneratedModView } from '@/components/GeneratedModView';
@@ -92,7 +92,7 @@ export default function Home() {
 
         try {
             const content = await zip.generateAsync({ type: "blob" });
-            const saveFile = (FileSaver as any).saveAs || FileSaver;
+            const saveFile = saveAs;
             // Exclude UUID from the zip filename
             const zipFileName = `CPF_${modConfig.folderName}_Unpacked.zip`;
             saveFile(content, zipFileName);
@@ -128,7 +128,7 @@ export default function Home() {
 
             const zipBlob = await buildAndZipPak(files, generatedFolderName);
 
-            const saveFile = (FileSaver as any).saveAs || FileSaver;
+            const saveFile = saveAs;
             const zipFileName = `CPF_${modConfig.folderName}_Mod.zip`;
             saveFile(zipBlob, zipFileName);
 
