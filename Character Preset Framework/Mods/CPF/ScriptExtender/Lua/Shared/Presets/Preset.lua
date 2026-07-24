@@ -48,7 +48,7 @@ end
 --- Generates a unique ID for a preset
 ---@return string
 local function generatePresetId()
-    return VCFormat:CreateUUID()
+    return Ext.Utils.GenerateGuid()
 end
 
 --- Extracts unified preset data (Stats + Appearance) from an entity
