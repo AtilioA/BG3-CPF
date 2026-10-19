@@ -1,5 +1,5 @@
 {
-    "RequiredVersion": 31,
+    "RequiredVersion": 32,
     "ModTable": "CPF",
     "FeatureFlags": [
         "Lua"
