@@ -51,7 +51,7 @@ end
 
 ---@param entityUuid string
 ---@param preset Preset|table
----@param options? {checkAvailability?: boolean, collectWarnings?: boolean, autoEnterMirror?: boolean, logSuccess?: boolean}
+---@param options? {checkAvailability?: boolean, collectWarnings?: boolean, autoEnterMirror?: boolean, logSuccess?: boolean, applyStats?: boolean}
 ---@return table result
 function PresetApplication.Apply(entityUuid, preset, options)
     options = options or {}
@@ -98,7 +98,11 @@ function PresetApplication.Apply(entityUuid, preset, options)
         })
     end
 
-    CCA.ApplyPresetData(entity, preset.Data)
+    CCA.ApplyPresetData(entity, preset.Data, options.applyStats)
+
+    if options.applyStats then
+        CCStatsApplier.ApplyToEntity(entity, preset.Data.CCStats)
+    end
 
     entity:Replicate("CharacterCreationAppearance")
     entity:Replicate("CharacterCreationStats")

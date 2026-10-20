@@ -93,6 +93,8 @@
     <content contentuid="h14d9850417844dd2ad53e1952438e0d8dd61" version="1">Auto-enter mirror after applying preset</content>
     <content contentuid="h05f31edd0b5442d9af969de18f1d5bf8df76" version="1">Unarchive all presets</content>
     <content contentuid="hc2c599f4eb0241b79dfed8019a5e6697f79b" version="1">Automatically enter the mirror/appearance change mode after applying a preset.</content>
+    <content contentuid="h5d883919a25c3057829d25b8f988ce67g" version="1">Apply preset race &amp; body (photography)</content>
+    <content contentuid="h7ccc6c39b520148f4e68628afa7f6dc1g" version="1">Apply the preset's race, subrace, body type and body shape to the character.&lt;br&gt;Not intended for gameplay: it may break saves. Use only for photography.</content>
     <content contentuid="hc52a8c48f4d641028cf4caefefc613184e9g" version="1">Click this button to unarchive all presets.</content>
     <content contentuid="hc554eadccbe946c5bd3227be1ac5c5291acf" version="1">0 = no debug logs, 1 = basic debug, 2 = verbose.</content>
     <content contentuid="h3384e2c2309a48b59c80f0647e4b46a05g89" version="1">Debug level</content>

@@ -168,8 +168,8 @@ local function handleApplyCCAToClientDummy(data, userId)
     CPFPrint(2, "Received request to apply preset data to client dummy")
 
     local photoModeDummies = Ext.Entity.GetAllEntitiesWithComponent("PhotoModeDummy")
-    if photoModeDummies and #photoModeDummies > 0 then
-        -- Reload visuals for photo mode. Thanks Focus for the tip!
+    if data.ApplyStats or (photoModeDummies and #photoModeDummies > 0) then
+        -- Reload visuals (photography race/body swap or photo mode). Thanks Focus for the tip!
         Ext.System.ClientVisual.ReloadAllVisuals = true
     end
     if not data.PresetData then
@@ -188,6 +188,11 @@ local function handleApplyCCAToClientDummy(data, userId)
     if #dummyEntities == 0 then
         CPFPrint(2, "No dummy entities found")
         return
+    end
+
+    -- Apply preset stats to dummies (photography race/body swap)
+    if data.ApplyStats then
+        CCStatsApplier.ApplyToDummies(dummyEntities, presetData.CCStats)
     end
 
     local totalSuccessCount = 0

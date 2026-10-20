@@ -52,6 +52,17 @@
                         "NameHandle": "h14d9850417844dd2ad53e1952438e0d8dd61"
                     }
                 },
+                {
+                    "Id": "apply_race_and_body",
+                    "Name": "Apply preset race & body (photography)",
+                    "Type": "checkbox",
+                    "Default": false,
+                    "Description": "Apply the preset's race, subrace, body type and body shape to the character.\nNot intended for gameplay: it may break saves. Use only for photography.",
+                    "Handles": {
+                        "NameHandle": "h5d883919a25c3057829d25b8f988ce67g",
+                        "DescriptionHandle": "h7ccc6c39b520148f4e68628afa7f6dc1g"
+                    }
+                },
                 // {
                 //     "Id": "auto_update_portrait",
                 //     "Name": "Auto-update portrait after applying preset",

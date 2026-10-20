@@ -93,6 +93,8 @@
     <content contentuid="h14d9850417844dd2ad53e1952438e0d8dd61" version="1">Entrar automaticamente no Espelho após aplicar preset</content>
     <content contentuid="h05f31edd0b5442d9af969de18f1d5bf8df76" version="1">Desarquivar todos os presets</content>
     <content contentuid="hc2c599f4eb0241b79dfed8019a5e6697f79b" version="1">Entrar automaticamente no modo de Espelho/mudança de aparência após aplicar um preset.&lt;br&gt;Recomendado para garantir que o retrato seja atualizado corretamente (caso contrário, faça um level-up).</content>
+    <content contentuid="h5d883919a25c3057829d25b8f988ce67g" version="1">Aplicar raça &amp; corpo do preset (fotografia)</content>
+    <content contentuid="h7ccc6c39b520148f4e68628afa7f6dc1g" version="1">Aplica a raça, sub-raça, tipo e forma de corpo do preset ao personagem.&lt;br&gt;Não é recomendado para gameplay: pode quebrar saves. Use apenas para fotografia.</content>
     <content contentuid="hc52a8c48f4d641028cf4caefefc613184e9g" version="1">Clique neste botão para desarquivar todos os presets.</content>
     <content contentuid="hc554eadccbe946c5bd3227be1ac5c5291acf" version="1">0 = sem logs de depuração, 1 = depuração básica, 2 = detalhado.</content>
     <content contentuid="h3384e2c2309a48b59c80f0647e4b46a05g89" version="1">Nível de depuração</content>

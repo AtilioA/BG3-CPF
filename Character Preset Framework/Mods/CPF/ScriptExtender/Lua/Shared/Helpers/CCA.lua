@@ -191,8 +191,9 @@ end
 --- Applies preset data (appearance + stats) to a character entity and broadcasts to client
 --- @param charEntity EntityHandle
 --- @param presetData PresetData - Contains CCStats and CCAppearance
+--- @param applyStats boolean? Apply preset CCStats (race/body) to the entity. Photography-only; may break saves.
 --- @return nil
-function CCA.ApplyPresetData(charEntity, presetData)
+function CCA.ApplyPresetData(charEntity, presetData, applyStats)
     CPFPrint(2, "Applying preset data to character " .. VCLoca:GetDisplayName(charEntity))
 
     if not presetData or not presetData.CCAppearance then
@@ -215,7 +216,8 @@ function CCA.ApplyPresetData(charEntity, presetData)
     -- Send preset data to client to apply to dummy (only on server)
     if Ext.IsServer() then
         NetChannels.ApplyCCAToClientDummy:Broadcast({
-            PresetData = presetData
+            PresetData = presetData,
+            ApplyStats = applyStats or false
         })
         CPFPrint(2, "Sent preset data to client for dummy application")
     end

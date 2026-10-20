@@ -32,6 +32,7 @@ local function handleApplyPreset(data, userId)
         collectWarnings = true,
         autoEnterMirror = MCM.Get("auto_enter_mirror"),
         logSuccess = true,
+        applyStats = MCM.Get("apply_race_and_body"),
     })
 
     if not result.Success then
