@@ -29,4 +29,5 @@ RequireFiles("Client/Helpers/", {
 
 RequireFiles("Client/", {
     "SubscribedEvents",
+    "PresetCatalog",
 })

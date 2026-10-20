@@ -30,4 +30,8 @@ NetChannels.ApplyCCAToClientDummy = createChannel("ApplyCCAToClientDummy")
 ---@class IconUpdateChannel : ExtenderNetChannel
 NetChannels.IconUpdate = createChannel("IconUpdate")
 
+--- The host client's preset records, relayed by the server to every client
+---@class PresetCatalogChannel : ExtenderNetChannel
+NetChannels.PresetCatalog = createChannel("PresetCatalog")
+
 return NetChannels

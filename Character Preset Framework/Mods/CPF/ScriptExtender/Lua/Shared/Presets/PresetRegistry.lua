@@ -92,6 +92,13 @@ function PresetRegistry.Clear()
     CPFPrint(2, "Cleared all registered presets")
 end
 
+--- Replaces all records at once, such as with the host's catalog
+---@param records table<string, PresetRecord>
+function PresetRegistry.ReplaceAll(records)
+    PresetRegistry._records = records
+    CPFPrint(2, "Replaced registry with %d preset(s)", PresetRegistry.Count())
+end
+
 --- Gets the count of registered presets
 ---@return integer count Number of registered presets
 function PresetRegistry.Count()

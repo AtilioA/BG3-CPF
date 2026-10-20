@@ -34,6 +34,7 @@ function MCMIntegration.Initialize()
     MCM.EventButton.RegisterCallback("reset_presets_index", function()
         local cleared = PresetIndex:Clear()
         local loaded = PresetDiscovery:LoadPresets()
+        State:RefreshPresets()
         if cleared and loaded >= 0 then
             MCM.EventButton.ShowFeedback(
                 "reset_presets_index",
@@ -95,6 +96,7 @@ function MCMIntegration.Initialize_MCM_1_38()
         callback = function()
             local cleared = PresetIndex:Clear()
             local loaded = PresetDiscovery:LoadPresets()
+            State:RefreshPresets()
             if cleared and loaded >= 0 then
                 MCM.EventButton.ShowFeedback({
                     buttonId = "reset_presets_index",
