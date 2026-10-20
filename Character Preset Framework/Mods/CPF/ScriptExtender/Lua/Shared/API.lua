@@ -166,7 +166,7 @@ function API.GetAvailablePresetsForCharacter(characterGuid)
     end
 
     local normalizedRaceName = normalizeRaceBucketName(raceData.Name)
-    local maleBodyTypeEnum = Ext.Enums and Ext.Enums.BodyType and Ext.Enums.BodyType.Male
+    local maleBodyTypeEnum = Ext.Enums.BodyType.Male
     local isMale = (maleBodyTypeEnum and targetStats.BodyType == maleBodyTypeEnum) or (targetStats.BodyType == 0)
     local isStrong = (targetStats.BodyShape == 1)
 
