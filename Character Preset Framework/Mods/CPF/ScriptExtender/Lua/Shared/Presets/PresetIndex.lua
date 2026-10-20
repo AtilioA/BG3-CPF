@@ -11,27 +11,29 @@ PresetIndex = {
     IndexFilePath = "CPF/cpf_presets_index.json"
 }
 
---- Loads the preset index from disk
----@return PresetIndexEntry[] entries List of index entries
+--- Loads the preset index from disk. A missing file is an empty index; an unreadable one returns nil, so it is never overwritten.
+---@return PresetIndexEntry[]|nil entries List of index entries, or nil on failure
+---@return string? errorMessage Error message if loading failed
 function PresetIndex.Load()
     CPFDebug(2, "PresetIndex.Load: Loading from " .. PresetIndex.IndexFilePath)
     local data, err = JsonLayer:Load(PresetIndex.IndexFilePath)
 
     if not data then
-        -- If file doesn't exist or is invalid, return empty list (reconstruction/first run)
-        CPFDebug(2, "Preset index not found or invalid, starting fresh.")
-        -- Create the empty index file immediately
-        PresetIndex.Save({})
-        return {}
+        if err == JsonLayer.ErrorCodes.FILE_NOT_FOUND then
+            return {}, nil
+        end
+
+        CPFWarn(0, "Failed to read preset index: " .. JsonLayer:GetErrorMessage(err))
+        return nil, "Failed to read preset index: " .. JsonLayer:GetErrorMessage(err)
     end
 
     if not Table.IsArray(data) and next(data) ~= nil then
-        CPFWarn(1, "Preset index is not an array, resetting.")
-        return {}
+        CPFWarn(0, "Preset index is not an array; refusing to use or overwrite it.")
+        return nil, "Preset index is not a valid array"
     end
 
     CPFDebug(2, string.format("PresetIndex.Load: Loaded %d entries", #data))
-    return data
+    return data, nil
 end
 
 --- Saves the preset index to disk
@@ -59,11 +61,15 @@ end
 ---@param presetId string The ID of the preset
 ---@param source string Source: Mod Name or "User"
 ---@return boolean success
+---@return string? error
 function PresetIndex.AddEntry(filename, presetId, source)
     source = source or "User"
     CPFDebug(2,
         string.format("PresetIndex.AddEntry: filename='%s', presetId='%s', source='%s'", filename, presetId, source))
-    local entries = PresetIndex.Load()
+    local entries, loadErr = PresetIndex.Load()
+    if not entries then
+        return false, loadErr
+    end
     local found = false
 
     -- Look for existing entry by presetId (not filename, since mod presets may not have filenames)
@@ -97,8 +103,12 @@ end
 --- Archives an entry in the index by filename
 ---@param filename string Relative path to the preset file
 ---@return boolean success
+---@return string? error
 function PresetIndex.ArchiveEntry(filename)
-    local entries = PresetIndex.Load()
+    local entries, loadErr = PresetIndex.Load()
+    if not entries then
+        return false, loadErr
+    end
     local changed = false
 
     for _, entry in ipairs(entries) do
@@ -119,8 +129,12 @@ end
 --- Archives an entry in the index by preset ID
 ---@param presetId string The ID of the preset
 ---@return boolean success
+---@return string? error
 function PresetIndex.ArchiveEntryByPresetId(presetId)
-    local entries = PresetIndex.Load()
+    local entries, loadErr = PresetIndex.Load()
+    if not entries then
+        return false, loadErr
+    end
     local changed = false
 
     for _, entry in ipairs(entries) do
@@ -142,8 +156,12 @@ end
 --- Deletes an entry from the index by preset ID
 ---@param presetId string The ID of the preset
 ---@return boolean success
+---@return string? error
 function PresetIndex.DeleteEntryByPresetId(presetId)
-    local entries = PresetIndex.Load()
+    local entries, loadErr = PresetIndex.Load()
+    if not entries then
+        return false, loadErr
+    end
     local changed = false
 
     for i = #entries, 1, -1 do
@@ -165,7 +183,11 @@ end
 ---@param presetId string The ID of the preset
 ---@return PresetIndexEntry? entry The index entry or nil if not found
 function PresetIndex.GetEntry(presetId)
-    local entries = PresetIndex.Load()
+    local entries, loadErr = PresetIndex.Load()
+    if not entries then
+        CPFWarn(1, "PresetIndex.GetEntry: index read failed: " .. tostring(loadErr))
+        return nil
+    end
 
     for _, entry in ipairs(entries) do
         if entry.presetId == presetId then
@@ -187,8 +209,12 @@ end
 ---@param presetId string The ID of the preset
 ---@param archived boolean Whether the preset should be archived
 ---@return boolean success
+---@return string? error
 function PresetIndex.SetArchived(presetId, archived)
-    local entries = PresetIndex.Load()
+    local entries, loadErr = PresetIndex.Load()
+    if not entries then
+        return false, loadErr
+    end
     local changed = false
 
     for _, entry in ipairs(entries) do
@@ -209,9 +235,13 @@ end
 
 --- Unarchives all presets in the preset index
 ---@return boolean success
+---@return string? error
 function PresetIndex.UnarchiveAll()
     CPFDebug(1, "PresetIndex.UnarchiveAll: Unarchiving all presets")
-    local entries = PresetIndex.Load()
+    local entries, loadErr = PresetIndex.Load()
+    if not entries then
+        return false, loadErr
+    end
     for _, entry in ipairs(entries) do
         entry.hidden = false
     end

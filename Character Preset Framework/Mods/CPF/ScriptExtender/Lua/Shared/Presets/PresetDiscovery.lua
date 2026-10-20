@@ -210,6 +210,9 @@ function PresetDiscovery:LoadPresets()
     -- Load User Presets from Registry (including archived ones)
     CPFPrint(1, "Loading user presets from registry...")
     local registryEntries = PresetIndex.Load()
+    if not registryEntries then
+        return totalCount
+    end
     for _, entry in ipairs(registryEntries) do
         -- Load all presets, including archived ones
         -- The UI will filter based on the index's legacy `hidden` field.
