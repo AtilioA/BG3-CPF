@@ -58,7 +58,7 @@ function WindowHelpers.AddPresetRow(presetsTable, record, isCompatible)
     }
     if not isCompatible then
         item:SetColor("Button", UIColors.BUTTON_DISABLED)
-        item:SetColor("Text", Mods.BG3MCM.UIStyle.Colors.TextDisabled)
+        item:SetColor("Text", UIColors.TEXT_DISABLED)
     end
     item.OnClick = function()
         State:SelectPreset(record)
@@ -74,10 +74,10 @@ function WindowHelpers.UpdateActivePresetButton(presetsTable, selected)
         if Ext.Types.IsA(cellChild, "extui::Button") then
             if cellChild.Label == selected.preset.Name .. "##" .. selected.preset._id then
                 activeProfileButton = cellChild
-                cellChild:SetColor("Button", Mods.BG3MCM.UIStyle.Colors.ButtonActive)
+                cellChild:SetColor("Button", UIColors.BUTTON_ACTIVE)
             else
                 if cellChild.UserData.isCompatible then
-                    cellChild:SetColor("Button", Mods.BG3MCM.UIStyle.Colors.Button)
+                    cellChild:SetColor("Button", UIColors.BUTTON)
                 else
                     cellChild:SetColor("Button", UIColors.BUTTON_DISABLED)
                 end

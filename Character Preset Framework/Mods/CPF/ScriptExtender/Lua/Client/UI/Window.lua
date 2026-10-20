@@ -93,7 +93,7 @@ function Window:DrawSidebar(parent)
                 local archivedHeader = archivedCell:AddCollapsingHeader(Loca.Get(Loca.Keys.UI_TEXT_ARCHIVED_PRESETS))
                 local archivedPresetsTable = archivedHeader:AddTable("ArchivedPresetsTable", 1)
                 archivedHeader:SetColor("Header", UIColors.BUTTON_DISABLED)
-                archivedHeader:SetColor("Text", Mods.BG3MCM.UIStyle.Colors.TextDisabled)
+                archivedHeader:SetColor("Text", UIColors.TEXT_DISABLED)
                 archivedHeader.DefaultOpen = false
 
                 for _, record in ipairs(archived) do
@@ -114,7 +114,7 @@ function Window:DrawSidebar(parent)
                 -- Dumb button might not exist anymore
                 pcall(function()
                     if mode ~= "VIEW" and activeProfileButton then
-                        activeProfileButton:SetColor("Button", Mods.BG3MCM.UIStyle.Colors.Button)
+                        activeProfileButton:SetColor("Button", UIColors.BUTTON)
                     end
                 end)
             end)

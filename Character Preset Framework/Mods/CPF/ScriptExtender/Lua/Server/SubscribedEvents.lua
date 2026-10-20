@@ -11,9 +11,6 @@ function SubscribedEvents:SubscribeToEvents()
         end
     end
 
-    CPFDebug(2, "Subscribing to events with JSON config: " ..
-        Ext.Json.Stringify(Mods.BG3MCM.MCMAPI:GetAllModSettings(ModuleUUID)))
-
     Ext.ModEvents.BG3MCM['MCM_Setting_Saved']:Subscribe(EHandlers.HandleMCMSettingChange)
 end
 
